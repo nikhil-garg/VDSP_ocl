@@ -1,2 +1,1 @@
-# VDSP_ocl
- 
+# VDSP_spinnaker
