@@ -17,7 +17,7 @@ def args():
     # Defining the model
     parser.add_argument(
         "--input_nbr",
-        default=60000, 
+        default=10000, 
         type=int, 
         help="Number of images to consider for training"
     )

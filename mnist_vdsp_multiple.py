@@ -32,6 +32,7 @@ import itertools
 import random
 import logging
 
+import nni
 
 
 def evaluate_mnist_multiple(args):
@@ -326,6 +327,7 @@ def evaluate_mnist_multiple(args):
     print("Accuracy: ", accuracy)
     sim.close()
 
+    nni.report_final_result(accuracy)
 
     del weights, sim.data
 
@@ -386,53 +388,65 @@ if __name__ == '__main__':
     random.seed(seed)
     np.random.seed(seed)
 
-    accuracy, weights, p_input_layer, p_layer_1, time_points = evaluate_mnist_multiple(args)
+
+
+    params = nni.get_next_parameter()
+
+    args.g_max = params['g_max']
+    args.tau_in = params['tau_in']
+    args.tau_out = params['tau_out']
+    args.lr = params['lr']
+    args.presentation_time = params['presentation_time']
+
+
+
+    accuracy, weights = evaluate_mnist_multiple(args)
     print('accuracy:', accuracy)
 
-    now = time.strftime("%Y%m%d-%H%M%S")
-    folder = os.getcwd()+"/MNIST_VDSP"+now
-    os.mkdir(folder)
+    # now = time.strftime("%Y%m%d-%H%M%S")
+    # folder = os.getcwd()+"/MNIST_VDSP"+now
+    # os.mkdir(folder)
 
 
-    plt.figure(figsize=(12,10))
+    # plt.figure(figsize=(12,10))
 
-    plt.subplot(2, 1, 1)
-    plt.title('Input neurons')
-    rasterplot(time_points, p_input_layer)
-    plt.xlabel("Time [s]")
-    plt.ylabel("Neuron index")
+    # plt.subplot(2, 1, 1)
+    # plt.title('Input neurons')
+    # rasterplot(time_points, p_input_layer)
+    # plt.xlabel("Time [s]")
+    # plt.ylabel("Neuron index")
 
-    plt.subplot(2, 1, 2)
-    plt.title('Output neurons')
-    rasterplot(time_points, p_layer_1)
-    plt.xlabel("Time [s]")
-    plt.ylabel("Neuron index")
+    # plt.subplot(2, 1, 2)
+    # plt.title('Output neurons')
+    # rasterplot(time_points, p_layer_1)
+    # plt.xlabel("Time [s]")
+    # plt.ylabel("Neuron index")
 
-    plt.tight_layout()
+    # plt.tight_layout()
 
-    plt.savefig(folder+'/raster'+'.png')
-
-
-    for tstep in np.arange(0, len(weights), 1):
-        tstep = int(tstep)
-        # tstep = len(weights) - tstep -1
+    # plt.savefig(folder+'/raster'+'.png')
 
 
-        print(tstep)
-
-        columns = int(args.n_neurons/5)
-        fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
-
-        for i in range(0,(args.n_neurons)):
-
-            axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[tstep][i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
+    # for tstep in np.arange(0, len(weights), 1):
+    #     tstep = int(tstep)
+    #     # tstep = len(weightds) - tstep -1
 
 
-        plt.tight_layout()    
-        fig.savefig(folder+'/weights'+str(tstep)+'.png')
-        plt.close('all')
+    #     print(tstep)
 
-    gen_video(folder, "weights")
+    #     columns = int(args.n_neurons/5)
+    #     fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
+
+    #     for i in range(0,(args.n_neurons)):
+
+    #         axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[tstep][i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
+
+
+    #     plt.tight_layout()    
+    #     fig.savefig(folder+'/weights'+str(tstep)+'.png')
+    #     plt.close('all')
+
+    # gen_video(folder, "weights")
 
 
 
