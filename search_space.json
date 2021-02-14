@@ -1,7 +1,9 @@
 {
-	"g_max": {"_type":"choice", "_value": [0.1, 0.2, 0.3, 0.4,0.5,0.6,0.7,0.8]},
-	"tau_in": {"_type":"choice", "_value": [0.01, 0.03, 0.06, 0.1, 0.15,0.2,0.25,0.3]},
-	"tau_out": {"_type":"choice", "_value": [0.01, 0.03, 0.06, 0.1, 0.15,0.2,0.25,0.3]},
-	"lr": {"_type":"choice", "_value": [0.00001,0.00005,0.0001, 0.0003, 0.0006, 0.001, 0.0015,0.002]},
-	"presentation_time": {"_type":"choice", "_value": [0.20,0.30,0.40]}
+	"g_max": {"_type":"uniform", "_value": [0.1,0.8]},
+	"tau_in": {"_type":"uniform", "_value": [0.01,0.3]},
+	"tau_out": {"_type":"uniform", "_value": [0.01,0.3]},
+	"lr": {"_type":"uniform", "_value": [0.0001,0.002]},
+	"rate_in": {"_type":"uniform", "_value": [20,100]},
+	"rate_out": {"_type":"uniform", "_value": [20,100]},
+	"presentation_time": {"_type":"uniform", "_value": [0.20,0.40]}
 }

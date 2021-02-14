@@ -80,10 +80,10 @@ def evaluate_mnist_multiple(args):
             "dimensions":1,
             "label":"Input layer",
             "encoders":nengo.dists.Uniform(1,1),
-            # "max_rates":nengo.dists.Uniform(22,22),
-            # "intercepts":nengo.dists.Uniform(0,0),
-            "gain":nengo.dists.Uniform(2,2),
-            "bias":nengo.dists.Uniform(0,0),
+            "max_rates":nengo.dists.Uniform(args.rate_in,args.rate_in),
+            "intercepts":nengo.dists.Uniform(0,0),
+            # "gain":nengo.dists.Uniform(2,2),
+            # "bias":nengo.dists.Uniform(0,0),
             "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
@@ -94,10 +94,10 @@ def evaluate_mnist_multiple(args):
             "dimensions":1,
             "label":"Layer 1",
             "encoders":nengo.dists.Uniform(1,1),
-            "gain":nengo.dists.Uniform(2,2),
-            "bias":nengo.dists.Uniform(0,0),
-            # "intercepts":nengo.dists.Choice([0]),
-            # "max_rates":nengo.dists.Choice([args.rate_out,args.rate_out]),
+            # "gain":nengo.dists.Uniform(2,2),
+            # "bias":nengo.dists.Uniform(0,0),
+            "intercepts":nengo.dists.Choice([0]),
+            "max_rates":nengo.dists.Choice([args.rate_out,args.rate_out]),
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
@@ -397,6 +397,8 @@ if __name__ == '__main__':
     args.tau_out = params['tau_out']
     args.lr = params['lr']
     args.presentation_time = params['presentation_time']
+    agrs.rate_in = params['rate_in']
+    args.rate_out = params['rate_out']
 
 
 

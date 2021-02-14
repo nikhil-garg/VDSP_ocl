@@ -579,6 +579,8 @@ class STDPLIF(AdaptiveLIF):
 
         self.T += dt
         
+        # if(np.max(J) !=0):
+        #     J = np.divide(J,np.max(J)) * 2
 
         n = adaptation
         

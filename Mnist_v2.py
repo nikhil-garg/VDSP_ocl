@@ -23,6 +23,7 @@ import tensorflow as tf
 
 img_rows, img_cols = 28, 28
 input_nbr = 60000
+iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
 Dataset = "Mnist"
@@ -66,15 +67,15 @@ def sparsity_measure(vector):  # Gini index
 # Model construction
 #############################
 
-presentation_time = 0.35 #0.35
+presentation_time = 0.20 #0.35
 pause_time = 0 #0.15
 #input layer
 n_in = 784
-n_neurons = 20
+n_neurons = 30
 
 # Learning params
 
-learning_rate=0.0005
+learning_rate=0.0015
 
 learning_args = {
             "lr": learning_rate,
@@ -98,7 +99,7 @@ with model:
         n_in,
         1,
         label="Input",
-        neuron_type=MyLIF_in(tau_rc=0.3,min_voltage=-1,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
+        neuron_type=MyLIF_in(tau_rc=0.1,min_voltage=-1,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
         gain=nengo.dists.Choice([2]),
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
@@ -112,7 +113,7 @@ with model:
          n_neurons,
          1,
          label="layer1",
-         neuron_type=STDPLIF(tau_rc=0.3, min_voltage=-1),
+         neuron_type=STDPLIF(tau_rc=0.06, min_voltage=-1),
          gain=nengo.dists.Choice([2]),
          encoders=nengo.dists.Choice([[1]]),
          bias=nengo.dists.Choice([0]))
@@ -162,10 +163,10 @@ with nengo.Simulator(model,dt=0.005) as sim:
     w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
     w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
     
-    sim.run(step_time * label_train_filtered.shape[0])
+    sim.run(iterations*step_time * label_train_filtered.shape[0])
 
 
-# weights = weights[-1]
+weights = weights[-1]
 
 #if(not full_log):
 #    log.closeLog()
@@ -312,7 +313,7 @@ class_spikes = np.ones((10,1))
 for num in range(input_nbr):
     #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
-    output_spikes_num = output_spikes[num*70:(num+1)*70,:] # 0.350/0.005
+    output_spikes_num = output_spikes[num*presentation_time/0.005:(num+1)*presentation_time/0.005,:] # 0.350/0.005
     num_spikes = np.sum(output_spikes_num > 0, axis=0)
 
     for i in range(n_classes):
@@ -333,7 +334,7 @@ for num in range(input_nbr):
     class_pred = np.argmax(class_spikes)
     predicted_labels.append(class_pred)
 
-    true_class = labels[(num*70)]
+    true_class = labels[(num*presentation_time/0.005)]
     # print(true_class)
     # print(class_pred)
 

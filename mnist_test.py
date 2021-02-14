@@ -16,14 +16,48 @@ from nengo_extras.data import load_mnist
 from utilis import *
 import pickle
 import tensorflow as tf
+import pandas as pd
 
-#############################
-# load the data
-#############################
+presentation_time = 0.35
+pause_time = 0
 
 img_rows, img_cols = 28, 28
-input_nbr = 6000
-probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
+input_nbr = 10000
+n_in = 784
+n_neurons = 30
+
+weights =  pd.read_pickle("mnist_params_STDP")
+
+neuron_class = np.array((7,
+2,
+6,
+1,
+6,
+4,
+4,
+5,
+1,
+3,
+6,
+7,
+5,
+9,
+6,
+8,
+4,
+9,
+1,
+0,
+2,
+1,
+5,
+2,
+7,
+0,
+9,
+3,
+7,
+3))
 
 Dataset = "Mnist"
 # (image_train, label_train), (image_test, label_test) = load_mnist()
@@ -36,8 +70,8 @@ label_test_filtered = []
 
 for i in range(0,input_nbr):
 #  if (label_train[i] == 1 or label_train[i] == 0):
-        image_test_filtered.append(image_test[i])
-        label_test_filtered.append(label_test[i])
+    image_test_filtered.append(image_test[i])
+    label_test_filtered.append(label_test[i])
 
 print("actual input",len(label_test_filtered))
 print(np.bincount(label_test_filtered))
@@ -50,28 +84,19 @@ label_test_filtered = np.array(label_test_filtered)
 model = nengo.Network(label="My network",)
 
 
-
-presentation_time = 0.35 #0.35
-pause_time = 0 #0.15
-#input layer
-n_in = 784
-n_neurons = 20
-
 # Learning params
-
-
 
 with model:
     # input layer 
       # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-    picture = nengo.Node(nengo.processes.PresentInput(image_train_filtered, presentation_time=presentation_time))
-    true_label = nengo.Node(nengo.processes.PresentInput(label_train_filtered, presentation_time=presentation_time))
+    picture = nengo.Node(nengo.processes.PresentInput(image_test_filtered, presentation_time=presentation_time))
+    true_label = nengo.Node(nengo.processes.PresentInput(label_test_filtered, presentation_time=presentation_time))
         # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
     input_layer = nengo.Ensemble(
         n_in,
         1,
         label="Input",
-        neuron_type=MyLIF_in(tau_rc=0.3,min_voltage=-1,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
+        neuron_type=MyLIF_in(tau_rc=0.3,min_voltage=-2,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
         gain=nengo.dists.Choice([2]),
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
@@ -92,11 +117,11 @@ with model:
 
     # w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=784, size_out=n_neurons)
     
-    nengo.Connection(input_layer.neurons, layer1.neurons,transform=0)
+    nengo.Connection(input_layer.neurons, layer1.neurons,transform=weights)
  
    
-    p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
-    p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
+    p_true_label = nengo.Probe(true_label)
+    p_layer_1 = nengo.Probe(layer1.neurons)
     #if(not full_log):
     #    nengo.Node(log)
 
@@ -105,60 +130,61 @@ with model:
 step_time = (presentation_time + pause_time) 
 
 with nengo.Simulator(model,dt=0.005) as sim:
-    
-    
+       
     sim.run(step_time * label_test_filtered.shape[0])
 
 
-
-
-# pickle.dump(weights, open( "mnist_params_STDP", "wb" ))
-neuron_class = np.array( [[3.]
- [1.]
- [1.]
- [5.]
- [5.]
- [7.]
- [0.]
- [2.]
- [7.]
- [7.]
- [2.]
- [6.]
- [0.]
- [9.]
- [8.]
- [6.]
- [4.]
- [1.]
- [9.]
- [2.]])
-
-
-t_data = sim.trange(sample_every=probe_sample_rate)
-
 labels = sim.data[p_true_label][:,0]
-
 output_spikes = sim.data[p_layer_1]
-
 n_classes = 10
-
-rate_data = nengo.synapses.Lowpass(0.1).filtfilt(sim.data[p_layer_1])
-
-predicted_labels = labels * 0   
-
+# rate_data = nengo.synapses.Lowpass(0.1).filtfilt(sim.data[p_layer_1])
+predicted_labels = []  
+true_labels = []
 correct_classified = 0
 wrong_classified = 0
 
-for t in range(len(t_data)):
-    if(labels[t]>0):
-    # Find the index of neuron with highest firing rate : k
-        k = np.argmax(rate_data[t])
-        predicted_labels[t] = neuron_class[k]
-        if(predicted_labels[t] == labels[t]):
-            correct_classified+=1
-        else:
-            wrong_classified+=1
+
+class_spikes = np.ones((10,1))
+
+for num in range(input_nbr):
+    #np.sum(sim.data[my_spike_probe] > 0, axis=0)
+
+    output_spikes_num = output_spikes[num*int(presentation_time/0.005):(num+1)*int(presentation_time/0.005),:] # 0.350/0.005
+    num_spikes = np.sum(output_spikes_num > 0, axis=0)
+
+    for i in range(n_classes):
+        sum_temp = 0
+        count_temp = 0
+        for j in range(n_neurons):
+            if((neuron_class[j]) == i) : 
+                sum_temp += num_spikes[j]
+                count_temp +=1
+
+        class_spikes[i] = sum_temp/count_temp
+
+
+
+    # print(class_spikes)
+    k = np.argmax(num_spikes)
+    # predicted_labels.append(neuron_class[k])
+    class_pred = np.argmax(class_spikes)
+    predicted_labels.append(class_pred)
+
+    true_class = labels[(num*int(presentation_time/0.005))]
+    # print(true_class)
+    # print(class_pred)
+
+    # if(neuron_class[k] == true_class):
+    #     correct_classified+=1
+    # else:
+    #     wrong_classified+=1
+    if(class_pred == true_class):
+        correct_classified+=1
+    else:
+        wrong_classified+=1
+
+
         
 accuracy = correct_classified/ (correct_classified+wrong_classified)*100
 print("Accuracy: ", accuracy)
+#Ratio = Ratio + (alpha * (CRmaining / CTotal))

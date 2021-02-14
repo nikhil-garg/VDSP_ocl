@@ -17,7 +17,7 @@ def args():
     # Defining the model
     parser.add_argument(
         "--input_nbr",
-        default=10000, 
+        default=60000, 
         type=int, 
         help="Number of images to consider for training"
     )
@@ -114,6 +114,13 @@ def args():
         type=float,
         help="Firing rate for output neuron",
     )
+    parser.add_argument(
+        "--rate_in",
+        default=20,
+        type=float,
+        help="Firing rate for input neuron",
+    )
+
 
 
     my_args = parser.parse_args()

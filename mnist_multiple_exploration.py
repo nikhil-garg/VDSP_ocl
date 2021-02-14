@@ -29,12 +29,12 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.60],
-		input_nbr=[60000],
+		input_nbr=[12000],
 		g_max=[0.3]
-		,tau_in = [0.3]
-		,tau_out = [0.3]
-		, lr = [0.0005, 0.001]
-		, presentation_time = [0.20,0.35,0.4]
+		,tau_in = [0.1]
+		,tau_out = [0.03]
+		, lr = [0.005, 0.001]
+		, presentation_time = [0.35]
     )
 	param_values = [v for v in parameters.values()]
 
