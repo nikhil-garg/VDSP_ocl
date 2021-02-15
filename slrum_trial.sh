@@ -5,7 +5,7 @@
 
 
 
-pip install --no-index -r ~/VDSP_ocl/requirements.txt
+pip install --no-index -r requirements.txt
 
 
 nnictl create --config config.yml
