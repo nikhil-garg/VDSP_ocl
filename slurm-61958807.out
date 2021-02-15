@@ -1,4 +1,0 @@
-Ignoring pip: markers 'python_version < "3"' don't match your environment
-Could not open requirements file: [Errno 2] No such file or directory: '/home/ng1998/VDSP_ocl/requirements.txt'
-/var/spool/slurmd/job61958807/slurm_script: line 11: nnictl: command not found
-/var/spool/slurmd/job61958807/slurm_script: line 12: nnictl: command not found
