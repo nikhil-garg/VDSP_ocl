@@ -72,7 +72,7 @@ def evaluate_mnist_multiple(args):
     # g_max = 1/784 #Maximum output contribution
     g_max = args.g_max
     n_neurons = args.n_neurons # Layer 1 neurons
-    inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
+    # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
 
     input_neurons_args = {
@@ -107,11 +107,11 @@ def evaluate_mnist_multiple(args):
     # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 20), seed=1),     
 
     #Lateral Inhibition parameters
-    lateral_inhib_args = {
-            "transform": inhib_factor* (np.full((n_neurons, n_neurons), 1) - np.eye(n_neurons)),
-            "synapse":args.inhib_synapse,
-            "label":"Lateral Inhibition"
-    }
+    # lateral_inhib_args = {
+    #         "transform": inhib_factor* (np.full((n_neurons, n_neurons), 1) - np.eye(n_neurons)),
+    #         "synapse":args.inhib_synapse,
+    #         "label":"Lateral Inhibition"
+    # }
 
     #Learning rule parameters
     learning_args = {
@@ -124,7 +124,7 @@ def evaluate_mnist_multiple(args):
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
 
-    argument_string = "presentation_time: "+ str(presentation_time)+ "\n pause_time: "+ str(pause_time)+ "\n input_neurons_args: " + str(input_neurons_args)+ " \n layer_1_neuron_args: " + str(layer_1_neurons_args)+"\n Lateral Inhibition parameters: " + str(lateral_inhib_args) + "\n learning parameters: " + str(learning_args)+ "\n g_max: "+ str(g_max) 
+    # argument_string = "presentation_time: "+ str(presentation_time)+ "\n pause_time: "+ str(pause_time)+ "\n input_neurons_args: " + str(input_neurons_args)+ " \n layer_1_neuron_args: " + str(layer_1_neurons_args)+"\n Lateral Inhibition parameters: " + str(lateral_inhib_args) + "\n learning parameters: " + str(learning_args)+ "\n g_max: "+ str(g_max) 
 
     images = image_train_filtered
     labels = label_train_filtered
@@ -148,10 +148,12 @@ def evaluate_mnist_multiple(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
-        nengo.Connection(input_layer.neurons, w, synapse=None)
-        nengo.Connection(w, layer1.neurons, synapse=None)
+        # w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
+        # nengo.Connection(input_layer.neurons, w, synapse=None)
+        # nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
+        init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
+        conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=-0.6),transform=init_weights)
 
         #Lateral inhibition
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
@@ -160,7 +162,9 @@ def evaluate_mnist_multiple(args):
         p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
         p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
         p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
-        weights = w.output.history
+        weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
+
+        # weights = w.output.history
 
         
 
@@ -168,8 +172,8 @@ def evaluate_mnist_multiple(args):
     with nengo.Simulator(model, dt=0.005) as sim:
 
         
-        w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
-        w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
+        # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
+        # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         
         
         sim.run((presentation_time+pause_time) * labels.shape[0]*iterations)
@@ -179,6 +183,8 @@ def evaluate_mnist_multiple(args):
     # folder = os.getcwd()+"/MNIST_VDSP"+now
     # os.mkdir(folder)
     # print(weights)
+    weights = sim.data[weights_probe]
+
     last_weight = weights[-1]
 
     # pickle.dump(weights, open( folder+"/trained_weights", "wb" ))
@@ -211,6 +217,7 @@ def evaluate_mnist_multiple(args):
     '''
 
     img_rows, img_cols = 28, 28
+    # input_nbr = 10000
     input_nbr = int(args.input_nbr/6)
 
     Dataset = "Mnist"
@@ -397,6 +404,7 @@ if __name__ == '__main__':
     args.tau_out = params['tau_out']
     args.lr = params['lr']
     args.presentation_time = params['presentation_time']
+    args.rate_out = params['rate_out']
 
 
 

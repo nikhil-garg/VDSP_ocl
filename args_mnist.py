@@ -8,7 +8,6 @@ Created on 4th Jan 2021
 import argparse
 
 
-
 def args():
     parser = argparse.ArgumentParser(
         description="Train a VDSP based MNIST classifier"
@@ -17,7 +16,7 @@ def args():
     # Defining the model
     parser.add_argument(
         "--input_nbr",
-        default=60000, 
+        default=60, 
         type=int, 
         help="Number of images to consider for training"
     )
@@ -90,18 +89,7 @@ def args():
         type=str,
         help="filename of final weights",
     )
-    parser.add_argument(
-        "--inhib_factor",
-        default=0,
-        type=float,
-        help="inhib_factor",
-    )
-    parser.add_argument(
-        "--inhib_synapse",
-        default=0.005,
-        type=float,
-        help="inhib_synapse",
-    )
+
     parser.add_argument(
         "--vprog",
         default=-0.6,
@@ -120,8 +108,6 @@ def args():
         type=float,
         help="Firing rate for input neuron",
     )
-
-
 
     my_args = parser.parse_args()
 

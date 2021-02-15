@@ -67,23 +67,21 @@ def sparsity_measure(vector):  # Gini index
 # Model construction
 #############################
 
-presentation_time = 0.20 #0.35
+presentation_time = 0.35 #0.35
 pause_time = 0 #0.15
 #input layer
 n_in = 784
-n_neurons = 30
+n_neurons = 20
 
 # Learning params
 
-learning_rate=0.0015
+learning_rate=0.001
 
 learning_args = {
             "lr": learning_rate,
             "winit_min":0,
             "winit_max":1,
             "vprog":-0.6,
-    #         "tpw":50,
-    #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*100),#Save weights after 100 images
     }
 
@@ -104,10 +102,8 @@ with model:
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
 
-    input_conn = nengo.Connection(picture,input_layer.neurons,)
+    input_conn = nengo.Connection(picture,input_layer.neurons)
 
-    # weights randomly initiated 
-    #layer1_weights = np.round(random.random((n_neurons, 784)),5)
     # define first layer
     layer1 = nengo.Ensemble(
          n_neurons,
@@ -118,35 +114,12 @@ with model:
          encoders=nengo.dists.Choice([[1]]),
          bias=nengo.dists.Choice([0]))
 
-    w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=784, size_out=n_neurons)
-    
-    nengo.Connection(input_layer.neurons, w)
-    nengo.Connection(w, layer1.neurons)
+    init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
+    conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=learning_rate,vprog=-0.6),transform=init_weights)
 
-    #conn1 = nengo.Connection(
-    #    input_layer.neurons,
-    #    layer1.neurons,
-    #    transform=layer1_weights)
-
-    # create inhibitory layer 
-    # inhib_wegihts = (np.full((n_neurons, n_neurons), 1) - np.eye(n_neurons)) * (- 2)
-
-    # inhib = nengo.Connection(
-    #     layer1.neurons,
-    #     layer1.neurons,
-    #     synapse=0.005,
-    #     transform=inhib_wegihts)
-
-    weights = w.output.history
-    #############################
-    # setup the probes
-    #############################
-
-    #layer1_synapses_probe = nengo.Probe(conn1,"weights",label="layer1_synapses") # ('output', 'input', 'weights')
-    # layer1_spikes_probe = nengo.Probe(layer1.neurons, "spikes", label="layer1_spikes") # ('output', 'input', 'spikes', 'voltage', 'refractory_time', 'adaptation', 'inhib')
-    #layer1_voltage_probe = nengo.Probe(layer1.neurons, "voltage", label="layer1_voltage") # ('output', 'input', 'spikes', 'voltage', 'refractory_time', 'adaptation', 'inhib')
     p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
     p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
+    weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
     #if(not full_log):
     #    nengo.Node(log)
 
@@ -160,13 +133,13 @@ with nengo.Simulator(model,dt=0.005) as sim:
     #if(not full_log):
     #    log.set(sim,Args,False,False)
 
-    w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
-    w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
+    # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
+    # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
     
     sim.run(iterations*step_time * label_train_filtered.shape[0])
 
 
-weights = weights[-1]
+weights = sim.data[weights_probe][-1]
 
 #if(not full_log):
 #    log.closeLog()
@@ -217,7 +190,6 @@ print("Neuron class: \n", neuron_class)
 '''
 Testing
 '''
-
 
 img_rows, img_cols = 28, 28
 input_nbr = 10000
@@ -313,7 +285,7 @@ class_spikes = np.ones((10,1))
 for num in range(input_nbr):
     #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
-    output_spikes_num = output_spikes[num*presentation_time/0.005:(num+1)*presentation_time/0.005,:] # 0.350/0.005
+    output_spikes_num = output_spikes[num*int(presentation_time/0.005):(num+1)*int(presentation_time/0.005),:] # 0.350/0.005
     num_spikes = np.sum(output_spikes_num > 0, axis=0)
 
     for i in range(n_classes):
@@ -334,20 +306,12 @@ for num in range(input_nbr):
     class_pred = np.argmax(class_spikes)
     predicted_labels.append(class_pred)
 
-    true_class = labels[(num*presentation_time/0.005)]
-    # print(true_class)
-    # print(class_pred)
+    true_class = labels[(num*int(presentation_time/0.005))]
 
-    # if(neuron_class[k] == true_class):
-    #     correct_classified+=1
-    # else:
-    #     wrong_classified+=1
     if(class_pred == true_class):
         correct_classified+=1
     else:
         wrong_classified+=1
-
-
         
 accuracy = correct_classified/ (correct_classified+wrong_classified)*100
 print("Accuracy: ", accuracy)

@@ -238,9 +238,6 @@ def plan_MyLIF_in(
     )
 
 
-
-
-
         
 class MyLIF_out(LIFRate):
     """Spiking version of the leaky integrate-and-fire (LIF) neuron model.
@@ -323,44 +320,7 @@ class MyLIF_out(LIFRate):
         refractory_time[spiked_mask] = self.tau_ref + t_spike
 
         
-# def fun_post(X,
-#        a1=0,a2=1,a3=0,a4=1,a5=1,a6=1,a7=1,
-#        b1=1,b2=1,b3=1,b4=1,b5=1,b6=1,b7=1,
-#        c1=0,c2=1,c3=0,c4=1,c5=1,c6=1,c7=1,
-#        d1=1,d2=1,d3=1,d4=1,d5=1,d6=1,d7=1,
-#        alpha1=1,alpha2=0    
-#        ): 
-#     w, vmem = X
-#     vthp=0.25
-#     vthn=0.25
-#     vprog=0
-    
-#     w_dep = w #Depression is dependent on w
-#     w_pot = 1-w #Potentiation is dependent on (1-w)
-    
-#     v_ov_dep =  vmem - (vprog+vthp)
-#     v_ov_pot = (vprog-vthn) - vmem
 
-#     cond_dep = vmem>(vprog+vthp)
-#     cond_pot = vmem<(vprog-vthn)
-    
-#     f_dep = a1 + a2*(w_dep**1) + a3*(w_dep**2) + a4*(w_dep**3) + a5*(w_dep**4) + a6*(w_dep**5) + a7*(w_dep**6) 
-#     f_pot = c1 + c2*(w_pot**1) + c3*(w_pot**2) + c4*(w_pot**3) + c5*(w_pot**4) + c6*(w_pot**5) + c7*(w_pot**6)
-    
-#     g_dep = d1 + d2*(v_ov_dep**1) + d3*(v_ov_dep**2) + d4*(v_ov_dep**3) + d5*(v_ov_dep**4)+ d6*(v_ov_dep**5) + d7*(v_ov_dep**6)
-#     g_pot = b1 + b2*(v_ov_pot**1) + b3*(v_ov_pot**2)+ b4*(v_ov_pot**3) + b5*(v_ov_pot**4)+ b6*(v_ov_pot**5) + b7*(v_ov_pot**6)
-     
-#     dW = (abs(cond_pot*(alpha1*f_pot*g_pot)))  + (-1*(abs(cond_dep*(alpha2*f_dep*g_dep))))    
-#     return dW
-
-# popt = np.array((2.63597385e-03, -1.40625865e-01,  1.19260653e+00, -4.85020418e+00,
-#         6.19503572e+00, -2.38168082e+00, -1.26838474e-01, -1.18184487e-05,
-#         3.54407615e+00,  1.47761497e+00,  1.95994954e-01, -1.45394293e-01,
-#        -1.75854618e-01, -1.24731786e-01,  9.28553739e-04,  1.01638127e-02,
-#         5.03048289e-01, -2.00483170e+00,  4.07350128e+00, -3.71689334e+00,
-#         1.21163739e+00, -4.89515267e-06,  2.54888294e+00,  1.12456515e+00,
-#         1.67556196e-01, -1.25816285e-01, -1.58590489e-01, -8.91218466e-02,
-#         1.01582510e+00,  1.04369846e+00))
 
 def fun_post(X,
        a1=0,a2=1,a3=0,a4=1,a5=1,#a6=1,a7=1,
@@ -401,80 +361,6 @@ popt = np.array((1.22495116e-02, -2.14968776e-01,  2.16351015e+00, -1.00745674e+
         2.59452096e-01,  2.61974798e-01))
 
 
-
-class CustomRule_post(nengo.Process):
-   
-    def __init__(self, vthp=0.25, vthn=0.25, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1):
-       
-        self.vthp = vthp
-        self.vthn = vthn
-        self.vprog = vprog  
-        
-        self.signal_vmem_pre = None
-        self.signal_out_post = None
-        
-        self.sample_distance = sample_distance
-        self.lr = lr
-        
-        self.history = []
-        self.current_weight = []
-        self.update_history = []
-        
-        self.vmem_prev = 0
-        
-        self.winit_min = winit_min
-        self.winit_max = winit_max
-        
-        self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
-        
-        super().__init__()
-        
-    def make_step(self, shape_in, shape_out, dt, rng, state=None):  
-       
-        self.w = np.random.uniform(self.winit_min, self.winit_max, (shape_out[0], shape_in[0]))
-        dw = np.zeros((shape_out[0], shape_in[0]))
-
-        def step(t, x):
-
-            assert self.signal_vmem_pre is not None
-            assert self.signal_out_post is not None
-            
-            vmem = self.signal_vmem_pre
-            vmem = np.clip(vmem, -2, 1)
-            post_out = self.signal_out_post
-            
-            
-            vmem = np.reshape(vmem, (1, shape_in[0]))         
-            post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
-          
-            vmem = np.vstack([vmem]*shape_out[0])            
-            post_out_matrix = np.hstack([post_out_matrix]*shape_in[0])
-            
-            dw = post_out_matrix*dt*fun_post((self.w,vmem),*popt)   
-            self.w += dw*self.lr  
-            self.w = np.clip(self.w, 0,1)
-
-            
-            
-            if (self.tstep%self.sample_distance ==0):
-                self.history.append(self.w.copy())
-                self.update_history.append(dw.copy())
-            
-            self.tstep +=1
-            
-            
-            self.vmem_prev = vmem.copy()
-            return np.dot(self.w, x)
-        
-        return step   
-
-        self.current_weight = self.w
-    
-    def set_signal_vmem(self, signal):
-        self.signal_vmem_pre = signal
-        
-    def set_signal_out(self, signal):
-        self.signal_out_post = signal
 
 
 
@@ -543,6 +429,137 @@ class CustomRule_post_v2(nengo.Process):
         self.signal_out_post = signal
 
 
+
+
+
+import numpy as np
+from nengo.builder.builder import Builder
+from nengo.builder.learning_rules import (build_or_passthrough, get_post_ens,
+                                          get_pre_ens)
+from nengo.builder.operator import Copy, DotInc, Operator, Reset
+from nengo.learning_rules import LearningRuleType, _remove_default_post_synapse
+from nengo.params import Default, NdarrayParam, NumberParam
+from nengo.synapses import Lowpass, SynapseParam
+
+
+class VLR(LearningRuleType):
+    """
+    See the Nengo codebase
+    (https://github.com/nengo/nengo/blob/master/nengo/learning_rules.py)
+    for documentation and examples of how to construct this class, and what the super
+    class constructor values are.
+    """
+
+    modifies = "weights"
+    probeable = ("pre_voltages", "post_activities", "post_filtered","weights")
+
+    learning_rate = NumberParam("learning_rate", low=0, readonly=True, default=1)
+    post_synapse = SynapseParam("post_synapse", default=None, readonly=True)
+    vprog = NumberParam("vprog", readonly=True, default=-0.6)
+
+    def __init__(
+        self,
+        learning_rate=Default,
+        post_synapse=Default,
+        vprog=Default,
+    ):
+        super().__init__(learning_rate, size_in=0)
+        self.post_synapse = post_synapse
+        self.vprog = vprog
+
+
+class SimVLR(Operator):
+    """
+    See the Nengo codebase
+    (https://github.com/nengo/nengo/blob/master/nengo/builder/learning_rules.py)
+    for the other examples of learning rule operators.
+    """
+
+    def __init__(self, pre_voltages, post_filtered,weights, delta, learning_rate,vprog, tag=None):
+        super().__init__(tag=tag)
+        self.learning_rate = learning_rate
+        self.vprog = vprog
+
+        # Define what this operator sets, increments, reads and updates
+        # See (https://github.com/nengo/nengo/blob/master/nengo/builder/operator.py)
+        # for some other example operators
+        self.sets = []
+        self.incs = []
+        self.reads = [pre_voltages, post_filtered, weights]
+        self.updates = [delta]
+
+    @property
+    def delta(self):
+        return self.updates[0]
+
+    @property
+    def pre_voltages(self):
+        return self.reads[0]
+
+    @property
+    def post_filtered(self):
+        return self.reads[1]
+    
+    @property
+    def weights(self):
+        return self.reads[2]
+
+    @property
+    def _descstr(self):
+        return f"pre={self.pre_voltages}, post={self.post_filtered} -> {self.delta}"
+
+    def make_step(self, signals, dt, rng):
+        # Get signals from model signal dictionary
+        pre_voltages = signals[self.pre_voltages]
+        post_filtered = signals[self.post_filtered]
+        delta = signals[self.delta]
+        weights = signals[self.weights]
+        
+        pre_voltages = np.reshape(pre_voltages, (1, delta.shape[1]))
+        post_filtered = np.reshape(post_filtered, (delta.shape[0], 1))
+
+        def step_vlr():
+            # Put learning rule logic here
+            
+            delta[...] = post_filtered*dt*fun_post((weights,pre_voltages,self.vprog),*popt)*self.learning_rate
+
+        return step_vlr
+
+
+@Builder.register(VLR)  # Register the function below with the Nengo builder
+def build_vlr(model, vlr, rule):
+    """
+    See the Nengo codebase
+    (https://github.com/nengo/nengo/blob/master/nengo/builder/learning_rules.py#L594)
+    for the documentation for this function.
+    """
+
+    # Extract necessary signals and objects from the model and learning rule
+    conn = rule.connection
+    pre_voltages = model.sig[get_pre_ens(conn).neurons]["voltage"]
+    post_activities = model.sig[get_post_ens(conn).neurons]["out"]
+    weights = model.sig[conn]["weights"]
+    
+    post_filtered = build_or_passthrough(model, vlr.post_synapse, post_activities)
+#     post_filtered = post_activities
+
+    # Instantiate and add the custom learning rule operator to the Nengo model op graph
+    model.add_op(
+        SimVLR(
+            pre_voltages,
+            post_filtered,
+            weights,
+            model.sig[rule]["delta"],
+            learning_rate=vlr.learning_rate,
+            vprog = vlr.vprog,
+            
+        )
+    )
+
+    # Expose these signals for probes
+    model.sig[rule]["pre_voltages"] = pre_voltages
+    model.sig[rule]["post_activities"] = post_activities
+    model.sig[rule]["post_filtered"] = post_filtered
 
 
 #create new neuron type STDPLIF 
@@ -664,6 +681,17 @@ def build_STDPLIF(model, STDPlif, neurons):
                                     "adaptation": model.sig[neurons]['adaptation'],
                                     "inhib": model.sig[neurons]['inhib']
                                      }))
+
+
+
+
+
+
+
+
+
+
+
 
 import os
 import re
