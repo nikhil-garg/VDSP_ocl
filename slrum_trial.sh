@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #SBATCH --account=def-drod1901
 #SBATCH --time=0-10:00:0
