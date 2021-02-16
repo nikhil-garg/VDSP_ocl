@@ -3,7 +3,7 @@ import numpy as np
 from numpy import random
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import tensorflow as tf
+# import tensorflow as tf
 import os
 from nengo.dists import Choice
 from datetime import datetime
