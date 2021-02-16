@@ -17,7 +17,6 @@ source $SLURM_TMPDIR/env/bin/activate
 git clone https://github.com/nikhil-garg/VDSP_ocl.git
 cd VDSP_ocl
 
-pip install --no-index --upgrade pip
 pip install --no-index -r requirements.txt
 
 python mnist_multiple_exploration.py
