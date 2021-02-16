@@ -2,5 +2,4 @@ Nni
 numpy
 matplotlib
 pandas
-tensorflow
 Mako

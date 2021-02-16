@@ -6,9 +6,11 @@ OUTDIR=~/project/out/$SLURM_JOB_ID
 mkdir -p $OUTDIR
 cd $SLURM_TMPDIR
 
+python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl
+
 git clone https://github.com/nengo/nengo
 cd nengo
-pip install -e 
+pip install -e .
 
 cd ..
 
