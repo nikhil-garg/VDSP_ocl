@@ -17,7 +17,7 @@ from InputData import PresentInputWithPause
 # from custom_rule import CustomRule
 # from custom_rule import CustomRule_prev
 
-import nengo_ocl
+# import nengo_ocl
 
 from nengo.neurons import LIFRate
 # from custom_rule import CustomRule
@@ -692,7 +692,7 @@ def build_STDPLIF(model, STDPlif, neurons):
 
 import os
 import re
-import cv2
+# import cv2
 
 
 def gen_video(directory, f_prename):

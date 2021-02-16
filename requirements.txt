@@ -4,7 +4,3 @@ matplotlib
 pandas
 tensorflow
 Mako
-opencv_python
-nengo
-pyopencl
-nengo_ocl
