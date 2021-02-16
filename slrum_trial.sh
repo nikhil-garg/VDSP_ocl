@@ -1,13 +1,13 @@
 #!/bin/bash
 #SBATCH --account=def-drod1901
-#SBATCH --time=0-0:5:0
-#SBATCH --cpus-per-task=2
+#SBATCH --time=0-0:3:0
+#SBATCH --cpus-per-task=1
 OUTDIR=~/project/out/$SLURM_JOB_ID
 mkdir -p $OUTDIR
 cd $SLURM_TMPDIR
 
 
-module load python/3.6 
+module load python/3.8
 
 virtualenv --no-download $SLURM_TMPDIR/env  # SLURM_TMPDIR is on the compute node
 
