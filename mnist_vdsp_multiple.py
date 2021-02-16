@@ -59,17 +59,7 @@ def evaluate_mnist_multiple(args):
     # image_train_filtered = np.array(image_train_filtered)
     # label_train_filtered = np.array(label_train_filtered)
 
-    # input_nbr = 10000
 
-
-    # #select the 0s and 1s as the two classes from MNIST data
-    # image_test_filtered = []
-    # label_test_filtered = []
-
-    # for i in range(0,input_nbr):
-    # #  if (label_train[i] == 1 or label_train[i] == 0):
-    #     image_test_filtered.append(image_test[i])
-    #     label_test_filtered.append(label_test[i])
 
     # np.save(
     #     'mnist.npz',
@@ -244,23 +234,23 @@ def evaluate_mnist_multiple(args):
     Testing
     '''
 
-    img_rows, img_cols = 28, 28
-    # input_nbr = 10000
-    input_nbr = int(args.input_nbr/6)
+    # img_rows, img_cols = 28, 28
+    input_nbr = 10000
+    # input_nbr = int(args.input_nbr/6)
 
-    Dataset = "Mnist"
-    # (image_train, label_train), (image_test, label_test) = load_mnist()
-    (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
+    # Dataset = "Mnist"
+    # # (image_train, label_train), (image_test, label_test) = load_mnist()
+    # (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
 
 
-    #select the 0s and 1s as the two classes from MNIST data
-    image_test_filtered = []
-    label_test_filtered = []
+    # #select the 0s and 1s as the two classes from MNIST data
+    # image_test_filtered = []
+    # label_test_filtered = []
 
-    for i in range(0,input_nbr):
-    #  if (label_train[i] == 1 or label_train[i] == 0):
-        image_test_filtered.append(image_test[i])
-        label_test_filtered.append(label_test[i])
+    # for i in range(0,input_nbr):
+    # #  if (label_train[i] == 1 or label_train[i] == 0):
+    #     image_test_filtered.append(image_test[i])
+    #     label_test_filtered.append(label_test[i])
 
     print("actual input",len(label_test_filtered))
     print(np.bincount(label_test_filtered))
