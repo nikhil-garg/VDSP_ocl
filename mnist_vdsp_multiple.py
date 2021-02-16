@@ -25,7 +25,7 @@ from nengo.dists import Choice, Distribution, get_samples, Uniform
 
 from nengo.utils.numpy import clip, is_array_like
 from utilis import *
-import keras
+# import keras
 
 from args_mnist import args as my_args
 import itertools
@@ -42,22 +42,43 @@ def evaluate_mnist_multiple(args):
     #############################
     input_nbr = args.input_nbr
 
-    (image_train, label_train), (image_test, label_test) = (keras.datasets.mnist.load_data())
+    # (image_train, label_train), (image_test, label_test) = (keras.datasets.mnist.load_data())
 
-    probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
-    # probe_sample_rate = 1000
-    image_train_filtered = []
-    label_train_filtered = []
+    # probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
+    # # probe_sample_rate = 1000
+    # image_train_filtered = []
+    # label_train_filtered = []
 
     x = args.digit
 
-    for i in range(0,input_nbr):
+    # for i in range(0,input_nbr):
       
-        image_train_filtered.append(image_train[i])
-        label_train_filtered.append(label_train[i])
+    #     image_train_filtered.append(image_train[i])
+    #     label_train_filtered.append(label_train[i])
 
-    image_train_filtered = np.array(image_train_filtered)
-    label_train_filtered = np.array(label_train_filtered)
+    # image_train_filtered = np.array(image_train_filtered)
+    # label_train_filtered = np.array(label_train_filtered)
+
+    # input_nbr = 10000
+
+
+    # #select the 0s and 1s as the two classes from MNIST data
+    # image_test_filtered = []
+    # label_test_filtered = []
+
+    # for i in range(0,input_nbr):
+    # #  if (label_train[i] == 1 or label_train[i] == 0):
+    #     image_test_filtered.append(image_test[i])
+    #     label_test_filtered.append(label_test[i])
+
+    np.load(
+        'mnist.npz',
+        image_train_filtered=image_train_filtered,
+        label_train_filtered=label_train_filtered,
+        image_test_filtered=image_test_filtered,
+        label_test_filtered=label_test_filtered,
+ 
+    )
 
 
     #Simulation Parameters 
