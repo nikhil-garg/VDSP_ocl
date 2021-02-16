@@ -7,7 +7,7 @@ mkdir -p $OUTDIR
 cd $SLURM_TMPDIR
 
 
-module load python/3.8.3
+module load python/3.8
 
 virtualenv --no-download $SLURM_TMPDIR/env  # SLURM_TMPDIR is on the compute node
 
