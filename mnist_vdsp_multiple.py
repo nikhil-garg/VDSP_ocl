@@ -252,11 +252,11 @@ def evaluate_mnist_multiple(args):
     #     image_test_filtered.append(image_test[i])
     #     label_test_filtered.append(label_test[i])
 
-    print("actual input",len(label_test_filtered))
-    print(np.bincount(label_test_filtered))
+    # print("actual input",len(label_test_filtered))
+    # print(np.bincount(label_test_filtered))
 
-    image_test_filtered = np.array(image_test_filtered)
-    label_test_filtered = np.array(label_test_filtered)
+    # image_test_filtered = np.array(image_test_filtered)
+    # label_test_filtered = np.array(label_test_filtered)
 
     #############################
 

@@ -37,13 +37,13 @@ if __name__ == '__main__':
                          })
 
 	parameters = dict(
-		vprog = [-0.50,-0.55,-0.60,-0.65],
+		vprog = [-0.60,-0.65],
 		input_nbr=[60000],
-		g_max=[0.1,0.3,0.4,0.6,0.8]
-		,tau_in = [0.03,0.06,0.1,0.15,0.2]
-		,tau_out = [0.03,0.06,0.1,0.15,0.2]
+		g_max=[0.3]
+		,tau_in = [0.2]
+		,tau_out = [0.03]
 		, lr = [0.0005,0.005, 0.001]
-		, presentation_time = [0.20,0.30,0.35]
+		, presentation_time = [0.20]
     )
 	param_values = [v for v in parameters.values()]
 
