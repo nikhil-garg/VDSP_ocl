@@ -1,0 +1,29 @@
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Collecting tensorflow==1.12.0 from https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl
+  Using cached https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl
+/var/spool/slurmd/job62028335/slurm_script: line 9:  6807 Killed                  python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl
+Cloning into 'nengo'...
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Obtaining file:///localscratch/ng1998.62028335.0/nengo
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+Collecting numpy>=1.13 (from nengo==3.2.0.dev0)
+Installing collected packages: numpy, nengo
+Could not install packages due to an EnvironmentError: [Errno 30] Read-only file system: '/cvmfs/soft.computecanada.ca/easybuild/software/2017/Core/python/3.6.3/lib/python3.6/site-packages/numpy-1.19.1.dist-info'
+
+Cloning into 'VDSP_ocl'...
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Collecting Nni (from -r requirements.txt (line 1))
+Collecting numpy (from -r requirements.txt (line 2))
+/var/spool/slurmd/job62028335/slurm_script: line 20:  6933 Killed                  pip install --no-index -r requirements.txt
+Traceback (most recent call last):
+  File "mnist_multiple_exploration.py", line 5, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+tar: /localscratch/ng1998.62028335.0/VDSP_ocl: Cannot read: Is a directory
+tar: At beginning of tape, quitting now
+tar: Error is not recoverable: exiting now
+slurmstepd: error: Detected 2 oom-kill event(s) in StepId=62028335.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
