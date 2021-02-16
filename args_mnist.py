@@ -16,7 +16,7 @@ def args():
     # Defining the model
     parser.add_argument(
         "--input_nbr",
-        default=60, 
+        default=60000, 
         type=int, 
         help="Number of images to consider for training"
     )
@@ -28,7 +28,7 @@ def args():
     )
     parser.add_argument(
         "--presentation_time",
-        default=0.20,
+        default=0.35,
         type=float,
         help="Presentation time of one image",
     )

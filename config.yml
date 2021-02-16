@@ -1,8 +1,8 @@
 authorName: Nikhil
 experimentName: VDSP
-trialConcurrency: 3
+trialConcurrency: 2
 maxExecDuration: 72h
-maxTrialNum: 10
+maxTrialNum: 100
 #choice: local, remote, pai
 trainingServicePlatform: local
 searchSpacePath: search_space.json
@@ -11,7 +11,7 @@ useAnnotation: false
 tuner:
   #choice: TPE, Random, Anneal, Evolution, BatchTuner, MetisTuner
   #SMAC (SMAC should be installed through nnictl)
-  builtinTunerName: TPE
+  builtinTunerName: Evolution
   classArgs:
     #choice: maximize, minimize
     optimize_mode: maximize

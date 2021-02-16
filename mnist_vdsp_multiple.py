@@ -403,8 +403,8 @@ if __name__ == '__main__':
     args.tau_in = params['tau_in']
     args.tau_out = params['tau_out']
     args.lr = params['lr']
-    args.presentation_time = params['presentation_time']
-    args.rate_out = params['rate_out']
+    # args.presentation_time = params['presentation_time']
+    # args.rate_out = params['rate_out']
 
 
 
