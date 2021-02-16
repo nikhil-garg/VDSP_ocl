@@ -14,7 +14,6 @@ virtualenv --no-download $SLURM_TMPDIR/env  # SLURM_TMPDIR is on the compute nod
 source $SLURM_TMPDIR/env/bin/activate
 
 
-pip install keras
 pip install matplotlib
 
 
