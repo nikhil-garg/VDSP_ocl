@@ -13,6 +13,7 @@ virtualenv --no-download $SLURM_TMPDIR/env  # SLURM_TMPDIR is on the compute nod
 
 source $SLURM_TMPDIR/env/bin/activate
 
+pip install matplotlib
 
 
 python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl
