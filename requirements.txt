@@ -1,10 +1,10 @@
 Nni
 numpy
-nengo
 matplotlib
 pyopencl
 pandas
-nengo_ocl
 tensorflow
 Mako
 opencv_python
+nengo
+nengo_ocl
