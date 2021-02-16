@@ -1,0 +1,25 @@
+Using base prefix '/cvmfs/soft.computecanada.ca/easybuild/software/2017/Core/python/3.6.3'
+New python executable in /localscratch/ng1998.61989816.0/env/bin/python
+Installing setuptools, pip, wheel...done.
+Cloning into 'VDSP_ocl'...
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Collecting pip
+Installing collected packages: pip
+  Found existing installation: pip 9.0.1
+    Uninstalling pip-9.0.1:
+      Successfully uninstalled pip-9.0.1
+Successfully installed pip-18.1
+Ignoring pip: markers 'python_version < "3"' don't match your environment
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/nix/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Collecting Nni (from -r requirements.txt (line 1))
+Collecting numpy (from -r requirements.txt (line 2))
+Collecting nengo_extras (from -r requirements.txt (line 3))
+  Could not find a version that satisfies the requirement nengo_extras (from -r requirements.txt (line 3)) (from versions: )
+No matching distribution found for nengo_extras (from -r requirements.txt (line 3))
+Traceback (most recent call last):
+  File "mnist_multiple_exploration.py", line 5, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+tar: /localscratch/ng1998.61989816.0/VDSP_ocl: Cannot read: Is a directory
+tar: At beginning of tape, quitting now
+tar: Error is not recoverable: exiting now
