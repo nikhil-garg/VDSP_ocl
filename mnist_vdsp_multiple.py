@@ -71,14 +71,21 @@ def evaluate_mnist_multiple(args):
     #     image_test_filtered.append(image_test[i])
     #     label_test_filtered.append(label_test[i])
 
-    np.load(
-        'mnist.npz',
-        image_train_filtered=image_train_filtered,
-        label_train_filtered=label_train_filtered,
-        image_test_filtered=image_test_filtered,
-        label_test_filtered=label_test_filtered,
+    # np.save(
+    #     'mnist.npz',
+    #     image_train_filtered=image_train_filtered,
+    #     label_train_filtered=label_train_filtered,
+    #     image_test_filtered=image_test_filtered,
+    #     label_test_filtered=label_test_filtered,
  
-    )
+    # )
+
+    data = np.load(mnist.npz, allow_pickle=True)
+    image_train_filtered = data['image_train_filtered']
+    label_train_filtered = data['label_train_filtered']
+    image_test_filtered = data['image_test_filtered']
+    label_test_filtered = data['label_test_filtered']
+
 
 
     #Simulation Parameters 
