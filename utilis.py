@@ -7,7 +7,6 @@ import tensorflow as tf
 import os
 from nengo.dists import Choice
 from datetime import datetime
-from nengo_extras.data import load_mnist
 import pickle
 from nengo.utils.matplotlib import rasterplot
 
@@ -18,7 +17,6 @@ from InputData import PresentInputWithPause
 # from custom_rule import CustomRule
 # from custom_rule import CustomRule_prev
 
-from nengo_extras.graphviz import net_diagram
 import nengo_ocl
 
 from nengo.neurons import LIFRate
@@ -38,7 +36,6 @@ from nengo.neurons import AdaptiveLIF
 from nengo.synapses import Lowpass, SynapseParam
 from nengo.params import (NumberParam,Default)
 from nengo.dists import Choice
-#from nengo_extras.neurons import spikes2events
 from nengo.utils.numpy import clip
 import numpy as np
 import random

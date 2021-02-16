@@ -8,7 +8,7 @@ import tensorflow as tf
 import os
 from nengo.dists import Choice
 from datetime import datetime
-from nengo_extras.data import load_mnist
+# from nengo_extras.data import load_mnist
 import pickle
 from nengo.utils.matplotlib import rasterplot
 
@@ -16,7 +16,7 @@ import time
 
 from InputData import PresentInputWithPause
 
-from nengo_extras.graphviz import net_diagram
+# from nengo_extras.graphviz import net_diagram
 
 from nengo.neurons import LIFRate
 

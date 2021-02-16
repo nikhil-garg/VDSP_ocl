@@ -1,6 +1,5 @@
 Nni
 numpy
-nengo_extras
 nengo
 matplotlib
 pyopencl
