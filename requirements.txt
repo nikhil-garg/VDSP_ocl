@@ -1,5 +1,4 @@
 Nni
 numpy
-matplotlib
 pandas
 Mako
