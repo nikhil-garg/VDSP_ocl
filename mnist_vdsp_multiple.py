@@ -44,7 +44,7 @@ def evaluate_mnist_multiple(args):
 
     # (image_train, label_train), (image_test, label_test) = (keras.datasets.mnist.load_data())
 
-    # probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
+    probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
     # # probe_sample_rate = 1000
     # image_train_filtered = []
     # label_train_filtered = []
@@ -80,7 +80,7 @@ def evaluate_mnist_multiple(args):
  
     # )
 
-    data = np.load(mnist.npz, allow_pickle=True)
+    data = np.load('mnist.npz', allow_pickle=True)
     image_train_filtered = data['image_train_filtered']
     label_train_filtered = data['label_train_filtered']
     image_test_filtered = data['image_test_filtered']
