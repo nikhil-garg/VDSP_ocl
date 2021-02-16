@@ -1,8 +1,8 @@
 authorName: Nikhil
 experimentName: VDSP
-trialConcurrency: 2
+trialConcurrency: 10
 maxExecDuration: 72h
-maxTrialNum: 100
+maxTrialNum: 1000
 #choice: local, remote, pai
 trainingServicePlatform: local
 searchSpacePath: search_space.json
