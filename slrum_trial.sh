@@ -7,16 +7,15 @@ mkdir -p $OUTDIR
 cd $SLURM_TMPDIR
 
 
-module load python/3.7
+module load python/3.8.3
 
 virtualenv --no-download $SLURM_TMPDIR/env  # SLURM_TMPDIR is on the compute node
 
 source $SLURM_TMPDIR/env/bin/activate
 
 pip install matplotlib
-pip install tensorflow
 
-python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.3.2-py3-none-any.whl
+python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.3.0-py3-none-any.whl
 
 
 git clone https://github.com/nengo/nengo
