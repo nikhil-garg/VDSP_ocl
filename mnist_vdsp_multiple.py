@@ -32,7 +32,7 @@ import itertools
 import random
 import logging
 
-import nni
+# import nni
 
 
 def evaluate_mnist_multiple(args):
@@ -334,7 +334,7 @@ def evaluate_mnist_multiple(args):
     print("Accuracy: ", accuracy)
     sim.close()
 
-    nni.report_final_result(accuracy)
+    # nni.report_final_result(accuracy)
 
     del weights, sim.data, labels, output_spikes, image_test,image_train,label_train,label_test, class_pred, t_data
 
