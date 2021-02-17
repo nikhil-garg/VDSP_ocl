@@ -108,6 +108,12 @@ def args():
         type=float,
         help="Firing rate for input neuron",
     )
+    parser.add_argument(
+        "--log_file_path",
+        default=None,
+        type=str,
+        help="log file path",
+    )
 
     my_args = parser.parse_args()
 
