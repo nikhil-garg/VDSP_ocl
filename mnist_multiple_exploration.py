@@ -46,11 +46,11 @@ if __name__ == '__main__':
 	parameters = dict(
 		vprog = [-0.60,-0.65],
 		input_nbr=[60000],
-		g_max=[0.3]
-		,tau_in = [0.2]
-		,tau_out = [0.03]
+		g_max=[0.1,0.3,0.5]
+		,tau_in = [0.03,0.06,0.1,0.15,0.2,0.3]
+		,tau_out = [0.03,0.06,0.1,0.15,0.2]
 		, lr = [0.0005,0.005, 0.001]
-		, presentation_time = [0.20]
+		, presentation_time = [0.20,0.3]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -128,7 +128,7 @@ if __name__ == '__main__':
 
 			# plt.savefig(folder+'/raster'+str(args.filename)+'.png')
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
 		if args.log_file_path is None:
