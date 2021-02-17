@@ -17,15 +17,22 @@ source $SLURM_TMPDIR/env/bin/activate
 
 pip install matplotlib
 
+git clone -b v2.0 https://github.com/Microsoft/nni.git
+cd nni
+python -m pip install --upgrade pip setuptools
+python setup.py develop
+cd ..
+
 
 git clone https://github.com/nengo/nengo
 cd nengo
 pip install -e .
 
-pip install Nni
+pip install nni
 pip install numpy
 pip install pandas
 pip install Mako
+
 
 cd ..
 
