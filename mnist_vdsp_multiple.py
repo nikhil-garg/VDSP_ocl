@@ -354,7 +354,7 @@ def evaluate_mnist_multiple(args):
 
     # nni.report_final_result(accuracy)
 
-    del weights, sim.data, labels, output_spikes, image_test,image_train,label_train,label_test, class_pred, t_data
+    del weights, sim.data, labels, output_spikes, class_pred, t_data
 
     return accuracy, last_weight
 
