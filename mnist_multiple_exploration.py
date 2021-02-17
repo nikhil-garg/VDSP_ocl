@@ -81,11 +81,6 @@ if __name__ == '__main__':
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
 		
-		if args.log_file_path is not None:
-			log_dir = pwd+'/log_dir/'
-		else : 
-			log_dir = args.log_file_path
-		df.to_csv(log_dir+log_file_name, index=False)
 
 
 		plot = False
@@ -136,7 +131,7 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
-		if args.log_file_path is not None:
+		if args.log_file_path is None:
 			log_dir = pwd+'/log_dir/'
 		else : 
 			log_dir = args.log_file_path
