@@ -36,6 +36,13 @@ if __name__ == '__main__':
                         "presentation_time":[]
                          })
 
+	if args.log_file_path is None:
+		log_dir = pwd+'/log_dir/'
+	else : 
+		log_dir = args.log_file_path
+		df.to_csv(log_dir+'test.csv', index=False)
+
+
 	parameters = dict(
 		vprog = [-0.60,-0.65],
 		input_nbr=[60000],
@@ -54,7 +61,14 @@ if __name__ == '__main__':
 	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.presentation_time in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
+		
+
+		timestr = time.strftime("%Y%m%d-%H%M%S")
+		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
+		pwd = os.getcwd()
+
 		accuracy, weights = evaluate_mnist_multiple(args)
+
 
 
 		df = df.append({ "vprog":args.vprog,
@@ -66,6 +80,12 @@ if __name__ == '__main__':
 		                 "presentation_time":args.presentation_time,
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
+		
+		if args.log_file_path is not None:
+			log_dir = pwd+'/log_dir/'
+		else : 
+			log_dir = args.log_file_path
+		df.to_csv(log_dir+log_file_name, index=False)
 
 
 		plot = False
