@@ -108,6 +108,46 @@ def args():
         type=float,
         help="Firing rate for input neuron",
     )
+
+    parser.add_argument(
+        "--gain_out",
+        default=20,
+        type=float,
+        help="gain for output neuron",
+    )
+    parser.add_argument(
+        "--gain_in",
+        default=20,
+        type=float,
+        help="gain for input neuron",
+    )
+
+    parser.add_argument(
+        "--bias_out",
+        default=0,
+        type=float,
+        help="bias for output neuron",
+    )
+    parser.add_argument(
+        "--bias_in",
+        default=0,
+        type=float,
+        help="bias for input neuron",
+    )
+
+    parser.add_argument(
+        "--thr_out",
+        default=70,
+        type=float,
+        help="Threshold of output layer",
+    )
+    parser.add_argument(
+        "--inhibition_time",
+        default=10,
+        type=float,
+        help="inhibition_time",
+    )
+
     parser.add_argument(
         "--log_file_path",
         default=None,

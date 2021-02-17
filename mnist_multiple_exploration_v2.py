@@ -32,6 +32,12 @@ if __name__ == '__main__':
 						"g_max":[],
 						"tau_in" :[],
 						"tau_out":[],
+						"gain_in":[],
+						"gain_out":[],
+						"bias_in":[],
+						"bias_out":[],
+						"thr_out":[],
+						"inhibition_time":[],
                         "lr":[],
                         "presentation_time":[]
                          })
@@ -44,13 +50,19 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.60,-0.65],
+		vprog = [-0.60],
 		input_nbr=[60000],
-		g_max=[0.1,0.3,0.5]
-		,tau_in = [0.03,0.06,0.1,0.15,0.2,0.3]
-		,tau_out = [0.03,0.06,0.1,0.15,0.2]
-		, lr = [0.0005,0.0001]
-		, presentation_time = [0.20,0.35]
+		g_max=[0.3]
+		,tau_in = [0.3]
+		,tau_out = [0.06]
+		,gain_in = [1.5,1.75,2,2.25,2.5]
+		,gain_out = [1.5,1.75,2,2.25,2.5]
+		,bias_in = [-0.125,0,0.125]
+		,bias_out = [-0.125,0,0.125]
+		,thr_out = [50,70,90]
+		,inhibition_time = [8,10,12]
+		, lr = [0.0001]
+		, presentation_time = [0.20]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -76,6 +88,12 @@ if __name__ == '__main__':
 						 "g_max":args.g_max,
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
+						 "gain_in":args.gain_in,
+						 "gain_out":args.gain_out,
+						 "bias_in":args.bias_in,
+						 "bias_out":args.bias_out,
+						 "thr_out":args.thr_out,
+						 "inhibition_time":args.inhibition_time,
 						 "lr": args.lr,
 		                 "presentation_time":args.presentation_time,
 		                 "accuracy":accuracy
