@@ -70,7 +70,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.presentation_time in product(*param_values):
+	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
