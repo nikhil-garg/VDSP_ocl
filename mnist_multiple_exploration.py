@@ -49,8 +49,8 @@ if __name__ == '__main__':
 		g_max=[0.1,0.3,0.5]
 		,tau_in = [0.03,0.06,0.1,0.15,0.2,0.3]
 		,tau_out = [0.03,0.06,0.1,0.15,0.2]
-		, lr = [0.0005,0.005, 0.001]
-		, presentation_time = [0.20,0.3]
+		, lr = [0.0005,0.0001, 0.0005]
+		, presentation_time = [0.20,0.35]
     )
 	param_values = [v for v in parameters.values()]
 
