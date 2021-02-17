@@ -1,12 +1,11 @@
 #!/bin/bash
 #SBATCH --account=def-drod1901
-#SBATCH --time=7-0:0:0
+#SBATCH --time=5-0:0:0
 #SBATCH --cpus-per-task=32 
-#SBATCH --mem=256G
+#SBATCH --mem=128G
 OUTDIR=~/project/out/$SLURM_JOB_ID
 mkdir -p $OUTDIR
 cd $SLURM_TMPDIR
-
 
 module load python/3.7
 
@@ -14,9 +13,7 @@ virtualenv --no-download $SLURM_TMPDIR/env  # SLURM_TMPDIR is on the compute nod
 
 source $SLURM_TMPDIR/env/bin/activate
 
-
 pip install matplotlib
-
 
 git clone https://github.com/nengo/nengo
 cd nengo
