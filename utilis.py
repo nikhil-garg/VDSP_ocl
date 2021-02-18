@@ -326,16 +326,8 @@ def fun_post(X,
        d1=1,d2=1,d3=1,d4=1,d5=1 ,#d6=1,d7=1,
        alpha1=1,alpha2=0    
        ): 
-    w, vmem, vprog, var_ratio = X
-    vthp=0.25
-    vthn=0.25
-    # var_ratio = 0.1 # between 0 and 1
-    shape_w = w.shape()
-    np.random.seed(0) 
-    vth_var = (2 * np.random.rand(shape_w)) -1 #between -1 to 1 of shape W
+    w, vmem, vprog, vthp,vthn = X
 
-    vthp = vthp + (vthp*var_ratio*vth_var)
-    vthn = vthn + (vthn*var_ratio*vth_var)
 
 
     w_dep = w #Depression is dependent on w
@@ -369,7 +361,7 @@ popt = np.array((1.22495116e-02, -2.14968776e-01,  2.16351015e+00, -1.00745674e+
 
 class CustomRule_post_v2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.25,vthn=0.25):
        
         self.vprog = vprog  
         
@@ -382,6 +374,8 @@ class CustomRule_post_v2(nengo.Process):
         
         self.sample_distance = sample_distance
         self.lr = lr
+        self.vthp = vthp
+        self.vthn = vthn
         
         self.history = [0]
 
@@ -393,7 +387,6 @@ class CustomRule_post_v2(nengo.Process):
     def make_step(self, shape_in, shape_out, dt, rng, state=None):  
        
         self.w = np.random.uniform(self.winit_min, self.winit_max, (shape_out[0], shape_in[0]))
-        dw = np.zeros((shape_out[0], shape_in[0]))
 
         def step(t, x):
 
@@ -408,7 +401,7 @@ class CustomRule_post_v2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog),*popt)  -0)*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt)  -0)*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
@@ -457,19 +450,16 @@ class VLR(LearningRuleType):
     learning_rate = NumberParam("learning_rate", low=0, readonly=True, default=1)
     post_synapse = SynapseParam("post_synapse", default=None, readonly=True)
     vprog = NumberParam("vprog", readonly=True, default=-0.6)
-    var_ratio = NumberParam("var_ratio", readonly=True, default=0)
 
     def __init__(
         self,
         learning_rate=Default,
         post_synapse=Default,
         vprog=Default,
-        var_ratio=Default
     ):
         super().__init__(learning_rate, size_in=0)
         self.post_synapse = post_synapse
         self.vprog = vprog
-        self.var_ratio = var_ratio
 
 
 class SimVLR(Operator):
@@ -479,11 +469,10 @@ class SimVLR(Operator):
     for the other examples of learning rule operators.
     """
 
-    def __init__(self, pre_voltages, post_filtered,weights, delta, learning_rate,vprog,var_ratio, tag=None):
+    def __init__(self, pre_voltages, post_filtered,weights, delta, learning_rate,vprog, tag=None):
         super().__init__(tag=tag)
         self.learning_rate = learning_rate
         self.vprog = vprog
-        self.var_ratio = var_ratio
 
         # Define what this operator sets, increments, reads and updates
         # See (https://github.com/nengo/nengo/blob/master/nengo/builder/operator.py)
@@ -526,7 +515,7 @@ class SimVLR(Operator):
         def step_vlr():
             # Put learning rule logic here
             
-            delta[...] = post_filtered*dt*fun_post((weights,pre_voltages,self.vprog,self.var_ratio),*popt)*self.learning_rate
+            delta[...] = post_filtered*dt*fun_post((weights,pre_voltages,self.vprog,0.25,0.25),*popt)*self.learning_rate
 
         return step_vlr
 
@@ -557,7 +546,6 @@ def build_vlr(model, vlr, rule):
             model.sig[rule]["delta"],
             learning_rate=vlr.learning_rate,
             vprog = vlr.vprog,
-            var_ratio = vlr.var_ratio
             
         )
     )

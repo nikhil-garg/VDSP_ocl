@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple import *
+from mnist_vdsp_multiple_var import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -44,6 +44,7 @@ if __name__ == '__main__':
                          })
 
 	if args.log_file_path is None:
+		pwd = os.getcwd()
 		log_dir = pwd+'/log_dir/'
 	else : 
 		log_dir = args.log_file_path
@@ -62,9 +63,9 @@ if __name__ == '__main__':
 		,bias_out = [0]
 		,thr_out = [70]
 		,inhibition_time = [10]
-		, lr = [0.0001, 0.005]
+		, lr = [0.0001, 0.0005]
 		, presentation_time = [0.20]
-		, var_ratio = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
+		, var_ratio = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -81,7 +82,7 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
-		accuracy, weights = evaluate_mnist_multiple(args)
+		accuracy, weights = evaluate_mnist_multiple_var(args)
 
 
 
