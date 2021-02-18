@@ -54,8 +54,8 @@ if __name__ == '__main__':
 	parameters = dict(
 		vprog = [-0.60],
 		input_nbr=[60000],
-		g_max=[0.3]
-		,tau_in = [0.3]
+		g_max=[0.1]
+		,tau_in = [0.1]
 		,tau_out = [0.06]
 		,gain_in = [2]
 		,gain_out = [2]
@@ -63,8 +63,8 @@ if __name__ == '__main__':
 		,bias_out = [0]
 		,thr_out = [70]
 		,inhibition_time = [10]
-		, lr = [0.0001, 0.0005]
-		, presentation_time = [0.20]
+		, lr = [0.0005]
+		, presentation_time = [0.35]
 		, var_ratio = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
     )
 	param_values = [v for v in parameters.values()]
