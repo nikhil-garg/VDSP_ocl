@@ -147,6 +147,13 @@ def args():
         type=float,
         help="inhibition_time",
     )
+    parser.add_argument(
+        "--var_ratio",
+        default=0,
+        type=float,
+        help="Variability of vth. Between 0 and 1",
+    )
+
 
     parser.add_argument(
         "--log_file_path",
