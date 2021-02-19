@@ -425,6 +425,77 @@ class CustomRule_post_v2(nengo.Process):
         self.signal_out_post = signal
 
 
+class CustomRule_post_v3(nengo.Process):
+   
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.25,vthn=0.25, weight_quant =0):
+       
+        self.vprog = vprog  
+        
+        self.signal_vmem_pre = None
+        self.signal_out_post = None
+
+        self.winit_min = winit_min
+        self.winit_max = winit_max
+        
+        
+        self.sample_distance = sample_distance
+        self.lr = lr
+        self.vthp = vthp
+        self.vthn = vthn
+        self.weight_quant = weight_quant 
+
+        
+        self.history = [0]
+
+        
+        # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
+        
+        super().__init__()
+        
+    def make_step(self, shape_in, shape_out, dt, rng, state=None):  
+       
+        self.w = np.random.uniform(self.winit_min, self.winit_max, (shape_out[0], shape_in[0]))
+
+        def step(t, x):
+
+            assert self.signal_vmem_pre is not None
+            assert self.signal_out_post is not None
+            
+            vmem = np.clip(self.signal_vmem_pre, -1, 1)
+            
+            post_out = self.signal_out_post
+            
+            vmem = np.reshape(vmem, (1, shape_in[0]))   
+
+            post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
+
+            weight_quantization_matrix = ((np.random.rand(shape_out[0],shape_in[0])) -0.5)*self.weight_quant
+
+            self.w = np.clip(((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr)+weight_quantization_matrix), 0, 1)
+            
+            # if (self.tstep%self.sample_distance ==0):
+            #     self.history.append(self.w.copy())
+            
+            # self.tstep +=1
+            self.history[0] = self.w.copy()
+            # self.history.append(self.w.copy())
+            # self.history = self.history[-2:]
+            # self.history = self.w
+            
+            return np.dot(self.w, x)
+        
+        return step   
+
+        # self.current_weight = self.w
+    
+    def set_signal_vmem(self, signal):
+        self.signal_vmem_pre = signal
+        
+    def set_signal_out(self, signal):
+        self.signal_out_post = signal
+
+
+
 
 import numpy as np
 from nengo.builder.builder import Builder
