@@ -35,7 +35,7 @@ import logging
 # import nni
 
 
-def evaluate_mnist_multiple_var(args):
+def evaluate_mnist_multiple_var_v2(args):
 
     #############################
     # load the data
@@ -135,11 +135,11 @@ def evaluate_mnist_multiple_var(args):
 
     vthp=0.25
     vthn=0.25    
-    np.random.seed(0) 
-    vth_var = (2 * np.random.rand(n_neurons,n_in)) -1 #between -1 to 1 of shape W
-    var_ratio=args.var_ratio
-    vthp = vthp + (vthp*var_ratio*vth_var)
-    vthn = vthn + (vthn*var_ratio*vth_var)
+    # np.random.seed(0) 
+    # vth_var = (2 * np.random.rand(n_neurons,n_in)) -1 #between -1 to 1 of shape W
+    # var_ratio=args.var_ratio
+    # vthp = vthp + (vthp*var_ratio*vth_var)
+    # vthn = vthn + (vthn*var_ratio*vth_var)
 
 
     learning_args = {
@@ -149,6 +149,7 @@ def evaluate_mnist_multiple_var(args):
             "vprog":args.vprog, 
             "vthp":vthp,
             "vthn":vthn,
+            "weight_quant":args.weight_quant,
             # "var_ratio":args.var_ratio,
     #         "tpw":50,
     #         "prev_flag":True,
@@ -179,7 +180,7 @@ def evaluate_mnist_multiple_var(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v3(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)

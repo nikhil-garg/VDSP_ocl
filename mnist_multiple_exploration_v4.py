@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple_var import *
+from mnist_vdsp_multiple_var_v2 import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
-		accuracy, weights = evaluate_mnist_multiple_var(args)
+		accuracy, weights = evaluate_mnist_multiple_var_v2(args)
 
 
 
