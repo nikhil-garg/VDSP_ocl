@@ -153,7 +153,12 @@ def args():
         type=float,
         help="Variability of vth. Between 0 and 1",
     )
-
+    parser.add_argument(
+        "--weight_quant",
+        default=0,
+        type=float,
+        help="Variability of weight update",
+    )
 
     parser.add_argument(
         "--log_file_path",
