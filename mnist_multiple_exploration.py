@@ -92,7 +92,6 @@ if __name__ == '__main__':
 		                 },ignore_index=True)
 		
 
-
 		plot = False
 		if plot : 	
 			print('accuracy', accuracy)
