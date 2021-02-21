@@ -328,8 +328,6 @@ def fun_post(X,
        ): 
     w, vmem, vprog, vthp,vthn = X
 
-
-
     w_dep = w #Depression is dependent on w
     w_pot = 1-w #Potentiation is dependent on (1-w)
     
