@@ -68,7 +68,7 @@ if __name__ == '__main__':
 		, lr = [0.0005]
 		, presentation_time = [0.35]
 		, var_ratio = [0]
-		,weight_quant = [0,1/1024,1/512,1/256,1/128,1/64,1/32,1/16,1/8,1/4,1/2]
+		,weight_quant = [0,1/4096,1/2048,1/1024,1/512,1/256,1/128,1/64,1/32,1/16,1/8,1/4,1/2]
     )
 	param_values = [v for v in parameters.values()]
 

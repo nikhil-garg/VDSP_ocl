@@ -56,7 +56,7 @@ if __name__ == '__main__':
 		vprog = [-0.60],
 		input_nbr=[60000],
 		g_max=[0.1]
-		,tau_in = [0.1]
+		,tau_in = [0.06]
 		,tau_out = [0.06]
 		,gain_in = [2]
 		,gain_out = [2]
