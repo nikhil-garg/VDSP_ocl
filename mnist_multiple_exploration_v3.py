@@ -40,7 +40,8 @@ if __name__ == '__main__':
 						"inhibition_time":[],
                         "lr":[],
                         "presentation_time":[],
-                        "var_ratio":[]
+                        "var_ratio":[],
+                        "accuracy":[],
                          })
 
 	if args.log_file_path is None:

@@ -136,7 +136,7 @@ def evaluate_mnist_multiple_var(args):
     vthp=0.25
     vthn=0.25    
     np.random.seed(0) 
-    vth_var = (2 * np.random.rand(n_neurons,n_in)) -1 #between -1 to 1 of shape W
+    vth_var = 2 *( np.random.randn(n_neurons,n_in)-0.5) #between -1 to 1 of shape W
     var_ratio=args.var_ratio
     vthp = vthp + (vthp*var_ratio*vth_var)
     vthn = vthn + (vthn*var_ratio*vth_var)
@@ -310,7 +310,7 @@ def evaluate_mnist_multiple_var(args):
 
     step_time = (presentation_time + pause_time) 
 
-    with nengo.Simulator(model,dt=0.005) as sim:
+    with nengo.Simulator(model,dt=args.dt) as sim:
            
         sim.run(step_time * label_test_filtered.shape[0])
 
@@ -331,7 +331,7 @@ def evaluate_mnist_multiple_var(args):
     for num in range(input_nbr):
         #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
-        output_spikes_num = output_spikes[num*int(presentation_time/0.005):(num+1)*int(presentation_time/0.005),:] # 0.350/0.005
+        output_spikes_num = output_spikes[num*int(presentation_time/args.dt):(num+1)*int(presentation_time/args.dt),:] # 0.350/0.005
         num_spikes = np.sum(output_spikes_num > 0, axis=0)
 
         for i in range(n_classes):
@@ -350,7 +350,7 @@ def evaluate_mnist_multiple_var(args):
         class_pred = np.argmax(class_spikes)
         predicted_labels.append(class_pred)
 
-        true_class = labels[(num*int(presentation_time/0.005))]
+        true_class = labels[(num*int(presentation_time/args.dt))]
         # print(true_class)
         # print(class_pred)
 
