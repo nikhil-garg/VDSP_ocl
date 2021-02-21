@@ -336,12 +336,12 @@ def evaluate_mnist_multiple_var(args):
 
         for i in range(n_classes):
             sum_temp = 0
-            count_temp = 1
+            count_temp = 0
             for j in range(n_neurons):
                 if((neuron_class[j]) == i) : 
                     sum_temp += num_spikes[j]
                     count_temp +=1
-
+            
             class_spikes[i] = sum_temp/count_temp
 
         # print(class_spikes)

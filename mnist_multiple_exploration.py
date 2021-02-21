@@ -33,7 +33,11 @@ if __name__ == '__main__':
 						"tau_in" :[],
 						"tau_out":[],
                         "lr":[],
-                        "presentation_time":[]
+                        "presentation_time":[],
+                        "dt":[],
+                        "n_neurons":[],
+                        "inhibition_time":[],
+                        "accuracy":[]
                          })
 
 	if args.log_file_path is None:
@@ -44,13 +48,16 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.60,-0.65],
-		input_nbr=[60000],
-		g_max=[0.1,0.3,0.5]
+		vprog = [-0.60,-0.65]
+		,input_nbr=[60000]
+		,g_max=[0.1,0.3,0.5]
 		,tau_in = [0.03,0.06,0.1,0.15,0.2,0.3]
 		,tau_out = [0.03,0.06,0.1,0.15,0.2]
 		, lr = [0.0005,0.0001]
 		, presentation_time = [0.20,0.35]
+		, dt = [0.20,0.35]
+		, n_neurons = [0.20,0.35]
+		, inhibition_time = [0.20,0.35]
     )
 	param_values = [v for v in parameters.values()]
 

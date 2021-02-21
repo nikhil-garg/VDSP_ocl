@@ -694,7 +694,7 @@ class STDPLIF(AdaptiveLIF):
         output[voltage != np.max(voltage)] = 0  
         if(np.sum(output) != 0):
             voltage[voltage != np.max(voltage)] = 0 
-            inhib[(voltage != np.max(voltage)) & (inhib == 0)] = self.inhibition_time
+            inhib[(voltage != np.max(voltage)) & (inhib == 0)] = self.inhibition_time/(dt*1000)
         #print("voltage : ",voltage)
         voltage[inhib != 0] = 0 
         J[inhib != 0] = 0

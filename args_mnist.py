@@ -20,6 +20,13 @@ def args():
         type=int, 
         help="Number of images to consider for training"
     )
+
+    parser.add_argument(
+        "--dt",
+        default=0.005, 
+        type=float, 
+        help="Time step"
+    )
     parser.add_argument(
         "--digit",
         default=4,
@@ -143,7 +150,7 @@ def args():
     )
     parser.add_argument(
         "--inhibition_time",
-        default=10,
+        default=50,
         type=float,
         help="inhibition_time",
     )
