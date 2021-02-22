@@ -150,7 +150,7 @@ def evaluate_mnist_multiple_var_v2(args):
             "vthp":vthp,
             "vthn":vthn,
             "weight_quant":args.weight_quant,
-            "var_ratio":args.var_ratio,
+            # "var_ratio":args.var_ratio,
     #         "tpw":50,
     #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
