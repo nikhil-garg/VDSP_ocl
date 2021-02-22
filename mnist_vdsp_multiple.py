@@ -32,7 +32,7 @@ import itertools
 import random
 import logging
 
-# import nni
+import nni
 
 
 def evaluate_mnist_multiple(args):
@@ -325,8 +325,11 @@ def evaluate_mnist_multiple(args):
                 if((neuron_class[j]) == i) : 
                     sum_temp += num_spikes[j]
                     count_temp +=1
-
-            class_spikes[i] = sum_temp/count_temp
+        
+            if(count_temp==0):
+                class_spikes[i] = 0
+            else:
+                class_spikes[i] = sum_temp/count_temp
 
         # print(class_spikes)
         k = np.argmax(num_spikes)
@@ -352,7 +355,7 @@ def evaluate_mnist_multiple(args):
     print("Accuracy: ", accuracy)
     sim.close()
 
-    # nni.report_final_result(accuracy)
+    nni.report_final_result(accuracy)
 
     del weights, sim.data, labels, output_spikes, class_pred, t_data
 
@@ -420,7 +423,7 @@ if __name__ == '__main__':
     args.g_max = params['g_max']
     args.tau_in = params['tau_in']
     args.tau_out = params['tau_out']
-    args.lr = params['lr']
+    # args.lr = params['lr']
     # args.presentation_time = params['presentation_time']
     # args.rate_out = params['rate_out']
 

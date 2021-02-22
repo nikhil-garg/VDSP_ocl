@@ -1,6 +1,5 @@
 {
-	"g_max": {"_type":"uniform", "_value": [0.3,0.8]},
+	"g_max": {"_type":"uniform", "_value": [0.1,0.9]},
 	"tau_in": {"_type":"uniform", "_value": [0.01,0.3]},
-	"tau_out": {"_type":"uniform", "_value": [0.01,0.3]},
-	"lr": {"_type":"uniform", "_value": [0.0001,0.001]}
+	"tau_out": {"_type":"uniform", "_value": [0.01,0.3]}
 }

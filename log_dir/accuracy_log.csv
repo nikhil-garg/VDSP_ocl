@@ -1,0 +1,2 @@
+vprog,input_nbr,g_max,tau_in,tau_out,gain_in,gain_out,bias_in,bias_out,thr_out,inhibition_time,lr,presentation_time,var_ratio,weight_quant,accuracy
+-0.6,60000.0,0.1,0.1,0.06,2.0,2.0,0.0,0.0,70.0,10.0,0.0005,0.35,0.0,0.0,67.96
