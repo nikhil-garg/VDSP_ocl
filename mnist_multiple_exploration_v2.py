@@ -53,16 +53,16 @@ if __name__ == '__main__':
 		vprog = [-0.60],
 		input_nbr=[60000],
 		g_max=[0.3]
-		,tau_in = [0.3]
-		,tau_out = [0.06]
-		,gain_in = [1.5,1.75,2,2.25,2.5]
-		,gain_out = [1.5,1.75,2,2.25,2.5]
-		,bias_in = [-0.125,0,0.125]
-		,bias_out = [-0.125,0,0.125]
-		,thr_out = [50,70,90]
-		,inhibition_time = [8,10,12]
-		, lr = [0.0001]
-		, presentation_time = [0.20]
+		,tau_in = [0.1]
+		,tau_out = [0.1]
+		,gain_in = [2]
+		,gain_out = [2/70, 1/70, 4/70]
+		,bias_in = [0]
+		,bias_out = [0]
+		,thr_out = [1, 10]
+		,inhibition_time = [10]
+		, lr = [0.0005]
+		, presentation_time = [0.35]
     )
 	param_values = [v for v in parameters.values()]
 

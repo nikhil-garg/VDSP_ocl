@@ -704,7 +704,7 @@ class STDPLIF(AdaptiveLIF):
             voltage[voltage != np.max(voltage)] = 0 
             inhib[(voltage != np.max(voltage)) & (inhib == 0)] = self.inhibition_time/(dt*1000)
         #print("voltage : ",voltage)
-        voltage[inhib != 0] = 0 
+        voltage[inhib != 0] = 0
         J[inhib != 0] = 0
         # set v(0) = 1 and solve for t to compute the spike time
         t_spike = dt + tau_rc * np.log1p(
