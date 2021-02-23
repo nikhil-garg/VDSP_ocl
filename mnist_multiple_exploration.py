@@ -55,11 +55,11 @@ if __name__ == '__main__':
 		,g_max=[0.1]
 		,tau_in = [0.1]
 		,tau_out = [0.1]
-		, lr = [0.0005]
+		, lr = [0.0005, 0.001]
 		, presentation_time = [0.35]
-		, dt = [0.005]
-		, n_neurons = [20]
-		, inhibition_time = [10,25,50,70,100]
+		, dt = [0.005, 0.001]
+		, n_neurons = [30, 20]
+		, inhibition_time = [50]
     )
 	param_values = [v for v in parameters.values()]
 
