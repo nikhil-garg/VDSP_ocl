@@ -28,6 +28,7 @@ if __name__ == '__main__':
 	np.random.seed(seed)
 	pwd = os.getcwd()
 	df = pd.DataFrame({	"vprog":[],
+						"vth":[],
 						"input_nbr":[],
 						"g_max":[],
 						"tau_in" :[],
@@ -49,15 +50,16 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.60,-0.65]
+		,vthp=[0,0.05,0.1,0.15,0.2,0.25,0.3]
 		,input_nbr=[60000]
 		,g_max=[0.1]
-		,tau_in = [0.03]
-		,tau_out = [0.03]
-		, lr = [0.0005,0.001, 0.002]
+		,tau_in = [0.1]
+		,tau_out = [0.1]
+		, lr = [0.0005]
 		, presentation_time = [0.35]
-		, dt = [0.005, 0.001]
-		, n_neurons = [20,30,50,80]
-		, inhibition_time = [50]
+		, dt = [0.005]
+		, n_neurons = [20]
+		, inhibition_time = [10,25,50,75]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -65,7 +67,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
+	for args.vprog,args.vthp,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -74,11 +76,15 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
+
+
+		args.vthn = args.vthp
 		accuracy, weights = evaluate_mnist_multiple(args)
 
 
 
 		df = df.append({ "vprog":args.vprog,
+						 "vth":args.vthp,
 						 "input_nbr":args.input_nbr,
 						 "g_max":args.g_max,
 						 "tau_in":args.tau_in,

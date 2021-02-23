@@ -161,6 +161,18 @@ def args():
         help="Variability of vth. Between 0 and 1",
     )
     parser.add_argument(
+        "--vthp",
+        default=0.25,
+        type=float,
+        help="Switching threshold of memristor",
+    )
+    parser.add_argument(
+        "--vthn",
+        default=0.25,
+        type=float,
+        help="Switching threshold of memristor",
+    )
+    parser.add_argument(
         "--weight_quant",
         default=0,
         type=float,

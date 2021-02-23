@@ -171,7 +171,7 @@ def evaluate_mnist_multiple(args):
         # nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
         init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
-        conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=args.vprog),transform=init_weights)
+        conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=args.vprog, vthp=args.vthp,vthn=args.vthn),transform=init_weights)
 
         #Lateral inhibition
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 

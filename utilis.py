@@ -519,16 +519,22 @@ class VLR(LearningRuleType):
     learning_rate = NumberParam("learning_rate", low=0, readonly=True, default=1)
     post_synapse = SynapseParam("post_synapse", default=None, readonly=True)
     vprog = NumberParam("vprog", readonly=True, default=-0.6)
+    vthp = NumberParam("vthp", readonly=True, default=0.25)
+    vthn = NumberParam("vthn", readonly=True, default=0.25)
 
     def __init__(
         self,
         learning_rate=Default,
         post_synapse=Default,
         vprog=Default,
+        vthp=Default,
+        vthn=Default
     ):
         super().__init__(learning_rate, size_in=0)
         self.post_synapse = post_synapse
         self.vprog = vprog
+        self.vthp = vthp
+        self.vthn = vthn
 
 
 class SimVLR(Operator):
@@ -538,10 +544,12 @@ class SimVLR(Operator):
     for the other examples of learning rule operators.
     """
 
-    def __init__(self, pre_voltages, post_filtered,weights, delta, learning_rate,vprog, tag=None):
+    def __init__(self, pre_voltages, post_filtered,weights, delta, learning_rate,vprog,vthp,vthn, tag=None):
         super().__init__(tag=tag)
         self.learning_rate = learning_rate
         self.vprog = vprog
+        self.vthp = vthp
+        self.vthn = vthn
 
         # Define what this operator sets, increments, reads and updates
         # See (https://github.com/nengo/nengo/blob/master/nengo/builder/operator.py)
@@ -584,7 +592,7 @@ class SimVLR(Operator):
         def step_vlr():
             # Put learning rule logic here
             
-            delta[...] = post_filtered*dt*fun_post((weights,pre_voltages,self.vprog,0.25,0.25),*popt)*self.learning_rate
+            delta[...] = post_filtered*dt*fun_post((weights,pre_voltages,self.vprog,self.vthp,self.vthn),*popt)*self.learning_rate
 
         return step_vlr
 
@@ -615,6 +623,8 @@ def build_vlr(model, vlr, rule):
             model.sig[rule]["delta"],
             learning_rate=vlr.learning_rate,
             vprog = vlr.vprog,
+            vthp = vlr.vthp,
+            vthn = vlr.vthn
             
         )
     )
