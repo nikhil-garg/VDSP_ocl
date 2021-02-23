@@ -43,6 +43,7 @@ if __name__ == '__main__':
                          })
 
 	if args.log_file_path is None:
+		pwd = os.getcwd()
 		log_dir = pwd+'/log_dir/'
 	else : 
 		log_dir = args.log_file_path
@@ -52,15 +53,15 @@ if __name__ == '__main__':
 	parameters = dict(
 		vprog = [-0.60],
 		input_nbr=[60000],
-		g_max=[0.3]
+		g_max=[1/210, 1/100, 1/300, 1/784]
 		,tau_in = [0.1]
 		,tau_out = [0.1]
 		,gain_in = [2]
-		,gain_out = [2/70, 1/70, 4/70]
+		,gain_out = [2]
 		,bias_in = [0]
 		,bias_out = [0]
-		,thr_out = [1, 10]
-		,inhibition_time = [10]
+		,thr_out = [1]
+		,inhibition_time = [5, 10]
 		, lr = [0.0005]
 		, presentation_time = [0.35]
     )

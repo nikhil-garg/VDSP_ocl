@@ -26,6 +26,9 @@ input_nbr = 60000
 iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
+dt = 0.005
+
+
 Dataset = "Mnist"
 # (image_train, label_train), (image_test, label_test) = load_mnist()
 (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
@@ -97,7 +100,7 @@ with model:
         n_in,
         1,
         label="Input",
-        neuron_type=MyLIF_in(tau_rc=0.1,min_voltage=-1,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
+        neuron_type=MyLIF_in(tau_rc=0.1,min_voltage=-1,amplitude=1/210),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
         gain=nengo.dists.Choice([2]),
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
@@ -109,17 +112,26 @@ with model:
          n_neurons,
          1,
          label="layer1",
-         neuron_type=STDPLIF(tau_rc=0.06, min_voltage=-1),
+         neuron_type=STDPLIF(tau_rc=0.06, min_voltage=-1, spiking_threshold = 1),
          gain=nengo.dists.Choice([2]),
          encoders=nengo.dists.Choice([[1]]),
          bias=nengo.dists.Choice([0]))
 
-    init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
-    conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=learning_rate,vprog=-0.6),transform=init_weights)
+    # init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
+    
+    w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=784, size_out=n_neurons)  
+    nengo.Connection(input_layer.neurons, w)
+    nengo.Connection(w, layer1.neurons)
+
+    # conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=learning_rate,vprog=-0.6),transform=init_weights)
 
     p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
     p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
-    weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
+    
+    weights = w.output.history
+
+
+    # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
     #if(not full_log):
     #    nengo.Node(log)
 
@@ -128,19 +140,19 @@ with model:
 step_time = (presentation_time + pause_time) 
 Args = {"Dataset":Dataset,"Labels":label_train_filtered,"step_time":step_time,"input_nbr":input_nbr}
 
-with nengo.Simulator(model,dt=0.005) as sim:
+with nengo.Simulator(model,dt=dt) as sim:
     
     #if(not full_log):
     #    log.set(sim,Args,False,False)
 
-    # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
-    # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
+    w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
+    w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
     
     sim.run(iterations*step_time * label_train_filtered.shape[0])
 
 
-weights = sim.data[weights_probe][-1]
-
+# weights = sim.data[weights_probe][-1]
+weights = weights[-1]
 #if(not full_log):
 #    log.closeLog()
 
@@ -192,7 +204,7 @@ Testing
 '''
 
 img_rows, img_cols = 28, 28
-input_nbr = 10000
+input_nbr = int(input_nbr/6)
 
 Dataset = "Mnist"
 # (image_train, label_train), (image_test, label_test) = load_mnist()
@@ -232,7 +244,7 @@ with model:
         n_in,
         1,
         label="Input",
-        neuron_type=MyLIF_in(tau_rc=0.3,min_voltage=-2,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
+        neuron_type=MyLIF_in(tau_rc=0.3,min_voltage=-1,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
         gain=nengo.dists.Choice([2]),
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
@@ -265,7 +277,7 @@ with model:
 
 step_time = (presentation_time + pause_time) 
 
-with nengo.Simulator(model,dt=0.005) as sim:
+with nengo.Simulator(model,dt=dt) as sim:
        
     sim.run(step_time * label_test_filtered.shape[0])
 
@@ -285,7 +297,7 @@ class_spikes = np.ones((10,1))
 for num in range(input_nbr):
     #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
-    output_spikes_num = output_spikes[num*int(presentation_time/0.005):(num+1)*int(presentation_time/0.005),:] # 0.350/0.005
+    output_spikes_num = output_spikes[num*int(presentation_time/dt):(num+1)*int(presentation_time/dt),:] # 0.350/0.005
     num_spikes = np.sum(output_spikes_num > 0, axis=0)
 
     for i in range(n_classes):
@@ -306,7 +318,7 @@ for num in range(input_nbr):
     class_pred = np.argmax(class_spikes)
     predicted_labels.append(class_pred)
 
-    true_class = labels[(num*int(presentation_time/0.005))]
+    true_class = labels[(num*int(presentation_time/dt))]
 
     if(class_pred == true_class):
         correct_classified+=1
