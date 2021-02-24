@@ -34,6 +34,7 @@ if __name__ == '__main__':
 						"tau_in" :[],
 						"tau_out":[],
                         "lr":[],
+                        "iterations":[],
                         "presentation_time":[],
                         "dt":[],
                         "n_neurons":[],
@@ -49,13 +50,14 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.60, -0.65]
+		vprog = [-0.60]
 		,vthp=[0.25]
 		,input_nbr=[60000]
 		,g_max=[1/210]
 		,tau_in = [0.1]
 		,tau_out = [0.1]
-		, lr = [0.002,0.005,0.0075,0.01,0.05,0.075, 0.1]
+		, lr = [0.0005]
+		,iterations=[1,2,3]
 		, presentation_time = [0.35]
 		, dt = [0.005]
 		, n_neurons = [30]
@@ -67,7 +69,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.vthp,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
+	for args.vprog,args.vthp,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		

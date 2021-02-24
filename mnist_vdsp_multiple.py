@@ -76,6 +76,8 @@ def evaluate_mnist_multiple(args):
     image_test_filtered = data['image_test_filtered']
     label_test_filtered = data['label_test_filtered']
 
+    image_train_filtered = np.tile(image_train_filtered,(args.Iterations,1,1))
+    label_train_filtered = np.tile(label_train_filtered,(args.Iterations))
 
 
     #Simulation Parameters 
@@ -97,11 +99,11 @@ def evaluate_mnist_multiple(args):
             "n_neurons":n_in,
             "dimensions":1,
             "label":"Input layer",
-            "encoders":nengo.dists.Uniform(1,1),
+            "encoders":nengo.dists.Choice([[1]]),
             # "max_rates":nengo.dists.Uniform(22,22),
             # "intercepts":nengo.dists.Uniform(0,0),
-            "gain":nengo.dists.Uniform(args.gain_in,args.gain_in),
-            "bias":nengo.dists.Uniform(args.bias_in,args.bias_in),
+            "gain":nengo.dists.Choice([args.gain_in]),
+            "bias":nengo.dists.Choice([args.bias_in]),
             "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
@@ -111,9 +113,9 @@ def evaluate_mnist_multiple(args):
             "n_neurons":n_neurons,
             "dimensions":1,
             "label":"Layer 1",
-            "encoders":nengo.dists.Uniform(1,1),
-            "gain":nengo.dists.Uniform(args.gain_out,args.gain_out),
-            "bias":nengo.dists.Uniform(args.bias_out,args.bias_out),
+            "encoders":nengo.dists.Choice([[1]]),
+            "gain":nengo.dists.Choice([args.gain_out]),
+            "bias":nengo.dists.Choice([args.bias_out]),
             # "intercepts":nengo.dists.Choice([0]),
             # "max_rates":nengo.dists.Choice([args.rate_out,args.rate_out]),
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
@@ -148,7 +150,7 @@ def evaluate_mnist_multiple(args):
     labels = label_train_filtered
 
 
-    model = nengo.Network("My network")
+    model = nengo.Network("My network", seed = 1)
     #############################
     # Model construction
     #############################
@@ -187,14 +189,14 @@ def evaluate_mnist_multiple(args):
         
 
     # with nengo_ocl.Simulator(model) as sim :   
-    with nengo.Simulator(model, dt=args.dt) as sim:
+    with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
 
         
         # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
         # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         
         
-        sim.run((presentation_time+pause_time) * labels.shape[0]*iterations)
+        sim.run((presentation_time+pause_time) * labels.shape[0])
 
     #save the model
     # now = time.strftime("%Y%m%d-%H%M%S")
@@ -418,11 +420,11 @@ if __name__ == '__main__':
 
 
 
-    params = nni.get_next_parameter()
+    # params = nni.get_next_parameter()
 
-    args.g_max = params['g_max']
-    args.tau_in = params['tau_in']
-    args.tau_out = params['tau_out']
+    # args.g_max = params['g_max']
+    # args.tau_in = params['tau_in']
+    # args.tau_out = params['tau_out']
     # args.lr = params['lr']
     # args.presentation_time = params['presentation_time']
     # args.rate_out = params['rate_out']
