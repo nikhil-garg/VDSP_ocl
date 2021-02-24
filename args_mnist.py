@@ -67,7 +67,7 @@ def args():
     )
     parser.add_argument(
         "--n_neurons",
-        default=20,
+        default=30,
         type=float,
         help="Number of output neurons",
     )

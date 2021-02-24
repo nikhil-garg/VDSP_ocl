@@ -425,7 +425,7 @@ class CustomRule_post_v2(nengo.Process):
 
 class CustomRule_post_v3(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.25,vthn=0.25, weight_quant =0):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.25,vthn=0.25, weight_quant =256):
        
         self.vprog = vprog  
         
@@ -471,9 +471,10 @@ class CustomRule_post_v3(nengo.Process):
 
             # weight_quantization_matrix = ((np.random.randn(shape_out[0],shape_in[0])) -0.5)*self.weight_quant
 
-            self.w = np.clip(((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr)+weight_quantization_matrix), 0, 1)
+            self.w = np.clip(((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr)), 0, 1)
             
-            self.w = np.round(self.w, self.weight_quant)
+
+            self.w = np.round(self.w * self.weight_quant) / self.weight_quant
 
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
@@ -706,6 +707,7 @@ class STDPLIF(AdaptiveLIF):
         output[voltage != np.max(voltage)] = 0  
         if(np.sum(output) != 0):
             voltage[voltage != np.max(voltage)] = 0 
+            # inhib[(voltage != np.max(voltage)) & (inhib == 0)] = 2
             inhib[(voltage != np.max(voltage)) & (inhib == 0)] = self.inhibition_time/(dt*1000)
         #print("voltage : ",voltage)
         voltage[inhib != 0] = 0
