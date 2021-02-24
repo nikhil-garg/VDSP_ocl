@@ -61,7 +61,7 @@ def args():
 
     parser.add_argument(
         "--g_max",
-        default=0.3,
+        default=1/210,
         type=float,
         help="Transform from synapse to output neurons"
     )
@@ -73,20 +73,20 @@ def args():
     )
     parser.add_argument(
         "--tau_in",
-        default=0.3,
+        default=0.1,
         type=float,
         help="Leak constant of input neurons",
     )
 
     parser.add_argument(
         "--tau_out",
-        default=0.3,
+        default=0.1,
         type=float,
         help="Leak constant of output neurons",
     )
     parser.add_argument(
         "--lr",
-        default=0.0001,
+        default=0.0005,
         type=float,
         help="Learning rate of VDSP",
     )
@@ -118,13 +118,13 @@ def args():
 
     parser.add_argument(
         "--gain_out",
-        default=20,
+        default=2,
         type=float,
         help="gain for output neuron",
     )
     parser.add_argument(
         "--gain_in",
-        default=20,
+        default=2,
         type=float,
         help="gain for input neuron",
     )
@@ -144,13 +144,13 @@ def args():
 
     parser.add_argument(
         "--thr_out",
-        default=70,
+        default=1,
         type=float,
         help="Threshold of output layer",
     )
     parser.add_argument(
         "--inhibition_time",
-        default=50,
+        default=10,
         type=float,
         help="inhibition_time",
     )

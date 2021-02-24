@@ -649,7 +649,7 @@ def build_or_passthrough(model, obj, signal):
 class STDPLIF(AdaptiveLIF):
     probeable = ('spikes', 'voltage', 'refractory_time','adaptation','inhib') #,'inhib'
     
-    def __init__(self, spiking_threshold = 70, inhibition_time=10,inhib=[],T = 0.0, **lif_args): # inhib=[],T = 0.0
+    def __init__(self, spiking_threshold =1, inhibition_time=10,inhib=[],T = 0.0, **lif_args): # inhib=[],T = 0.0
         super(STDPLIF, self).__init__(**lif_args)
         # neuron args (if you have any new parameters other than gain
         # an bais )
