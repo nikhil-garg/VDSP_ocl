@@ -78,7 +78,7 @@ n_neurons = 20
 
 # Learning params
 
-learning_rate=0.001
+learning_rate=0.0005
 
 learning_args = {
             "lr": learning_rate,
