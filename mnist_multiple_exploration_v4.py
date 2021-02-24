@@ -56,7 +56,7 @@ if __name__ == '__main__':
 	parameters = dict(
 		vprog = [-0.60],
 		input_nbr=[60000],
-		g_max=[0/210]
+		g_max=[1/210]
 		,tau_in = [0.1]
 		,tau_out = [0.1]
 		,gain_in = [2]
