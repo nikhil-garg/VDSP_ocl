@@ -76,8 +76,8 @@ def evaluate_mnist_multiple(args):
     image_test_filtered = data['image_test_filtered']
     label_test_filtered = data['label_test_filtered']
 
-    image_train_filtered = np.tile(image_train_filtered,(args.Iterations,1,1))
-    label_train_filtered = np.tile(label_train_filtered,(args.Iterations))
+    image_train_filtered = np.tile(image_train_filtered,(args.iterations,1,1))
+    label_train_filtered = np.tile(label_train_filtered,(args.iterations))
 
 
     #Simulation Parameters 

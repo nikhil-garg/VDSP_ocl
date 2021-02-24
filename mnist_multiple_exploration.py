@@ -60,7 +60,7 @@ if __name__ == '__main__':
 		,iterations=[1,2,3]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [30]
+		, n_neurons = [50]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -92,6 +92,7 @@ if __name__ == '__main__':
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
 						 "lr": args.lr,
+						 "iterations":args.iterations,
 		                 "presentation_time":args.presentation_time,
 		                 "dt":args.dt,
 		                 "n_neurons":args.n_neurons,
