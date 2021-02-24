@@ -467,10 +467,14 @@ class CustomRule_post_v3(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            weight_quantization_matrix = ((np.random.randn(shape_out[0],shape_in[0])) -0.5)*self.weight_quant
+
+
+            # weight_quantization_matrix = ((np.random.randn(shape_out[0],shape_in[0])) -0.5)*self.weight_quant
 
             self.w = np.clip(((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr)+weight_quantization_matrix), 0, 1)
             
+            self.w = np.round(self.w, self.weight_quant)
+
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
             

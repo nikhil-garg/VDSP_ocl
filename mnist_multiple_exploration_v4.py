@@ -56,19 +56,19 @@ if __name__ == '__main__':
 	parameters = dict(
 		vprog = [-0.60],
 		input_nbr=[60000],
-		g_max=[0.1]
+		g_max=[0/210]
 		,tau_in = [0.1]
-		,tau_out = [0.06]
+		,tau_out = [0.1]
 		,gain_in = [2]
 		,gain_out = [2]
 		,bias_in = [0]
 		,bias_out = [0]
 		,thr_out = [70]
 		,inhibition_time = [10]
-		, lr = [0.0005]
+		, lr = [0.001]
 		, presentation_time = [0.35]
 		, var_ratio = [0]
-		,weight_quant = [0,1/4096,1/2048,1/1024,1/512,1/256,1/128,1/64,1/32,1/16,1/8,1/4,1/2]
+		,weight_quant = [1, 2, 3, 4, 5, 6, 7]
     )
 	param_values = [v for v in parameters.values()]
 
