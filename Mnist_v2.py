@@ -27,6 +27,8 @@ iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
 dt = 0.005
+learning_rate=0.0005
+
 
 
 Dataset = "Mnist"
@@ -78,7 +80,6 @@ n_neurons = 30
 
 # Learning params
 
-learning_rate=0.0005
 
 learning_args = {
             "lr": learning_rate,
@@ -312,7 +313,8 @@ for num in range(input_nbr):
     			sum_temp += num_spikes[j]
     			count_temp +=1
 
-    	class_spikes[i] = sum_temp/count_temp
+    	class_spikes[i] = sum_temp
+        # class_spikes[i] = sum_temp/count_temp
 
 
 

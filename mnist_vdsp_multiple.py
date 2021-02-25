@@ -331,7 +331,8 @@ def evaluate_mnist_multiple(args):
             if(count_temp==0):
                 class_spikes[i] = 0
             else:
-                class_spikes[i] = sum_temp/count_temp
+                class_spikes[i] = sum_temp
+                # class_spikes[i] = sum_temp/count_temp
 
         # print(class_spikes)
         k = np.argmax(num_spikes)
