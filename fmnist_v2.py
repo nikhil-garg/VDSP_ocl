@@ -28,20 +28,41 @@ Dataset = "Mnist"
 (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.fashion_mnist.load_data())
 
 
+
+
 #select the 0s and 1s as the two classes from MNIST data
 image_train_filtered = []
 label_train_filtered = []
+image_test_filtered = []
+label_test_filtered = []
 
 for i in range(0,input_nbr):
 #  if (label_train[i] == 1 or label_train[i] == 0):
-        image_train_filtered.append(image_train[i])
-        label_train_filtered.append(label_train[i])
+    image_train_filtered.append(image_train[i])
+    label_train_filtered.append(label_train[i])
 
-print("actual input",len(label_train_filtered))
-print(np.bincount(label_train_filtered))
+
 
 image_train_filtered = np.array(image_train_filtered)
 label_train_filtered = np.array(label_train_filtered)
+
+for i in range(0,int(input_nbr/6)):
+#  if (label_train[i] == 1 or label_train[i] == 0):
+    image_test_filtered.append(image_test[i])
+    label_test_filtered.append(label_test[i])
+
+
+image_test_filtered = np.array(image_test_filtered)
+label_test_filtered = np.array(label_test_filtered)
+
+
+np.savez(
+        'fmnist.npz',
+        image_train_filtered=image_train_filtered,
+        label_train_filtered=label_train_filtered,
+        image_test_filtered=image_test_filtered,
+        label_test_filtered=label_test_filtered,
+    )
 
 #############################
 
