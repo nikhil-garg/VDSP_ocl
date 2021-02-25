@@ -74,7 +74,7 @@ presentation_time = 0.35 #0.35
 pause_time = 0 #0.15
 #input layer
 n_in = 784
-n_neurons = 20
+n_neurons = 30
 
 # Learning params
 
@@ -112,10 +112,14 @@ with model:
          n_neurons,
          1,
          label="layer1",
-         neuron_type=STDPLIF(tau_rc=0.06, min_voltage=-1, spiking_threshold = 1),
-         gain=nengo.dists.Choice([2]),
+         neuron_type=STDPLIF(tau_rc=0.1, min_voltage=-1, spiking_threshold = 1),
          encoders=nengo.dists.Choice([[1]]),
-         bias=nengo.dists.Choice([0]))
+
+         max_rates=nengo.dists.Choice([20]),
+         intercepts=nengo.dists.Choice([0]),
+         # gain=nengo.dists.Choice([2]),
+         # bias=nengo.dists.Choice([0])
+         )
 
     # init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
     
@@ -244,7 +248,7 @@ with model:
         n_in,
         1,
         label="Input",
-        neuron_type=MyLIF_in(tau_rc=0.3,min_voltage=-1,amplitude=0.3),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
+        neuron_type=MyLIF_in(tau_rc=0.1,min_voltage=-1,amplitude=1/210),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
         gain=nengo.dists.Choice([2]),
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
@@ -258,7 +262,7 @@ with model:
          n_neurons,
          1,
          label="layer1",
-         neuron_type=STDPLIF(tau_rc=0.3, min_voltage=-1),
+         neuron_type=STDPLIF(tau_rc=0.1, min_voltage=-1),
          intercepts=nengo.dists.Choice([0]),
          max_rates=nengo.dists.Choice([20,20]),
          encoders=nengo.dists.Choice([[1]]))
