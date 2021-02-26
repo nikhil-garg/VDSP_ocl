@@ -16,6 +16,6 @@ tuner:
     #choice: maximize, minimize
     optimize_mode: maximize
 trial:
-  command: python mnist_vdsp_multiple.py
+  command: python mnist_vdsp_nni.py
   codeDir: .
   gpuNum: 0

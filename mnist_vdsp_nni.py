@@ -4,11 +4,11 @@ import numpy as np
 from numpy import random
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import tensorflow as tf
+# import tensorflow as tf
 import os
 from nengo.dists import Choice
 from datetime import datetime
-from nengo_extras.data import load_mnist
+# from nengo_extras.data import load_mnist
 import pickle
 from nengo.utils.matplotlib import rasterplot
 
@@ -16,7 +16,7 @@ import time
 
 from InputData import PresentInputWithPause
 
-from nengo_extras.graphviz import net_diagram
+# from nengo_extras.graphviz import net_diagram
 
 from nengo.neurons import LIFRate
 
@@ -25,7 +25,7 @@ from nengo.dists import Choice, Distribution, get_samples, Uniform
 
 from nengo.utils.numpy import clip, is_array_like
 from utilis import *
-
+# import keras
 
 from args_mnist import args as my_args
 import itertools
@@ -42,22 +42,42 @@ def evaluate_mnist_multiple(args):
     #############################
     input_nbr = args.input_nbr
 
-    (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
+    # (image_train, label_train), (image_test, label_test) = (keras.datasets.mnist.load_data())
 
     probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
-    # probe_sample_rate = 1000
-    image_train_filtered = []
-    label_train_filtered = []
+    # # probe_sample_rate = 1000
+    # image_train_filtered = []
+    # label_train_filtered = []
 
     x = args.digit
 
-    for i in range(0,input_nbr):
+    # for i in range(0,input_nbr):
       
-        image_train_filtered.append(image_train[i])
-        label_train_filtered.append(label_train[i])
+    #     image_train_filtered.append(image_train[i])
+    #     label_train_filtered.append(label_train[i])
 
-    image_train_filtered = np.array(image_train_filtered)
-    label_train_filtered = np.array(label_train_filtered)
+    # image_train_filtered = np.array(image_train_filtered)
+    # label_train_filtered = np.array(label_train_filtered)
+
+
+
+    # np.save(
+    #     'mnist.npz',
+    #     image_train_filtered=image_train_filtered,
+    #     label_train_filtered=label_train_filtered,
+    #     image_test_filtered=image_test_filtered,
+    #     label_test_filtered=label_test_filtered,
+ 
+    # )
+
+    data = np.load('mnist.npz', allow_pickle=True)
+    image_train_filtered = data['image_train_filtered']
+    label_train_filtered = data['label_train_filtered']
+    image_test_filtered = data['image_test_filtered']
+    label_test_filtered = data['label_test_filtered']
+
+    image_train_filtered = np.tile(image_train_filtered,(args.iterations,1,1))
+    label_train_filtered = np.tile(label_train_filtered,(args.iterations))
 
 
     #Simulation Parameters 
@@ -72,18 +92,18 @@ def evaluate_mnist_multiple(args):
     # g_max = 1/784 #Maximum output contribution
     g_max = args.g_max
     n_neurons = args.n_neurons # Layer 1 neurons
-    inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
+    # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
 
     input_neurons_args = {
             "n_neurons":n_in,
             "dimensions":1,
             "label":"Input layer",
-            "encoders":nengo.dists.Uniform(1,1),
-            "max_rates":nengo.dists.Uniform(args.rate_in,args.rate_in),
-            "intercepts":nengo.dists.Uniform(0,0),
-            # "gain":nengo.dists.Uniform(2,2),
-            # "bias":nengo.dists.Uniform(0,0),
+            "encoders":nengo.dists.Choice([[1]]),
+            # "max_rates":nengo.dists.Uniform(22,22),
+            # "intercepts":nengo.dists.Uniform(0,0),
+            "gain":nengo.dists.Choice([args.gain_in]),
+            "bias":nengo.dists.Choice([args.bias_in]),
             "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
@@ -93,25 +113,25 @@ def evaluate_mnist_multiple(args):
             "n_neurons":n_neurons,
             "dimensions":1,
             "label":"Layer 1",
-            "encoders":nengo.dists.Uniform(1,1),
-            # "gain":nengo.dists.Uniform(2,2),
-            # "bias":nengo.dists.Uniform(0,0),
-            "intercepts":nengo.dists.Choice([0]),
-            "max_rates":nengo.dists.Choice([args.rate_out,args.rate_out]),
+            "encoders":nengo.dists.Choice([[1]]),
+            "gain":nengo.dists.Choice([args.gain_out]),
+            "bias":nengo.dists.Choice([args.bias_out]),
+            # "intercepts":nengo.dists.Choice([0]),
+            # "max_rates":nengo.dists.Choice([args.rate_out,args.rate_out]),
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
-            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1),
+            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time)
     }
 
     # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 20), seed=1),     
 
     #Lateral Inhibition parameters
-    lateral_inhib_args = {
-            "transform": inhib_factor* (np.full((n_neurons, n_neurons), 1) - np.eye(n_neurons)),
-            "synapse":args.inhib_synapse,
-            "label":"Lateral Inhibition"
-    }
+    # lateral_inhib_args = {
+    #         "transform": inhib_factor* (np.full((n_neurons, n_neurons), 1) - np.eye(n_neurons)),
+    #         "synapse":args.inhib_synapse,
+    #         "label":"Lateral Inhibition"
+    # }
 
     #Learning rule parameters
     learning_args = {
@@ -124,13 +144,13 @@ def evaluate_mnist_multiple(args):
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
 
-    argument_string = "presentation_time: "+ str(presentation_time)+ "\n pause_time: "+ str(pause_time)+ "\n input_neurons_args: " + str(input_neurons_args)+ " \n layer_1_neuron_args: " + str(layer_1_neurons_args)+"\n Lateral Inhibition parameters: " + str(lateral_inhib_args) + "\n learning parameters: " + str(learning_args)+ "\n g_max: "+ str(g_max) 
+    # argument_string = "presentation_time: "+ str(presentation_time)+ "\n pause_time: "+ str(pause_time)+ "\n input_neurons_args: " + str(input_neurons_args)+ " \n layer_1_neuron_args: " + str(layer_1_neurons_args)+"\n Lateral Inhibition parameters: " + str(lateral_inhib_args) + "\n learning parameters: " + str(learning_args)+ "\n g_max: "+ str(g_max) 
 
     images = image_train_filtered
     labels = label_train_filtered
 
 
-    model = nengo.Network("My network")
+    model = nengo.Network("My network", seed = 1)
     #############################
     # Model construction
     #############################
@@ -148,10 +168,12 @@ def evaluate_mnist_multiple(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
-        nengo.Connection(input_layer.neurons, w, synapse=None)
-        nengo.Connection(w, layer1.neurons, synapse=None)
+        # w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
+        # nengo.Connection(input_layer.neurons, w, synapse=None)
+        # nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
+        init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
+        conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=args.vprog, vthp=args.vthp,vthn=args.vthn),transform=init_weights)
 
         #Lateral inhibition
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
@@ -160,25 +182,29 @@ def evaluate_mnist_multiple(args):
         p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
         p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
         p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
-        weights = w.output.history
+        weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
+
+        # weights = w.output.history
 
         
 
     # with nengo_ocl.Simulator(model) as sim :   
-    with nengo.Simulator(model, dt=0.005) as sim:
+    with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
 
         
-        w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
-        w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
+        # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
+        # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         
         
-        sim.run((presentation_time+pause_time) * labels.shape[0]*iterations)
+        sim.run((presentation_time+pause_time) * labels.shape[0])
 
     #save the model
     # now = time.strftime("%Y%m%d-%H%M%S")
     # folder = os.getcwd()+"/MNIST_VDSP"+now
     # os.mkdir(folder)
     # print(weights)
+    weights = sim.data[weights_probe]
+
     last_weight = weights[-1]
 
     # pickle.dump(weights, open( folder+"/trained_weights", "wb" ))
@@ -210,28 +236,29 @@ def evaluate_mnist_multiple(args):
     Testing
     '''
 
-    img_rows, img_cols = 28, 28
-    input_nbr = int(args.input_nbr/6)
+    # img_rows, img_cols = 28, 28
+    input_nbr = 10000
+    # input_nbr = int(args.input_nbr/6)
 
-    Dataset = "Mnist"
-    # (image_train, label_train), (image_test, label_test) = load_mnist()
-    (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
+    # Dataset = "Mnist"
+    # # (image_train, label_train), (image_test, label_test) = load_mnist()
+    # (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
 
 
-    #select the 0s and 1s as the two classes from MNIST data
-    image_test_filtered = []
-    label_test_filtered = []
+    # #select the 0s and 1s as the two classes from MNIST data
+    # image_test_filtered = []
+    # label_test_filtered = []
 
-    for i in range(0,input_nbr):
-    #  if (label_train[i] == 1 or label_train[i] == 0):
-        image_test_filtered.append(image_test[i])
-        label_test_filtered.append(label_test[i])
+    # for i in range(0,input_nbr):
+    # #  if (label_train[i] == 1 or label_train[i] == 0):
+    #     image_test_filtered.append(image_test[i])
+    #     label_test_filtered.append(label_test[i])
 
-    print("actual input",len(label_test_filtered))
-    print(np.bincount(label_test_filtered))
+    # print("actual input",len(label_test_filtered))
+    # print(np.bincount(label_test_filtered))
 
-    image_test_filtered = np.array(image_test_filtered)
-    label_test_filtered = np.array(label_test_filtered)
+    # image_test_filtered = np.array(image_test_filtered)
+    # label_test_filtered = np.array(label_test_filtered)
 
     #############################
 
@@ -269,7 +296,7 @@ def evaluate_mnist_multiple(args):
 
     step_time = (presentation_time + pause_time) 
 
-    with nengo.Simulator(model,dt=0.005) as sim:
+    with nengo.Simulator(model,dt=args.dt) as sim:
            
         sim.run(step_time * label_test_filtered.shape[0])
 
@@ -290,18 +317,22 @@ def evaluate_mnist_multiple(args):
     for num in range(input_nbr):
         #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
-        output_spikes_num = output_spikes[num*int(presentation_time/0.005):(num+1)*int(presentation_time/0.005),:] # 0.350/0.005
+        output_spikes_num = output_spikes[num*int(presentation_time/args.dt):(num+1)*int(presentation_time/args.dt),:] # 0.350/0.005
         num_spikes = np.sum(output_spikes_num > 0, axis=0)
 
         for i in range(n_classes):
             sum_temp = 0
-            count_temp = 1
+            count_temp = 0
             for j in range(n_neurons):
                 if((neuron_class[j]) == i) : 
                     sum_temp += num_spikes[j]
                     count_temp +=1
-
-            class_spikes[i] = sum_temp/count_temp
+        
+            if(count_temp==0):
+                class_spikes[i] = 0
+            else:
+                class_spikes[i] = sum_temp
+                # class_spikes[i] = sum_temp/count_temp
 
         # print(class_spikes)
         k = np.argmax(num_spikes)
@@ -309,7 +340,7 @@ def evaluate_mnist_multiple(args):
         class_pred = np.argmax(class_spikes)
         predicted_labels.append(class_pred)
 
-        true_class = labels[(num*int(presentation_time/0.005))]
+        true_class = labels[(num*int(presentation_time/args.dt))]
         # print(true_class)
         # print(class_pred)
 
@@ -329,7 +360,7 @@ def evaluate_mnist_multiple(args):
 
     nni.report_final_result(accuracy)
 
-    del weights, sim.data, labels, output_spikes, image_test,image_train,label_train,label_test, class_pred, t_data
+    del weights, sim.data, labels, output_spikes, class_pred, t_data
 
     return accuracy, last_weight
 
@@ -391,14 +422,14 @@ if __name__ == '__main__':
 
 
     params = nni.get_next_parameter()
+    args.n_neurons = 20
 
     args.g_max = params['g_max']
     args.tau_in = params['tau_in']
     args.tau_out = params['tau_out']
-    args.lr = params['lr']
-    args.presentation_time = params['presentation_time']
-    args.rate_in = params['rate_in']
-    args.rate_out = params['rate_out']
+    # args.lr = params['lr']
+    # args.presentation_time = params['presentation_time']
+    # args.rate_out = params['rate_out']
 
 
 
