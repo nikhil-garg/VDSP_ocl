@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-drod1901
-#SBATCH --time=0-23:58:0
+#SBATCH --time=4-23:58:0
 #SBATCH --cpus-per-task=4 
 #SBATCH --mem=32G
 OUTDIR=~/project/out/$SLURM_JOB_ID
