@@ -27,7 +27,7 @@ iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
 dt = 0.005
-learning_rate=0.0005
+learning_rate=0.001
 
 
 
@@ -116,10 +116,10 @@ with model:
          neuron_type=STDPLIF(tau_rc=0.1, min_voltage=-1, spiking_threshold = 1),
          encoders=nengo.dists.Choice([[1]]),
 
-         max_rates=nengo.dists.Choice([20]),
-         intercepts=nengo.dists.Choice([0]),
-         # gain=nengo.dists.Choice([2]),
-         # bias=nengo.dists.Choice([0])
+         # max_rates=nengo.dists.Choice([20]),
+         # intercepts=nengo.dists.Choice([0]),
+         gain=nengo.dists.Choice([2]),
+         bias=nengo.dists.Choice([0])
          )
 
     # init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
@@ -264,9 +264,9 @@ with model:
          1,
          label="layer1",
          neuron_type=STDPLIF(tau_rc=0.1, min_voltage=-1),
-         intercepts=nengo.dists.Choice([0]),
-         max_rates=nengo.dists.Choice([20,20]),
-         encoders=nengo.dists.Choice([[1]]))
+         gain=nengo.dists.Choice([2]),
+        encoders=nengo.dists.Choice([[1]]),
+        bias=nengo.dists.Choice([0]))
 
     # w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=784, size_out=n_neurons)
     
