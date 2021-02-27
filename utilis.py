@@ -331,11 +331,11 @@ def fun_post(X,
     w_dep = w #Depression is dependent on w
     w_pot = 1-w #Potentiation is dependent on (1-w)
     
-    v_ov_dep =  vmem - (vprog+vthp)
-    v_ov_pot = (vprog-vthn) - vmem
+    v_ov_dep =  vmem - (vprog+vthn)
+    v_ov_pot = (vprog-vthp) - vmem
 
-    cond_dep = vmem>(vprog+vthp)
-    cond_pot = vmem<(vprog-vthn)
+    cond_dep = vmem>(vprog+vthn)
+    cond_pot = vmem<(vprog-vthp)
     
     f_dep = a1 + a2*(w_dep) + a3*(w_dep*w_dep) + a4*(w_dep*w_dep*w_dep) + a5*(w_dep*w_dep*w_dep*w_dep) 
     f_pot = c1 + c2*(w_pot) + c3*(w_pot*w_pot) + c4*(w_pot*w_pot*w_pot) + c5*(w_pot*w_pot*w_pot*w_pot) 
@@ -829,6 +829,165 @@ def build_STDPLIF(model, STDPlif, neurons):
                                     "adaptation": model.sig[neurons]['adaptation'],
                                     "inhib": model.sig[neurons]['inhib']
                                      }))
+
+
+
+
+
+
+class MyLIF_in_v2(LIFRate):
+    """Spiking version of the leaky integrate-and-fire (LIF) neuron model.
+
+    Parameters
+    ----------
+    tau_rc : float
+        Membrane RC time constant, in seconds. Affects how quickly the membrane
+        voltage decays to zero in the absence of input (larger = slower decay).
+    tau_ref : float
+        Absolute refractory period, in seconds. This is how long the
+        membrane voltage is held at zero after a spike.
+    min_voltage : float
+        Minimum value for the membrane voltage. If ``-np.inf``, the voltage
+        is never clipped.
+    amplitude : float
+        Scaling factor on the neuron output. Corresponds to the relative
+        amplitude of the output spikes of the neuron.
+    initial_state : {str: Distribution or array_like}
+        Mapping from state variables names to their desired initial value.
+        These values will override the defaults set in the class's state attribute.
+    """
+
+    state = {
+        "voltage": Uniform(low=0, high=1),
+        "refractory_time": Choice([0]),
+    }
+    spiking = True
+
+    min_voltage = NumberParam("min_voltage", high=0)
+
+    def __init__(
+        self, tau_rc=0.02, tau_ref=0.002, min_voltage=0, amplitude=1, initial_state=None
+    ):
+        super().__init__(
+            tau_rc=tau_rc,
+            tau_ref=tau_ref,
+            amplitude=amplitude,
+            initial_state=initial_state,
+        )
+        self.min_voltage = min_voltage
+
+    def step(self, dt, J, output, voltage, refractory_time):
+        # look these up once to avoid repeated parameter accesses
+        tau_rc = self.tau_rc
+        min_voltage = self.min_voltage
+
+        # reduce all refractory times by dt
+        refractory_time -= dt
+
+        # compute effective dt for each neuron, based on remaining time.
+        # note that refractory times that have completed midway into this
+        # timestep will be given a partial timestep, and moreover these will
+        # be subtracted to zero at the next timestep (or reset by a spike)
+        delta_t = clip((dt - refractory_time), 0, dt)
+
+        # update voltage using discretized lowpass filter
+        # since v(t) = v(0) + (J - v(0))*(1 - exp(-t/tau)) assuming
+        # J is constant over the interval [t, t + dt)
+        voltage -= (J - voltage) * np.expm1(-delta_t / tau_rc)
+
+        # determine which neurons spiked (set them to 1/dt, else 0)
+        spiked_mask = voltage > 1.5
+        output[:] = spiked_mask * (self.amplitude / dt)
+
+        # set v(0) = 1 and solve for t to compute the spike time
+        t_spike = dt + tau_rc * np.log1p(
+            -(voltage[spiked_mask] - 1) / (J[spiked_mask] - 1)
+        )
+
+        # set spiked voltages to zero, refractory times to tau_ref, and
+        # rectify negative voltages to a floor of min_voltage
+        voltage[voltage < min_voltage] = min_voltage
+        voltage[spiked_mask] = -2 #reset voltage
+        refractory_time[spiked_mask] = self.tau_ref + t_spike
+
+
+
+
+
+
+
+popt_tio2 = np.array((-1.45888014e-03,  3.09271871e-01, -2.13504843e-01,  8.92263656e-01,
+       -5.42580029e-01, -4.60570942e-02,  4.36182793e+00,  1.84512380e+00,
+        9.97207077e-01,  2.65766368e-02,  1.94699628e-02, -2.03248100e+00,
+        2.79588493e+00, -1.03521211e+00, -1.82228601e-01,  3.58735029e-03,
+        1.37165510e+00,  9.44594369e-01, -5.33387819e-01,  9.04135372e-02,
+       -3.54624213e-02,  4.97956420e-01))
+
+class CustomRule_post_v5(nengo.Process):
+   
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.45,vthn=0.45):
+       
+        self.vprog = vprog  
+        
+        self.signal_vmem_pre = None
+        self.signal_out_post = None
+
+        self.winit_min = winit_min
+        self.winit_max = winit_max
+        
+        
+        self.sample_distance = sample_distance
+        self.lr = lr
+        self.vthp = vthp
+        self.vthn = vthn
+        
+        self.history = [0]
+
+        
+        # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
+        
+        super().__init__()
+        
+    def make_step(self, shape_in, shape_out, dt, rng, state=None):  
+       
+        self.w = np.random.uniform(self.winit_min, self.winit_max, (shape_out[0], shape_in[0]))
+
+        def step(t, x):
+
+            assert self.signal_vmem_pre is not None
+            assert self.signal_out_post is not None
+            
+            vmem = np.clip(self.signal_vmem_pre, -2, 1.5)
+            
+            post_out = self.signal_out_post
+            
+            vmem = np.reshape(vmem, (1, shape_in[0]))   
+
+            post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
+
+            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            
+            # if (self.tstep%self.sample_distance ==0):
+            #     self.history.append(self.w.copy())
+            
+            # self.tstep +=1
+            self.history[0] = self.w.copy()
+            # self.history.append(self.w.copy())
+            # self.history = self.history[-2:]
+            # self.history = self.w
+            
+            return np.dot(self.w, x)
+        
+        return step   
+
+        # self.current_weight = self.w
+    
+    def set_signal_vmem(self, signal):
+        self.signal_vmem_pre = signal
+        
+    def set_signal_out(self, signal):
+        self.signal_out_post = signal
+
 
 
 import os
