@@ -50,13 +50,13 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [ -0.6, -0.7, -0.8, -0.9, -1.1, -1.5,0, 0.1, 0.2 ]
+		vprog = [-0.8, -0.9, -1.1]
 		,vthp=[0.45]
 		,input_nbr=[60000]
-		,g_max=[1/210]
-		,tau_in = [0.1]
-		,tau_out = [0.1]
-		, lr = [0.0005]
+		,g_max=[1/200,1/210,1/220]
+		,tau_in = [0.06]
+		,tau_out = [0.06]
+		, lr = [0.0005, 0.0001, 0.001]
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
