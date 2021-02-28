@@ -54,12 +54,12 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.60,-0.60,-0.60,-0.60,-0.60],
+		vprog = [-0.60],
 		input_nbr=[60000],
 		g_max=[1/210]
 		,vthr = [0.25,0.4]
-		,tau_in = [0.1]
-		,tau_out = [0.1]
+		,tau_in = [0.06]
+		,tau_out = [0.06]
 		,gain_in = [2]
 		,gain_out = [2]
 		,bias_in = [0]
