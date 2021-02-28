@@ -84,11 +84,11 @@ if __name__ == '__main__':
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
-
+		args.vthn = args.vthp
 		accuracy, weights = evaluate_mnist_multiple_var(args)
 
 
-		args.vthn = args.vthp
+		
 		df = df.append({ "vprog":args.vprog,
 						 "input_nbr":args.input_nbr,
 						 "g_max":args.g_max,

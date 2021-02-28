@@ -133,8 +133,8 @@ def evaluate_mnist_multiple_var(args):
 
     #Learning rule parameters
 
-    vthp=0.25
-    vthn=0.25    
+    vthp=args.vthp
+    vthn=args.vthn    
     np.random.seed(20) 
     vth_var = 2 *( np.random.randn(n_neurons,n_in)-0.5) #between -1 to 1 of shape W
     var_ratio=args.var_ratio
