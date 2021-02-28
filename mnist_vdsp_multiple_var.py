@@ -136,7 +136,7 @@ def evaluate_mnist_multiple_var(args):
     vthp=args.vthp
     vthn=args.vthn    
     np.random.seed(20) 
-    vth_var = 2 *( np.random.randn(n_neurons,n_in)-0.5) #between -1 to 1 of shape W
+    vth_var = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
     var_ratio=args.var_ratio
     vthp = vthp + (vthp*var_ratio*vth_var)
     vthn = vthn + (vthn*var_ratio*vth_var)
