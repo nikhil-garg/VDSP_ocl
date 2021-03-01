@@ -22,7 +22,7 @@ import tensorflow as tf
 #############################
 
 img_rows, img_cols = 28, 28
-input_nbr = 60000
+input_nbr = 1000
 iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 

@@ -70,15 +70,15 @@ def evaluate_qmnist_multiple(args):
  
     # )
 
-    data = np.load('mnist.npz', allow_pickle=True)
+    data = np.load('qmnist.npz', allow_pickle=True)
     image_train_filtered = data['image_train_filtered']
     label_train_filtered = data['label_train_filtered']
-    # image_test_filtered = data['image_test_filtered']
-    # label_test_filtered = data['label_test_filtered']
+    image_test_filtered = data['image_test_filtered']
+    label_test_filtered = data['label_test_filtered']
 
-    data_test = np.load('qmnist_test.npz', allow_pickle=True)
-    image_test_filtered = data_test['image_test_filtered']
-    label_test_filtered = data_test['label_test_filtered']
+    # data_test = np.load('qmnist_test.npz', allow_pickle=True)
+    # image_test_filtered = data_test['image_test_filtered']
+    # label_test_filtered = data_test['label_test_filtered']
 
     image_train_filtered = np.tile(image_train_filtered,(args.iterations,1,1))
     label_train_filtered = np.tile(label_train_filtered,(args.iterations))
