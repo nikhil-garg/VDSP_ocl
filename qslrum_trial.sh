@@ -28,6 +28,7 @@ cd ..
 
 git clone https://github.com/nikhil-garg/VDSP_ocl.git
 cd VDSP_ocl
+ls
 
 python qmnist_multiple_exploration.py --log_file_path $OUTDIR
 
