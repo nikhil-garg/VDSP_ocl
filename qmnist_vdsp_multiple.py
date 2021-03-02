@@ -70,7 +70,7 @@ def evaluate_qmnist_multiple(args):
  
     # )
 
-    data = np.load('qmnist.npz', allow_pickle=True)
+    data = np.load('qmnist_norm.npz', allow_pickle=True)
     image_train_filtered = data['image_train_filtered']
     label_train_filtered = data['label_train_filtered']
     image_test_filtered = data['image_test_filtered']
