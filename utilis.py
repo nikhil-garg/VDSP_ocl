@@ -319,12 +319,38 @@ class MyLIF_out(LIFRate):
         
 
 
+# def fun_post(X,
+#        a1=0,a2=1,a3=0,a4=1,a5=1,#a6=1,a7=1,
+#        b1=1,b2=1,b3=1,b4=1,b5=1,#b6=1,b7=1,
+#        c1=0,c2=1,c3=0,c4=1,c5=1,#c6=1,c7=1,
+#        d1=1,d2=1,d3=1,d4=1,d5=1 ,#d6=1,d7=1,
+#        alpha1=1,alpha2=0    
+#        ): 
+#     w, vmem, vprog, vthp,vthn = X
+
+#     w_dep = w #Depression is dependent on w
+#     w_pot = 1-w #Potentiation is dependent on (1-w)
+    
+#     v_ov_dep =  vmem - (vprog+vthn)
+#     v_ov_pot = (vprog-vthp) - vmem
+
+#     cond_dep = vmem>(vprog+vthn)
+#     cond_pot = vmem<(vprog-vthp)
+    
+#     f_dep = a1 + a2*(w_dep) + a3*(w_dep*w_dep) + a4*(w_dep*w_dep*w_dep) + a5*(w_dep*w_dep*w_dep*w_dep) 
+#     f_pot = c1 + c2*(w_pot) + c3*(w_pot*w_pot) + c4*(w_pot*w_pot*w_pot) + c5*(w_pot*w_pot*w_pot*w_pot) 
+    
+#     g_dep = d1 + d2*(v_ov_dep) + d3*(v_ov_dep*v_ov_dep) + d4*(v_ov_dep*v_ov_dep*v_ov_dep) + d5*(v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep)
+#     g_pot = b1 + b2*(v_ov_pot) + b3*(v_ov_pot*v_ov_pot)+ b4*(v_ov_pot*v_ov_pot*v_ov_pot) + b5*(v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot)
+     
+#     dW = (abs(cond_pot*(alpha1*f_pot*g_pot)))  + (-1*(abs(cond_dep*(alpha2*f_dep*g_dep))))    
+#     return dW
+
 def fun_post(X,
-       a1=0,a2=1,a3=0,a4=1,a5=1,#a6=1,a7=1,
-       b1=1,b2=1,b3=1,b4=1,b5=1,#b6=1,b7=1,
-       c1=0,c2=1,c3=0,c4=1,c5=1,#c6=1,c7=1,
-       d1=1,d2=1,d3=1,d4=1,d5=1 ,#d6=1,d7=1,
-       alpha1=1,alpha2=0    
+       a1=0,a2=1,a3=0,a4=1,a5=1,a6=1,a7=1,
+       b1=1,b2=1,b3=1,b4=1,b5=1,b6=1,b7=1,
+       c1=0,c2=1,c3=0,c4=1,c5=1,c6=1,c7=1,
+       d1=1,d2=1,d3=1,d4=1,d5=1 ,d6=1,d7=1 
        ): 
     w, vmem, vprog, vthp,vthn = X
 
@@ -337,30 +363,31 @@ def fun_post(X,
     cond_dep = vmem>(vprog+vthn)
     cond_pot = vmem<(vprog-vthp)
     
-    f_dep = a1 + a2*(w_dep) + a3*(w_dep*w_dep) + a4*(w_dep*w_dep*w_dep) + a5*(w_dep*w_dep*w_dep*w_dep) 
-    f_pot = c1 + c2*(w_pot) + c3*(w_pot*w_pot) + c4*(w_pot*w_pot*w_pot) + c5*(w_pot*w_pot*w_pot*w_pot) 
+    f_dep = a1 + a2*(w_dep) + a3*(w_dep*w_dep) + a4*(w_dep*w_dep*w_dep) + a5*(w_dep*w_dep*w_dep*w_dep) + a6*(w_dep*w_dep*w_dep*w_dep*w_dep) + a7*(w_dep*w_dep*w_dep*w_dep*w_dep*w_dep) 
+    f_pot = c1 + c2*(w_pot) + c3*(w_pot*w_pot) + c4*(w_pot*w_pot*w_pot) + c5*(w_pot*w_pot*w_pot*w_pot) + c6*(w_pot*w_pot*w_pot*w_pot*w_pot) + c7*(w_pot*w_pot*w_pot*w_pot*w_pot*w_pot) 
     
-    g_dep = d1 + d2*(v_ov_dep) + d3*(v_ov_dep*v_ov_dep) + d4*(v_ov_dep*v_ov_dep*v_ov_dep) + d5*(v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep)
-    g_pot = b1 + b2*(v_ov_pot) + b3*(v_ov_pot*v_ov_pot)+ b4*(v_ov_pot*v_ov_pot*v_ov_pot) + b5*(v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot)
+    g_dep = d1 + d2*(v_ov_dep) + d3*(v_ov_dep*v_ov_dep) + d4*(v_ov_dep*v_ov_dep*v_ov_dep) + d5*(v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep)+ d6*(v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep) + d7*(v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep*v_ov_dep)
+    g_pot = b1 + b2*(v_ov_pot) + b3*(v_ov_pot*v_ov_pot)+ b4*(v_ov_pot*v_ov_pot*v_ov_pot) + b5*(v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot) + b6*(v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot) + b7*(v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot*v_ov_pot)
      
-    dW = (abs(cond_pot*(alpha1*f_pot*g_pot)))  + (-1*(abs(cond_dep*(alpha2*f_dep*g_dep))))    
+    dW = (cond_pot*(f_pot*g_pot))  + -1*((cond_dep*(f_dep*g_dep)))  
     return dW
 
 
 
-# popt = np.array((1.22495116e-02, -2.14968776e-01,  2.16351015e+00, -1.00745674e+00,
-#        -2.96338716e-01,  2.03309365e-03,  1.78418550e+00,  9.36936974e-01,
-#        -3.44177580e-02, -2.03283574e-01, -4.42570217e-03,  5.31904574e-01,
-#        -4.53948671e-01,  1.72725583e+00, -1.16844175e+00,  2.85775799e-03,
-#         1.80503076e+00,  8.02874904e-01,  5.23725555e-01, -5.77871444e-01,
-#         2.59452096e-01,  2.61974798e-01))
+popt = np.array((-2.93971893e-03,  1.73717058e-01, -1.41034291e+00,  5.78102983e+00,
+       -6.67787516e+00,  1.51798869e+00,  7.83602169e-01,  3.89467120e-04,
+        6.96744645e+00,  3.15054829e+00, -3.57029409e-01,  1.52006869e+00,
+       -1.99187950e+00,  4.09788140e-01,  3.96864685e-04,  6.67827932e-03,
+        2.16360638e-01, -8.52979101e-01,  1.72913119e+00, -1.57148271e+00,
+        5.08741482e-01,  1.55171755e-05,  1.59442445e+00,  7.25139758e-01,
+        7.76059355e-02,  5.10038194e-02, -1.79580814e-01, -1.81881949e-02))
 
-popt = np.array((9.64235213e-03, -3.63061515e-01,  2.16645457e+00, -2.22633990e+00,
-        6.12085767e-01, -4.56786010e-04,  1.88733318e+00,  6.85084783e-01,
-        4.40594096e-01, -4.05354083e-01, -5.60994273e-03,  3.95905357e-01,
-       -6.34137301e-01,  1.92450107e+00, -1.29452642e+00, -4.08783010e-04,
-        1.92852502e+00,  7.32452026e-01,  4.98640992e-01, -4.49223752e-01,
-        3.52251043e-01,  6.26162680e-01))
+# popt = np.array((9.64235213e-03, -3.63061515e-01,  2.16645457e+00, -2.22633990e+00,
+#         6.12085767e-01, -4.56786010e-04,  1.88733318e+00,  6.85084783e-01,
+#         4.40594096e-01, -4.05354083e-01, -5.60994273e-03,  3.95905357e-01,
+#        -6.34137301e-01,  1.92450107e+00, -1.29452642e+00, -4.08783010e-04,
+#         1.92852502e+00,  7.32452026e-01,  4.98640992e-01, -4.49223752e-01,
+#         3.52251043e-01,  6.26162680e-01))
 
 
 
