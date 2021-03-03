@@ -162,13 +162,13 @@ def args():
     )
     parser.add_argument(
         "--vthp",
-        default=0.25,
+        default=0.16,
         type=float,
         help="Switching threshold of memristor",
     )
     parser.add_argument(
         "--vthn",
-        default=0.25,
+        default=0.15,
         type=float,
         help="Switching threshold of memristor",
     )

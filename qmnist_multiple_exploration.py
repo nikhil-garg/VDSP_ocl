@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.65]
+		vprog = [0, -0.05, -0.1, -0.15, -0.2, -0.25]
 		,vthp=[0.25]
 		,input_nbr=[60000]
 		,g_max=[1/210]
@@ -60,7 +60,7 @@ if __name__ == '__main__':
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [10, 20, 30,40,  50,60,70,80,90, 100]
+		, n_neurons = [30]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]

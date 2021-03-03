@@ -348,18 +348,25 @@ def fun_post(X,
 
 
 
-popt = np.array((1.22495116e-02, -2.14968776e-01,  2.16351015e+00, -1.00745674e+00,
-       -2.96338716e-01,  2.03309365e-03,  1.78418550e+00,  9.36936974e-01,
-       -3.44177580e-02, -2.03283574e-01, -4.42570217e-03,  5.31904574e-01,
-       -4.53948671e-01,  1.72725583e+00, -1.16844175e+00,  2.85775799e-03,
-        1.80503076e+00,  8.02874904e-01,  5.23725555e-01, -5.77871444e-01,
-        2.59452096e-01,  2.61974798e-01))
+# popt = np.array((1.22495116e-02, -2.14968776e-01,  2.16351015e+00, -1.00745674e+00,
+#        -2.96338716e-01,  2.03309365e-03,  1.78418550e+00,  9.36936974e-01,
+#        -3.44177580e-02, -2.03283574e-01, -4.42570217e-03,  5.31904574e-01,
+#        -4.53948671e-01,  1.72725583e+00, -1.16844175e+00,  2.85775799e-03,
+#         1.80503076e+00,  8.02874904e-01,  5.23725555e-01, -5.77871444e-01,
+#         2.59452096e-01,  2.61974798e-01))
+
+popt = np.array((9.64235213e-03, -3.63061515e-01,  2.16645457e+00, -2.22633990e+00,
+        6.12085767e-01, -4.56786010e-04,  1.88733318e+00,  6.85084783e-01,
+        4.40594096e-01, -4.05354083e-01, -5.60994273e-03,  3.95905357e-01,
+       -6.34137301e-01,  1.92450107e+00, -1.29452642e+00, -4.08783010e-04,
+        1.92852502e+00,  7.32452026e-01,  4.98640992e-01, -4.49223752e-01,
+        3.52251043e-01,  6.26162680e-01))
 
 
 
 class CustomRule_post_v2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.25,vthn=0.25):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15):
        
         self.vprog = vprog  
         
@@ -425,7 +432,7 @@ class CustomRule_post_v2(nengo.Process):
 
 class CustomRule_post_v3(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.25,vthn=0.25, weight_quant =256):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15, weight_quant =256):
        
         self.vprog = vprog  
         
@@ -500,7 +507,7 @@ class CustomRule_post_v3(nengo.Process):
 
 class CustomRule_post_v4(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.25,vthn=0.25):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15):
        
         self.vprog = vprog  
         
@@ -592,8 +599,8 @@ class VLR(LearningRuleType):
     learning_rate = NumberParam("learning_rate", low=0, readonly=True, default=1)
     post_synapse = SynapseParam("post_synapse", default=None, readonly=True)
     vprog = NumberParam("vprog", readonly=True, default=-0.6)
-    vthp = NumberParam("vthp", readonly=True, default=0.25)
-    vthn = NumberParam("vthn", readonly=True, default=0.25)
+    vthp = NumberParam("vthp", readonly=True, default=0.16)
+    vthn = NumberParam("vthn", readonly=True, default=0.15)
 
     def __init__(
         self,
