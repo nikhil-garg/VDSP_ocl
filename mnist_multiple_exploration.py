@@ -51,12 +51,11 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [0, -0.05, -0.1, -0.15, -0.2, -0.25]
-		,vthp=[0.25]
 		,input_nbr=[60000]
 		,g_max=[1/210]
-		,tau_in = [0.1]
-		,tau_out = [0.1]
-		, lr = [0.0005, 0.001]
+		,tau_in = [0.06]
+		,tau_out = [0.06]
+		, lr = [0.0005]
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
@@ -69,7 +68,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.vthp,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
+	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -79,8 +78,6 @@ if __name__ == '__main__':
 		pwd = os.getcwd()
 
 
-
-		args.vthn = args.vthp
 		accuracy, weights = evaluate_mnist_multiple(args)
 
 
