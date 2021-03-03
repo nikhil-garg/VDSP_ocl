@@ -22,12 +22,12 @@ import tensorflow as tf
 #############################
 
 img_rows, img_cols = 28, 28
-input_nbr = 1000
+input_nbr = 60000
 iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
 dt = 0.005
-learning_rate=0.001
+learning_rate=0.0005
 
 
 
@@ -101,7 +101,7 @@ with model:
         n_in,
         1,
         label="Input",
-        neuron_type=MyLIF_in(tau_rc=0.1,min_voltage=-1,amplitude=1/210),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
+        neuron_type=MyLIF_in(tau_rc=0.06,min_voltage=-1,amplitude=1/210),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
         gain=nengo.dists.Choice([2]),
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
@@ -113,7 +113,7 @@ with model:
          n_neurons,
          1,
          label="layer1",
-         neuron_type=STDPLIF(tau_rc=0.1, min_voltage=-1, spiking_threshold = 1),
+         neuron_type=STDPLIF(tau_rc=0.06, min_voltage=-1, spiking_threshold = 1),
          encoders=nengo.dists.Choice([[1]]),
 
          # max_rates=nengo.dists.Choice([20]),
@@ -249,7 +249,7 @@ with model:
         n_in,
         1,
         label="Input",
-        neuron_type=MyLIF_in(tau_rc=0.1,min_voltage=-1,amplitude=1/210),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
+        neuron_type=MyLIF_in(tau_rc=0.06,min_voltage=-1,amplitude=1/210),#nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2)),#nengo.LIF(amplitude=0.2),# nengo.neurons.PoissonSpiking(nengo.LIFRate(amplitude=0.2))
         gain=nengo.dists.Choice([2]),
         encoders=nengo.dists.Choice([[1]]),
         bias=nengo.dists.Choice([0]))
