@@ -140,6 +140,8 @@ def evaluate_mnist_multiple(args):
             "winit_min":0,
             "winit_max":1,
             "vprog":args.vprog, 
+            "vthp":args.vthp,
+            "vthn":args.vthn,
     #         "tpw":50,
     #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
@@ -169,12 +171,12 @@ def evaluate_mnist_multiple(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        # w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
-        # nengo.Connection(input_layer.neurons, w, synapse=None)
-        # nengo.Connection(w, layer1.neurons, synapse=None)
+        w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
+        nengo.Connection(input_layer.neurons, w, synapse=None)
+        nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
         init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
-        conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=args.vprog, vthp=args.vthp,vthn=args.vthn),transform=init_weights)
+        # conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=args.vprog, vthp=args.vthp,vthn=args.vthn),transform=init_weights)
 
         #Lateral inhibition
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
@@ -183,9 +185,9 @@ def evaluate_mnist_multiple(args):
         p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
         p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
         p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
-        weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
+        # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
 
-        # weights = w.output.history
+        weights = w.output.history
 
         
 
@@ -204,7 +206,8 @@ def evaluate_mnist_multiple(args):
     # folder = os.getcwd()+"/MNIST_VDSP"+now
     # os.mkdir(folder)
     # print(weights)
-    weights = sim.data[weights_probe]
+    
+    # weights = sim.data[weights_probe]
 
     last_weight = weights[-1]
 

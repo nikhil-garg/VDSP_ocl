@@ -86,6 +86,8 @@ learning_args = {
             "winit_min":0,
             "winit_max":1,
             "vprog":-0.6,
+            "vthp":0.16,
+            "vthn":0.15,
             "sample_distance": int((presentation_time+pause_time)*200*100),#Save weights after 100 images
     }
 
