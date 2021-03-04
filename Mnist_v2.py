@@ -27,7 +27,7 @@ iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
 dt = 0.005
-learning_rate=0.0005
+learning_rate=0.125
 
 
 

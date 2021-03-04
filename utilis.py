@@ -462,11 +462,11 @@ class CustomRule_post_v2(nengo.Process):
             assert self.signal_vmem_pre is not None
             assert self.signal_out_post is not None
             
-            vmem = np.clip(self.signal_vmem_pre, -1, 1)
+            # vmem = np.clip(self.signal_vmem_pre, -1, 1)
             
             post_out = self.signal_out_post
             
-            vmem = np.reshape(vmem, (1, shape_in[0]))   
+            vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
