@@ -195,8 +195,8 @@ def evaluate_mnist_multiple(args):
     with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
 
         
-        # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
-        # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
+        w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
+        w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         
         
         sim.run((presentation_time+pause_time) * labels.shape[0])
