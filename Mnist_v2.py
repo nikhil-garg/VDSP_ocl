@@ -28,6 +28,7 @@ probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to inpu
 
 dt = 0.005
 learning_rate=0.125
+vprog = -0.4
 
 
 
@@ -76,7 +77,7 @@ presentation_time = 0.35 #0.35
 pause_time = 0 #0.15
 #input layer
 n_in = 784
-n_neurons = 30
+n_neurons = 20
 
 # Learning params
 
@@ -85,7 +86,7 @@ learning_args = {
             "lr": learning_rate,
             "winit_min":0,
             "winit_max":1,
-            "vprog":-0.6,
+            "vprog":vprog,
             "vthp":0.16,
             "vthn":0.15,
             "sample_distance": int((presentation_time+pause_time)*200*100),#Save weights after 100 images
