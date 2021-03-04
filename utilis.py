@@ -386,10 +386,10 @@ def fun_post(X,
     xn=0.5
     
     cond_pot_fast = w<xp
-    cond_pot_slow = w>xp
+    cond_pot_slow = 1-cond_pot_fast
     
     cond_dep_fast = w>xn
-    cond_dep_slow = w<xn
+    cond_dep_slow = 1-cond_dep_fast
     
     w_dep = w #Depression is dependent on w
     w_pot = 1-w #Potentiation is dependent on (1-w)
