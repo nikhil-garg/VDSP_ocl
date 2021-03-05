@@ -55,7 +55,7 @@ if __name__ == '__main__':
 		,g_max=[1/210]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
-		, lr = [0.125]
+		, lr = [1]
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
