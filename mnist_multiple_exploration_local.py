@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple import *
+from mnist_vdsp_multiple_local import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -50,16 +50,16 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.6, -0.65,-0.70]
-		,input_nbr=[60000]
+		vprog = [-0.15, -0.2, -0.25,-0.3,-0.35,-0.4,-0.45,-0.5,-0.55,-0.6,-0.65,-0.7]
+		,input_nbr=[6000]
 		,g_max=[1/210]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
-		, lr = [0.125]
+		, lr = [0.125, 1]
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [30]
+		, n_neurons = [20]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 		pwd = os.getcwd()
 
 
-		accuracy, weights = evaluate_mnist_multiple(args)
+		accuracy, weights = evaluate_mnist_multiple_local(args)
 
 
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 		                 },ignore_index=True)
 		
 
-		plot = False
+		plot = True
 		if plot : 	
 			print('accuracy', accuracy)
 			print(args.filename)
