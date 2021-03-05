@@ -372,52 +372,83 @@ class MyLIF_out(LIFRate):
 #     dW = (cond_pot*(f_pot*g_pot))  + -1*((cond_dep*(f_dep*g_dep)))  
 #     return dW
 
+# def fun_post(X,
+#        a1=0,a2=1,a3=1,a4=1,a5=1,a6=1,
+#        b1=1,b2=1,b3=1,b4=1,b5=1,#b6=1,b7=1,
+#        c1=0,c2=1,c3=1,c4=1,c5=1,c6=1,
+#        d1=1,d2=1,d3=1,d4=1,d5=1 ,#d6=1,d7=1,   
+#        ): 
+#     w, vmem, vprog, vthp,vthn = X
+#     # vthp=0.16
+#     # vthn=0.15
+#     # vprog=0
+#     xp=0.3
+#     xn=0.5
+    
+#     cond_pot_fast = w<xp
+#     cond_pot_slow = 1-cond_pot_fast
+    
+#     cond_dep_fast = w>xn
+#     cond_dep_slow = 1-cond_dep_fast
+    
+#     w_dep = w #Depression is dependent on w
+#     w_pot = 1-w #Potentiation is dependent on (1-w)
+    
+#     v_ov_dep =  vmem - (vprog+vthn)
+#     v_ov_pot = (vprog-vthp) - vmem
+
+#     cond_dep = vmem>(vprog+vthn)
+#     cond_pot = vmem<(vprog-vthp)
+    
+#     f_dep = (a1)*cond_dep_fast + ( a2+ a3*(w_dep**1) + a4*(w_dep**2) + a5*(w_dep**3) + a6*(w_dep**4))*cond_dep_slow
+#     f_pot = (c1)*cond_pot_fast + ( c2+ c3*(w_pot**1) + c4*(w_pot**2) + c5*(w_pot**3) + c6*(w_pot**4))*cond_pot_slow
+    
+#     g_dep = d1 + d2*(v_ov_dep**1) + d3*(v_ov_dep**2) + d4*(v_ov_dep**3) + d5*(v_ov_dep**4)
+#     g_pot = b1 + b2*(v_ov_pot**1) + b3*(v_ov_pot**2)+ b4*(v_ov_pot**3) + b5*(v_ov_pot**4)
+    
+
+#     dW = (cond_pot*(f_pot*g_pot))  + (-1*((cond_dep*(f_dep*g_dep))))    
+#     return dW
+
 def fun_post(X,
-       a1=0,a2=1,a3=1,a4=1,a5=1,a6=1,
-       b1=1,b2=1,b3=1,b4=1,b5=1,#b6=1,b7=1,
-       c1=0,c2=1,c3=1,c4=1,c5=1,c6=1,
-       d1=1,d2=1,d3=1,d4=1,d5=1 ,#d6=1,d7=1,   
+       alphap=1,alphan=5,Ap=4000,An=4000,eta=1
        ): 
+    
     w, vmem, vprog, vthp,vthn = X
     # vthp=0.16
     # vthn=0.15
     # vprog=0
     xp=0.3
-    xn=0.5
+    xn=0.5 
+    vapp = vprog-vmem
     
     cond_pot_fast = w<xp
     cond_pot_slow = 1-cond_pot_fast
     
-    cond_dep_fast = w>xn
+    cond_dep_fast = w>(1-xn)
     cond_dep_slow = 1-cond_dep_fast
     
-    w_dep = w #Depression is dependent on w
-    w_pot = 1-w #Potentiation is dependent on (1-w)
+    f_pot = (np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))*cond_pot_slow + cond_pot_fast
+    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast
     
-    v_ov_dep =  vmem - (vprog+vthn)
-    v_ov_pot = (vprog-vthp) - vmem
+    cond_pot = vapp > vthp
+    cond_dep = vapp < -vthn
+    
+    g_pot = Ap*(np.exp(vapp)-np.exp(vthp))
+    g_dep = -An*(np.exp(-vapp)-np.exp(vthn))
 
-    cond_dep = vmem>(vprog+vthn)
-    cond_pot = vmem<(vprog-vthp)
-    
-    f_dep = (a1)*cond_dep_fast + ( a2+ a3*(w_dep**1) + a4*(w_dep**2) + a5*(w_dep**3) + a6*(w_dep**4))*cond_dep_slow
-    f_pot = (c1)*cond_pot_fast + ( c2+ c3*(w_pot**1) + c4*(w_pot**2) + c5*(w_pot**3) + c6*(w_pot**4))*cond_pot_slow
-    
-    g_dep = d1 + d2*(v_ov_dep**1) + d3*(v_ov_dep**2) + d4*(v_ov_dep**3) + d5*(v_ov_dep**4)
-    g_pot = b1 + b2*(v_ov_pot**1) + b3*(v_ov_pot**2)+ b4*(v_ov_pot**3) + b5*(v_ov_pot**4)
-    
-
-    dW = (cond_pot*(f_pot*g_pot))  + (-1*((cond_dep*(f_dep*g_dep))))    
+    dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
     return dW
 
+popt = np.array((1.00203134e+00, 4.94283756e+00, 5.06605428e-01, 5.06457823e-01,
+       1.57871670e-03))
 
-
-popt = np.array((6.05881551e-01,  1.01044824e-03,  3.37283747e-02,  1.39655640e+00,
-       -3.15512476e+00,  1.00677440e+01,  7.71595083e-05,  3.22900706e+00,
-        1.63426133e+00,  4.78639604e-01,  2.06084623e-01,  2.90613245e-04,
-        8.30146609e-09,  2.05743686e-04,  2.09438927e-04,  9.01123594e-05,
-        5.30047605e-05,  2.81943806e-08,  1.53334853e-03,  7.75914944e-04,
-        2.27631334e-04,  9.79408462e-05))
+# popt = np.array((6.05881551e-01,  1.01044824e-03,  3.37283747e-02,  1.39655640e+00,
+#        -3.15512476e+00,  1.00677440e+01,  7.71595083e-05,  3.22900706e+00,
+#         1.63426133e+00,  4.78639604e-01,  2.06084623e-01,  2.90613245e-04,
+#         8.30146609e-09,  2.05743686e-04,  2.09438927e-04,  9.01123594e-05,
+#         5.30047605e-05,  2.81943806e-08,  1.53334853e-03,  7.75914944e-04,
+#         2.27631334e-04,  9.79408462e-05))
 
 # popt = np.array((9.64235213e-03, -3.63061515e-01,  2.16645457e+00, -2.22633990e+00,
 #         6.12085767e-01, -4.56786010e-04,  1.88733318e+00,  6.85084783e-01,
