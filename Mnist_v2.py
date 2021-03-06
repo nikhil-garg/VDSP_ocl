@@ -22,14 +22,16 @@ import tensorflow as tf
 #############################
 
 img_rows, img_cols = 28, 28
-input_nbr = 6000
+input_nbr = 60000
 iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
 dt = 0.005
-learning_rate = 1
+learning_rate = 0.5
 # learning_rate=0.125
-vprog = -0.6
+vprog = -0.75
+n_neurons = 30
+
 
 
 
@@ -78,7 +80,6 @@ presentation_time = 0.35 #0.35
 pause_time = 0 #0.15
 #input layer
 n_in = 784
-n_neurons = 20
 
 # Learning params
 
