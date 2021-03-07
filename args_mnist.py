@@ -73,20 +73,20 @@ def args():
     )
     parser.add_argument(
         "--tau_in",
-        default=0.1,
+        default=0.06,
         type=float,
         help="Leak constant of input neurons",
     )
 
     parser.add_argument(
         "--tau_out",
-        default=0.1,
+        default=0.06,
         type=float,
         help="Leak constant of output neurons",
     )
     parser.add_argument(
         "--lr",
-        default=0.0005,
+        default=0.1,
         type=float,
         help="Learning rate of VDSP",
     )
@@ -99,7 +99,7 @@ def args():
 
     parser.add_argument(
         "--vprog",
-        default=-0.6,
+        default=-0.75,
         type=float,
         help="vprog",
     )

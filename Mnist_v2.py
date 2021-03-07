@@ -27,10 +27,10 @@ iterations = 1
 probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
 
 dt = 0.005
-learning_rate = 0.5
+learning_rate = 0.1
 # learning_rate=0.125
 vprog = -0.75
-n_neurons = 30
+n_neurons = 100
 
 
 

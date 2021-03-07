@@ -30,7 +30,6 @@ if __name__ == '__main__':
 	df = pd.DataFrame({	"vprog":[],
 						"input_nbr":[],
 						"g_max":[],
-						"vthr":[],
 						"tau_in" :[],
 						"tau_out":[],
 						"gain_in":[],
@@ -54,10 +53,9 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.60],
+		vprog = [-0.75],
 		input_nbr=[60000],
 		g_max=[1/210]
-		,vthr = [0.25]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		,gain_in = [2]
@@ -66,9 +64,9 @@ if __name__ == '__main__':
 		,bias_out = [0]
 		,thr_out = [1]
 		,inhibition_time = [10]
-		, lr = [0.0005]
+		, lr = [0.1]
 		, presentation_time = [0.35]
-		, var_ratio = [0,0.1,0.2,0.3,0.4, 0.5, 0.6, 0.7, 0.8,0.9,1]
+		, var_ratio = [0,0.1,0.2,0.3,0.4, 0.5]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -76,7 +74,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.vthp,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time,args.var_ratio in product(*param_values):
+	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time,args.var_ratio in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -84,7 +82,7 @@ if __name__ == '__main__':
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
-		args.vthn = args.vthp
+		# args.vthn = args.vthp
 		accuracy, weights = evaluate_mnist_multiple_var(args)
 
 
@@ -92,7 +90,6 @@ if __name__ == '__main__':
 		df = df.append({ "vprog":args.vprog,
 						 "input_nbr":args.input_nbr,
 						 "g_max":args.g_max,
-						 "vthr":args.vthp,
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
 						 "gain_in":args.gain_in,
