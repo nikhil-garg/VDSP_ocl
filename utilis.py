@@ -443,19 +443,45 @@ def fun_post(X,
 popt = np.array((1.00220687e+00,  5.01196597e+00, -3.54137489e-03, -3.54157996e-03,
        -2.25853150e-01))
 
-# popt = np.array((6.05881551e-01,  1.01044824e-03,  3.37283747e-02,  1.39655640e+00,
-#        -3.15512476e+00,  1.00677440e+01,  7.71595083e-05,  3.22900706e+00,
-#         1.63426133e+00,  4.78639604e-01,  2.06084623e-01,  2.90613245e-04,
-#         8.30146609e-09,  2.05743686e-04,  2.09438927e-04,  9.01123594e-05,
-#         5.30047605e-05,  2.81943806e-08,  1.53334853e-03,  7.75914944e-04,
-#         2.27631334e-04,  9.79408462e-05))
 
-# popt = np.array((9.64235213e-03, -3.63061515e-01,  2.16645457e+00, -2.22633990e+00,
-#         6.12085767e-01, -4.56786010e-04,  1.88733318e+00,  6.85084783e-01,
-#         4.40594096e-01, -4.05354083e-01, -5.60994273e-03,  3.95905357e-01,
-#        -6.34137301e-01,  1.92450107e+00, -1.29452642e+00, -4.08783010e-04,
-#         1.92852502e+00,  7.32452026e-01,  4.98640992e-01, -4.49223752e-01,
-#         3.52251043e-01,  6.26162680e-01))
+
+
+def fun_post_var(X,
+       alphap=1,alphan=5,Ap=4000,An=4000,eta=1
+       ): 
+    
+    w, vmem, vprog, vthp,vthn,var  = X
+    # vthp=0.16
+    # vthn=0.15
+    # vprog=0
+    xp=0.3
+    xn=0.5 
+    vapp = vprog-vmem
+
+    Ap = var*Ap
+    An = var*An
+    
+    cond_pot_fast = w<xp
+    cond_pot_slow = 1-cond_pot_fast
+    
+    cond_dep_fast = w>(1-xn)
+    cond_dep_slow = 1-cond_dep_fast
+    
+    f_pot = (np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))*cond_pot_slow + cond_pot_fast
+    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast
+    
+    cond_pot = vapp > vthp
+    cond_dep = vapp < -vthn
+    
+    g_pot = Ap*(np.exp(vapp)-np.exp(vthp))
+    g_dep = -An*(np.exp(-vapp)-np.exp(vthn))
+
+    dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
+    return dW
+
+popt = np.array((1.00220687e+00,  5.01196597e+00, -3.54137489e-03, -3.54157996e-03,
+       -2.25853150e-01))
+
 
 
 
@@ -525,6 +551,8 @@ class CustomRule_post_v2(nengo.Process):
         self.signal_out_post = signal
 
 
+
+#For quantization during training
 class CustomRule_post_v3(nengo.Process):
    
     def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15, weight_quant =256):
@@ -600,9 +628,12 @@ class CustomRule_post_v3(nengo.Process):
         self.signal_out_post = signal
 
 
+
+
+#For variability in Ap and An 
 class CustomRule_post_v4(nengo.Process):
-   
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15):
+    #var is the matrix with random numbers to be multiplied with Ap and An. var=1 : no variability
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_amp= 1):
        
         self.vprog = vprog  
         
@@ -617,9 +648,9 @@ class CustomRule_post_v4(nengo.Process):
         self.lr = lr
         self.vthp = vthp
         self.vthn = vthn
+        self.var_amp = var_amp
         
-        self.history = []
-        self.update_history=[]
+        self.history = [0]
 
         
         # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
@@ -635,29 +666,25 @@ class CustomRule_post_v4(nengo.Process):
             assert self.signal_vmem_pre is not None
             assert self.signal_out_post is not None
             
-            vmem = np.clip(self.signal_vmem_pre, -1, 1)
+            # vmem = np.clip(self.signal_vmem_pre, -1, 1)
             
             post_out = self.signal_out_post
             
-            vmem = np.reshape(vmem, (1, shape_in[0]))   
+            vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            dw = dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr
-
-            self.w = np.clip(self.w +dw , 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_var((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp),*popt))*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
             
             # self.tstep +=1
-            # self.history[0] = self.w.copy()
+            self.history[0] = self.w.copy()
             # self.history.append(self.w.copy())
             # self.history = self.history[-2:]
             # self.history = self.w
-            self.history.append(self.w.copy())
-            self.update_history.append(dw.copy())
-        
+            
             return np.dot(self.w, x)
         
         return step   
@@ -669,6 +696,8 @@ class CustomRule_post_v4(nengo.Process):
         
     def set_signal_out(self, signal):
         self.signal_out_post = signal
+
+
 
 import numpy as np
 from nengo.builder.builder import Builder

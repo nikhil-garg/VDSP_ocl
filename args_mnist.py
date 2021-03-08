@@ -178,6 +178,12 @@ def args():
         type=float,
         help="Variability of weight update",
     )
+    parser.add_argument(
+        "--amp_var",
+        default=0,
+        type=float,
+        help="Variability of Ap and An in VDSP",
+    )
 
     parser.add_argument(
         "--log_file_path",

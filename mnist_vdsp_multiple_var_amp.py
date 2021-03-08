@@ -35,7 +35,7 @@ import logging
 # import nni
 
 
-def evaluate_mnist_multiple_var(args):
+def evaluate_mnist_multiple_var_amp(args):
 
     #############################
     # load the data
@@ -133,13 +133,17 @@ def evaluate_mnist_multiple_var(args):
 
     #Learning rule parameters
 
-    vthp=args.vthp
-    vthn=args.vthn    
+    # vthp=args.vthp
+    # vthn=args.vthn    
+    # np.random.seed(20) 
+    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    # var_ratio=args.var_ratio
+    # vthp = vthp + (vthp*var_ratio*random_matrix)
+    # vthn = vthn + (vthn*var_ratio*random_matrix)
+
     np.random.seed(20) 
     random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    var_ratio=args.var_ratio
-    vthp = vthp + (vthp*var_ratio*random_matrix)
-    vthn = vthn + (vthn*var_ratio*random_matrix)
+    var_amp_matrix = 1 + (random_matrix*args.amp_var)
 
 
     learning_args = {
@@ -147,8 +151,9 @@ def evaluate_mnist_multiple_var(args):
             "winit_min":0,
             "winit_max":1,
             "vprog":args.vprog, 
-            "vthp":vthp,
-            "vthn":vthn,
+            "vthp":args.vthp,
+            "vthn":args.vthn,
+            "var_amp":var_amp_matrix,
             # "var_ratio":args.var_ratio,
     #         "tpw":50,
     #         "prev_flag":True,
@@ -179,7 +184,7 @@ def evaluate_mnist_multiple_var(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v4(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
@@ -432,18 +437,18 @@ if __name__ == '__main__':
 
 
 
-    params = nni.get_next_parameter()
+    # params = nni.get_next_parameter()
 
-    args.g_max = params['g_max']
-    args.tau_in = params['tau_in']
-    args.tau_out = params['tau_out']
-    args.lr = params['lr']
+    # args.g_max = params['g_max']
+    # args.tau_in = params['tau_in']
+    # args.tau_out = params['tau_out']
+    # args.lr = params['lr']
     # args.presentation_time = params['presentation_time']
     # args.rate_out = params['rate_out']
 
 
 
-    accuracy, weights = evaluate_mnist_multiple_var(args)
+    accuracy, weights = evaluate_mnist_multiple_var_amp(args)
     print('accuracy:', accuracy)
 
     # now = time.strftime("%Y%m%d-%H%M%S")
