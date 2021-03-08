@@ -62,7 +62,7 @@ def evaluate_mnist_multiple(args):
 
 
 
-    # np.save(
+    # np.savez(
     #     'mnist.npz',
     #     image_train_filtered=image_train_filtered,
     #     label_train_filtered=label_train_filtered,
