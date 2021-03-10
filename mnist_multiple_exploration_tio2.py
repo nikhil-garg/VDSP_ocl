@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.2, -0.3, -0.4]
+		vprog = [-0.58, -0.582, -0.584]
 		,input_nbr=[60000]
 		,g_max=[1/210]
 		,tau_in = [0.06]
