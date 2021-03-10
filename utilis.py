@@ -515,7 +515,8 @@ def fun_post_tio2(X,
     return dW
 
 def fun_post_var_tio2(X,
-       alphap=1,alphan=5,Ap=4000,An=4000,eta=1
+       alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
+       a1=1,a2=1,a3=1,a4=1
        ): 
     
     w, vmem, vprog, vthp,vthn,var  = X
@@ -535,8 +536,8 @@ def fun_post_var_tio2(X,
     cond_dep_fast = w>(1-xn)
     cond_dep_slow = 1-cond_dep_fast
     
-    f_pot = (np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))*cond_pot_slow + cond_pot_fast
-    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast
+    f_pot = (np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))*cond_pot_slow + cond_pot_fast*(a1*w+a2)
+    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast*(a3*w+a4)
     
     cond_pot = vapp > vthp
     cond_dep = vapp < -vthn
