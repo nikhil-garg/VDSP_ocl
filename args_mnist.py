@@ -191,6 +191,12 @@ def args():
         type=str,
         help="log file path",
     )
+    parser.add_argument(
+        "--seed",
+        default=0,
+        type=float,
+        help="Seed of random number generator",
+    )
 
     my_args = parser.parse_args()
 

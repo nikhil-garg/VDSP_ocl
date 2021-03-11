@@ -31,7 +31,7 @@ from args_mnist import args as my_args
 import itertools
 import random
 import logging
-
+import random
 # import nni
 
 
@@ -135,7 +135,9 @@ def evaluate_mnist_multiple_var(args):
 
     vthp=args.vthp
     vthn=args.vthn    
-    np.random.seed(20) 
+    np.random.seed(args.seed)
+    random.seed(args.seed)
+
     random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
     var_ratio=args.var_ratio
     vthp = vthp + (vthp*var_ratio*random_matrix)
