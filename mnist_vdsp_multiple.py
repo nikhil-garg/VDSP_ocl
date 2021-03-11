@@ -31,7 +31,7 @@ from args_mnist import args as my_args
 import itertools
 import random
 import logging
-
+import random 
 # import nni
 
 
@@ -51,7 +51,8 @@ def evaluate_mnist_multiple(args):
     # label_train_filtered = []
 
     x = args.digit
-
+    np.random.seed(args.seed)
+    random.seed(args.seed)
     # for i in range(0,input_nbr):
       
     #     image_train_filtered.append(image_train[i])

@@ -38,6 +38,7 @@ if __name__ == '__main__':
                         "presentation_time":[],
                         "dt":[],
                         "n_neurons":[],
+                        "seed":[],
                         "inhibition_time":[],
                         "accuracy":[]
                          })
@@ -59,7 +60,8 @@ if __name__ == '__main__':
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [20,40,60,80,90,110]
+		, n_neurons = [20,30,40,50,60,70,80,90,100]
+		, seed = [0,100,200]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -68,7 +70,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
+	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.seed,args.inhibition_time in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -93,6 +95,7 @@ if __name__ == '__main__':
 		                 "presentation_time":args.presentation_time,
 		                 "dt":args.dt,
 		                 "n_neurons":args.n_neurons,
+		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
