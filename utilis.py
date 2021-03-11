@@ -594,7 +594,7 @@ class CustomRule_post_v2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr), 0.001, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
@@ -659,7 +659,7 @@ class CustomRule_post_v2_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt_tio2))*post_out_matrix*self.lr), 0.001, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
@@ -731,7 +731,7 @@ class CustomRule_post_v3(nengo.Process):
             random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0]))
             var_matrix = (random_matrix*self.var_dw)+1
 
-            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr*var_matrix), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr*var_matrix), 0.001, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
@@ -800,7 +800,7 @@ class CustomRule_post_v4(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_var((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp),*popt))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_var((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp),*popt))*post_out_matrix*self.lr), 0.001, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
