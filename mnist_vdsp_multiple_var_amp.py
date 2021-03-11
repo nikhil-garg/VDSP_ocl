@@ -141,7 +141,8 @@ def evaluate_mnist_multiple_var_amp(args):
     # vthp = vthp + (vthp*var_ratio*random_matrix)
     # vthn = vthn + (vthn*var_ratio*random_matrix)
 
-    np.random.seed(20) 
+    np.random.seed(args.seed)
+    random.seed(args.seed) 
     random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
     var_amp_matrix = 1 + (random_matrix*args.amp_var)
 

@@ -41,6 +41,7 @@ if __name__ == '__main__':
                         "lr":[],
                         "presentation_time":[],
                         "amp_var":[],
+                        "seed":[],
                         "accuracy":[],
                          })
 
@@ -66,7 +67,8 @@ if __name__ == '__main__':
 		,inhibition_time = [10]
 		, lr = [0.1]
 		, presentation_time = [0.35]
-		, amp_var = [0.3,0.4,0.5]
+		, amp_var = [0,0.1,0.2,0.3,0.4]
+		, seed = [0,100,200,300,400,500,600,700,800,900]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -74,7 +76,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time,args.amp_var in product(*param_values):
+	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time,args.amp_var,args.seed in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -101,6 +103,7 @@ if __name__ == '__main__':
 						 "lr": args.lr,
 		                 "presentation_time":args.presentation_time,
 		                 "amp_var":args.amp_var,
+		                 "seed":args.seed,
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
 		
