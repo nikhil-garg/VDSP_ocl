@@ -184,6 +184,18 @@ def args():
         type=float,
         help="Variability of Ap and An in VDSP",
     )
+    parser.add_argument(
+        "--dw_var",
+        default=0,
+        type=float,
+        help="Variability of dW",
+    )
+    parser.add_argument(
+        "--g_var",
+        default=0,
+        type=float,
+        help="Variability of amp of input neurons",
+    )
 
     parser.add_argument(
         "--log_file_path",

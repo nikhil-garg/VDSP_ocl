@@ -683,10 +683,11 @@ class CustomRule_post_v2_tio2(nengo.Process):
         self.signal_out_post = signal
 
 
-#For quantization during training
+#For C2C variability
+
 class CustomRule_post_v3(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15, weight_quant =256):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_dw=0):
        
         self.vprog = vprog  
         
@@ -696,13 +697,12 @@ class CustomRule_post_v3(nengo.Process):
         self.winit_min = winit_min
         self.winit_max = winit_max
         
-        
+        self.var_dw = var_dw
+
         self.sample_distance = sample_distance
         self.lr = lr
         self.vthp = vthp
         self.vthn = vthn
-        self.weight_quant = weight_quant 
-
         
         self.history = [0]
 
@@ -720,23 +720,19 @@ class CustomRule_post_v3(nengo.Process):
             assert self.signal_vmem_pre is not None
             assert self.signal_out_post is not None
             
-            vmem = np.clip(self.signal_vmem_pre, -1, 1)
+            # vmem = np.clip(self.signal_vmem_pre, -1, 1)
             
             post_out = self.signal_out_post
             
-            vmem = np.reshape(vmem, (1, shape_in[0]))   
+            vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
+            random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0]))
+            var_matrix = (random_matrix*self.var_dw)+1
 
-
-            # weight_quantization_matrix = ((np.random.randn(shape_out[0],shape_in[0])) -0.5)*self.weight_quant
-
-            self.w = np.clip(((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr)), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr*var_matrix), 0, 1)
             
-
-            self.w = np.round(self.w * self.weight_quant) / self.weight_quant
-
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
             
@@ -757,7 +753,6 @@ class CustomRule_post_v3(nengo.Process):
         
     def set_signal_out(self, signal):
         self.signal_out_post = signal
-
 
 
 
