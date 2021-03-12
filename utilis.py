@@ -796,8 +796,8 @@ class CustomRule_post_v3(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
             
-            np.random.seed(t)
-            random.seed(t) 
+            np.random.seed(int(t))
+            random.seed(int(t)) 
             
             random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0]))
             var_matrix = (random_matrix*self.var_dw)+1
