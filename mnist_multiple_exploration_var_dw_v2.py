@@ -67,8 +67,8 @@ if __name__ == '__main__':
 		,inhibition_time = [10]
 		, lr = [0.1]
 		, presentation_time = [0.35]
-		, dw_var = [0.25,0.3,0.35]
-		, seed = [1000]
+		, dw_var = [0.4,0.5,0.6,0.7]
+		, seed = [0]
     )
 	param_values = [v for v in parameters.values()]
 
