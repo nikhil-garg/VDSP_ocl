@@ -23,9 +23,7 @@ if __name__ == '__main__':
 	logger = logging.getLogger(__name__)
 
 	# Fix the seed of all random number generator
-	seed = 50
-	random.seed(seed)
-	np.random.seed(seed)
+
 
 	df = pd.DataFrame({	"vprog":[],
 						"input_nbr":[],
@@ -66,7 +64,7 @@ if __name__ == '__main__':
 		, lr = [0.1]
 		, presentation_time = [0.35]
 		, var_ratio = [0.8,0.9,1,1.1]
-		, seed = [500]
+		, seed = [400]
     )
 	param_values = [v for v in parameters.values()]
 
