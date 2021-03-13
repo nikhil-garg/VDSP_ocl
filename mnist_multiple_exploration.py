@@ -61,7 +61,7 @@ if __name__ == '__main__':
 		, presentation_time = [0.35]
 		, dt = [0.005]
 		, n_neurons = [10,30,50]
-		, seed = [0]
+		, seed = [100]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -79,10 +79,7 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
-
 		accuracy, weights = evaluate_mnist_multiple(args)
-
-
 
 		df = df.append({ "vprog":args.vprog,
 						 "vth":args.vthp,
