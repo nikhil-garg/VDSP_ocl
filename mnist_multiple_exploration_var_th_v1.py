@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple_var_v2 import *
+from mnist_vdsp_multiple_var import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -29,7 +29,6 @@ if __name__ == '__main__':
 
 	df = pd.DataFrame({	"vprog":[],
 						"input_nbr":[],
-						"g_max":[],
 						"tau_in" :[],
 						"tau_out":[],
 						"gain_in":[],
@@ -41,8 +40,8 @@ if __name__ == '__main__':
                         "lr":[],
                         "presentation_time":[],
                         "var_ratio":[],
-                        "weight_quant":[],
-                        "accuracy":[]
+                        "seed":[],
+                        "accuracy":[],
                          })
 
 	if args.log_file_path is None:
@@ -54,21 +53,20 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.60],
+		vprog = [-0.75],
 		input_nbr=[60000],
-		g_max=[1/210]
-		,tau_in = [0.1]
-		,tau_out = [0.1]
+		,tau_in = [0.06]
+		,tau_out = [0.06]
 		,gain_in = [2]
 		,gain_out = [2]
 		,bias_in = [0]
 		,bias_out = [0]
-		,thr_out = [70]
+		,thr_out = [1]
 		,inhibition_time = [10]
-		, lr = [0.001]
+		, lr = [0.1]
 		, presentation_time = [0.35]
-		, var_ratio = [0]
-		,weight_quant = [128,256,512,1024,2048]
+		, var_ratio = [0,0.1,0.2,0.3]
+		, seed = [0]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -76,22 +74,21 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time,args.var_ratio, args.weight_quant in product(*param_values):
+	for args.vprog,args.input_nbr,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time,args.var_ratio,args.seed in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
+		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
+		# args.vthn = args.vthp
+		accuracy, weights = evaluate_mnist_multiple_var(args)
 
-		accuracy, weights = evaluate_mnist_multiple_var_v2(args)
 
-
-
+		
 		df = df.append({ "vprog":args.vprog,
 						 "input_nbr":args.input_nbr,
-						 "g_max":args.g_max,
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
 						 "gain_in":args.gain_in,
@@ -103,7 +100,7 @@ if __name__ == '__main__':
 						 "lr": args.lr,
 		                 "presentation_time":args.presentation_time,
 		                 "var_ratio":args.var_ratio,
-		                 "weight_quant":args.weight_quant,
+		                 "seed":args.seed,
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
 		
