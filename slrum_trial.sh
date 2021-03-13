@@ -2,7 +2,7 @@
 #SBATCH --account=def-drod1901
 #SBATCH --time=2-23:58:00
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=8G
+#SBATCH --mem=32G
 OUTDIR=~/project/out/$SLURM_JOB_ID
 mkdir -p $OUTDIR
 cd $SLURM_TMPDIR
