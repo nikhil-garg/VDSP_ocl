@@ -92,7 +92,7 @@ def evaluate_mnist_multiple(args):
     #Input layer parameters
     n_in = args.n_in
     # g_max = 1/784 #Maximum output contribution
-    g_max = args.g_max
+    amp_neuron = args.amp_neuron
     n_neurons = args.n_neurons # Layer 1 neurons
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
@@ -106,7 +106,7 @@ def evaluate_mnist_multiple(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -143,6 +143,8 @@ def evaluate_mnist_multiple(args):
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,
+            "gmax":args.gmax,
+            "gmin":args.gmin,
     #         "tpw":50,
     #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images

@@ -88,7 +88,7 @@ def evaluate_mnist_multiple_var_amp(args):
     #Input layer parameters
     n_in = args.n_in
     # g_max = 1/784 #Maximum output contribution
-    g_max = args.g_max
+    amp_neuron = args.amp_neuron
     n_neurons = args.n_neurons # Layer 1 neurons
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
@@ -102,7 +102,7 @@ def evaluate_mnist_multiple_var_amp(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Uniform(args.gain_in,args.gain_in),
             "bias":nengo.dists.Uniform(args.bias_in,args.bias_in),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -155,6 +155,8 @@ def evaluate_mnist_multiple_var_amp(args):
             "vthp":args.vthp,
             "vthn":args.vthn,
             "var_amp":var_amp_matrix,
+            "gmax":args.gmax,
+            "gmin":args.gmin,
             # "var_ratio":args.var_ratio,
     #         "tpw":50,
     #         "prev_flag":True,

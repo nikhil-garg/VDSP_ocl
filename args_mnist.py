@@ -60,8 +60,8 @@ def args():
     )
 
     parser.add_argument(
-        "--g_max",
-        default=1/210,
+        "--amp_neuron",
+        default=0.5607848,
         type=float,
         help="Transform from synapse to output neurons"
     )
@@ -194,7 +194,18 @@ def args():
         "--g_var",
         default=0,
         type=float,
-        help="Variability of amp of input neurons",
+        help="Variability of gmax and gmin",
+    )
+
+    parser.add_argument(
+        "--gmax",
+        default=0.0085,
+        type=float,
+    )
+    parser.add_argument(
+        "--gmin",
+        default=0.0000085,
+        type=float,
     )
 
     parser.add_argument(

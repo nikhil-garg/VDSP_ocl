@@ -31,7 +31,7 @@ from args_mnist import args as my_args
 import itertools
 import random
 import logging
-
+import random
 # import nni
 
 
@@ -88,19 +88,11 @@ def evaluate_mnist_multiple_var_g(args):
     #Input layer parameters
     n_in = args.n_in
     # g_max = 1/784 #Maximum output contribution
-    g_max = args.g_max
+    amp_neuron = args.amp_neuron
     n_neurons = args.n_neurons # Layer 1 neurons
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
-    # np.random.seed(args.seed)
-    # random.seed(args.seed) 
-    # random_matrix = np.random.normal(0.0, 1.0, (n_in)) #between -1 to 1 of shape W
-    # var_g_matrix = 1 + (random_matrix*args.g_var)
 
-
-
-    nengo.dists.Gaussian(0, 0.5)
-    
     input_neurons_args = {
             "n_neurons":n_in,
             "dimensions":1,
@@ -110,7 +102,7 @@ def evaluate_mnist_multiple_var_g(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Uniform(args.gain_in,args.gain_in),
             "bias":nengo.dists.Uniform(args.bias_in,args.bias_in),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max *var_g_matrix)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -141,15 +133,16 @@ def evaluate_mnist_multiple_var_g(args):
 
     #Learning rule parameters
 
-    # vthp=args.vthp
-    # vthn=args.vthn    
-    # np.random.seed(20) 
-    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    # var_ratio=args.var_ratio
-    # vthp = vthp + (vthp*var_ratio*random_matrix)
-    # vthn = vthn + (vthn*var_ratio*random_matrix)
 
-    
+
+    np.random.seed(args.seed)
+    random.seed(args.seed)
+    gmax = np.random.normal(args.gmax, args.gmax*args.g_var, (n_neurons,n_in)) #between -1 to 1 of shape W
+
+    np.random.seed(args.seed + 1)
+    random.seed(args.seed + 1)
+    gmin = np.random.normal(args.gmin, args.gmin*args.g_var, (n_neurons,n_in)) #between -1 to 1 of shape W
+
 
     learning_args = {
             "lr": args.lr,
@@ -158,7 +151,8 @@ def evaluate_mnist_multiple_var_g(args):
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,
-            # "var_amp":var_amp_matrix,
+            "gmax":args.gmax,
+            "gmin":args.gmin,
             # "var_ratio":args.var_ratio,
     #         "tpw":50,
     #         "prev_flag":True,
@@ -453,7 +447,7 @@ if __name__ == '__main__':
 
 
 
-    accuracy, weights = evaluate_mnist_multiple_var_amp(args)
+    accuracy, weights = evaluate_mnist_multiple_var(args)
     print('accuracy:', accuracy)
 
     # now = time.strftime("%Y%m%d-%H%M%S")

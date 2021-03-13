@@ -554,7 +554,7 @@ popt_tio2 = np.array((9.97129391e-01,  4.96300830e+00,  4.68921578e-04,  2.09469
 
 class CustomRule_post_v2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,gmax=0.0085,gmin=0.0000085):
        
         self.vprog = vprog  
         
@@ -569,6 +569,8 @@ class CustomRule_post_v2(nengo.Process):
         self.lr = lr
         self.vthp = vthp
         self.vthn = vthn
+        self.gmax=gmax
+        self.gmin = gmin
         
         self.history = [0]
 
@@ -604,8 +606,8 @@ class CustomRule_post_v2(nengo.Process):
             # self.history.append(self.w.copy())
             # self.history = self.history[-2:]
             # self.history = self.w
-            
-            return np.dot(self.w, x)
+
+            return np.dot((self.w*(self.gmax-self.gmin)) + self.gmin, x)
         
         return step   
 
@@ -830,7 +832,7 @@ class CustomRule_post_v3(nengo.Process):
 #For variability in Ap and An 
 class CustomRule_post_v4(nengo.Process):
     #var is the matrix with random numbers to be multiplied with Ap and An. var=1 : no variability
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_amp= 1):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_amp= 1,gmax=0.0085, gmin=0.0000085):
        
         self.vprog = vprog  
         
@@ -846,6 +848,8 @@ class CustomRule_post_v4(nengo.Process):
         self.vthp = vthp
         self.vthn = vthn
         self.var_amp = var_amp
+        self.gmin=gmin
+        self.gmax = gmax
         
         self.history = [0]
 
@@ -882,7 +886,7 @@ class CustomRule_post_v4(nengo.Process):
             # self.history = self.history[-2:]
             # self.history = self.w
             
-            return np.dot(self.w, x)
+            return np.dot((self.w*(self.gmax-self.gmin)) + self.gmin, x)
         
         return step   
 

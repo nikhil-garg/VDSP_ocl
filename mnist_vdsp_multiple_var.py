@@ -88,7 +88,7 @@ def evaluate_mnist_multiple_var(args):
     #Input layer parameters
     n_in = args.n_in
     # g_max = 1/784 #Maximum output contribution
-    g_max = args.g_max
+    amp_neuron = args.amp_neuron
     n_neurons = args.n_neurons # Layer 1 neurons
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
@@ -102,7 +102,7 @@ def evaluate_mnist_multiple_var(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Uniform(args.gain_in,args.gain_in),
             "bias":nengo.dists.Uniform(args.bias_in,args.bias_in),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -151,6 +151,8 @@ def evaluate_mnist_multiple_var(args):
             "vprog":args.vprog, 
             "vthp":vthp,
             "vthn":vthn,
+            "gmax":args.gmax,
+            "gmin":args.gmin,
             # "var_ratio":args.var_ratio,
     #         "tpw":50,
     #         "prev_flag":True,
@@ -434,12 +436,12 @@ if __name__ == '__main__':
 
 
 
-    params = nni.get_next_parameter()
+    # params = nni.get_next_parameter()
 
-    args.g_max = params['g_max']
-    args.tau_in = params['tau_in']
-    args.tau_out = params['tau_out']
-    args.lr = params['lr']
+    # args.g_max = params['g_max']
+    # args.tau_in = params['tau_in']
+    # args.tau_out = params['tau_out']
+    # args.lr = params['lr']
     # args.presentation_time = params['presentation_time']
     # args.rate_out = params['rate_out']
 
