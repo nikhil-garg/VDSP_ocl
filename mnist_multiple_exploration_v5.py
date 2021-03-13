@@ -58,8 +58,8 @@ if __name__ == '__main__':
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [60]
-		, seed = [0]
+		, n_neurons = [30,40]
+		, seed = [200]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]

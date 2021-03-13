@@ -32,6 +32,6 @@ cd ..
 git clone https://github.com/nikhil-garg/VDSP_ocl.git
 cd VDSP_ocl
 
-python mnist_multiple_exploration_v6.py --log_file_path $OUTDIR
+python mnist_multiple_exploration_v7.py --log_file_path $OUTDIR
 
 tar xf $SLURM_TMPDIR/VDSP_ocl -C $OUTDIR
