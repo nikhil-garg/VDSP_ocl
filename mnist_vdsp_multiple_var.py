@@ -137,11 +137,10 @@ def evaluate_mnist_multiple_var(args):
     vthn=args.vthn    
     np.random.seed(args.seed)
     random.seed(args.seed)
-
-    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
     var_ratio=args.var_ratio
-    vthp = vthp + (vthp*var_ratio*random_matrix)
-    vthn = vthn + (vthn*var_ratio*random_matrix)
+
+    vthp = np.random.normal(vthp, vthp*var_ratio, (n_neurons,n_in)) #between -1 to 1 of shape W
+    vthn = np.random.normal(vthn, vthn*var_ratio, (n_neurons,n_in)) #between -1 to 1 of shape W
 
 
     learning_args = {
