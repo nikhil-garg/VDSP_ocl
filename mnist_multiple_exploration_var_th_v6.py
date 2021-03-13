@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.75],
-		input_nbr=[60000],
+		input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		,gain_in = [2]
@@ -64,7 +64,7 @@ if __name__ == '__main__':
 		, lr = [0.1]
 		, presentation_time = [0.35]
 		, var_ratio = [0.8,0.9,1,1.1]
-		, seed = [400]
+		, seed = [100]
     )
 	param_values = [v for v in parameters.values()]
 
