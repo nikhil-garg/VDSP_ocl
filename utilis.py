@@ -450,7 +450,7 @@ def fun_post_var(X,
        alphap=1,alphan=5,Ap=4000,An=4000,eta=1
        ): 
     
-    w, vmem, vprog, vthp,vthn,var  = X
+    w, vmem, vprog, vthp,vthn,var_amp_1,var_amp_2  = X
     # vthp=0.16
     # vthn=0.15
     # vprog=0
@@ -458,8 +458,8 @@ def fun_post_var(X,
     xn=0.5 
     vapp = vprog-vmem
 
-    Ap = var*Ap
-    An = var*An
+    Ap = var_amp_1*Ap
+    An = var_amp_2*An
     
     cond_pot_fast = w<xp
     cond_pot_slow = 1-cond_pot_fast
@@ -832,7 +832,7 @@ class CustomRule_post_v3(nengo.Process):
 #For variability in Ap and An 
 class CustomRule_post_v4(nengo.Process):
     #var is the matrix with random numbers to be multiplied with Ap and An. var=1 : no variability
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_amp= 1,gmax=0.0085, gmin=0.0000085):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_amp_1= 1,var_amp_2=1,gmax=0.0085, gmin=0.0000085):
        
         self.vprog = vprog  
         
@@ -847,7 +847,8 @@ class CustomRule_post_v4(nengo.Process):
         self.lr = lr
         self.vthp = vthp
         self.vthn = vthn
-        self.var_amp = var_amp
+        self.var_amp_1 = var_amp_1
+        self.var_amp_2 = var_amp_2
         self.gmin=gmin
         self.gmax = gmax
         
@@ -875,7 +876,7 @@ class CustomRule_post_v4(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_var((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp),*popt))*post_out_matrix*self.lr), 0.001, 1)
+            self.w = np.clip((self.w + dt*(fun_post_var((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp_1,self.var_amp_2),*popt))*post_out_matrix*self.lr), 0.001, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())

@@ -53,8 +53,8 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.75],
-		input_nbr=[60000],
+		vprog = [-0.75]
+		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		,gain_in = [2]
@@ -65,8 +65,8 @@ if __name__ == '__main__':
 		,inhibition_time = [10]
 		, lr = [0.1]
 		, presentation_time = [0.35]
-		, amp_var = [0,0.1,0.2]
-		, seed = [800,900]
+		, amp_var = [0,0.1,0.2,0.3]
+		, seed = [0]
     )
 	param_values = [v for v in parameters.values()]
 
