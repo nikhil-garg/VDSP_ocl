@@ -34,6 +34,15 @@ sbatch slrum_trial_g_var_v8.sh --log_file_path $OUTDIR
 sbatch slrum_trial_g_var_v9.sh --log_file_path $OUTDIR
 sbatch slrum_trial_g_var_v10.sh --log_file_path $OUTDIR
 
+
+sbatch slrum_trial_amp_var_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v9.sh --log_file_path $OUTDIR
+
+
+
               63816916   ng1998 def-drod1901 slrum_trial_v1   R   16:26:21     1    2        N/A     32G cdr783 (None) 
        63816943   ng1998 def-drod1901 slrum_trial_v2   R   16:26:21     1    2        N/A     32G cdr787 (None) 
        63816968   ng1998 def-drod1901 slrum_trial_v3   R   16:26:21     1    2        N/A     32G cdr809 (None) 
