@@ -66,7 +66,7 @@ if __name__ == '__main__':
 		, lr = [0.1]
 		, presentation_time = [0.35]
 		, amp_var = [0.4,0.5,0.6,0.7]
-		, seed = [900]
+		, seed = [0]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -89,7 +89,6 @@ if __name__ == '__main__':
 		
 		df = df.append({ "vprog":args.vprog,
 						 "input_nbr":args.input_nbr,
-						 "g_max":args.g_max,
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
 						 "gain_in":args.gain_in,
