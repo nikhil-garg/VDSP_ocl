@@ -4,12 +4,7 @@ sbatch slrum_trial_th_var_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_th_var_v4.sh --log_file_path $OUTDIR
 sbatch slrum_trial_th_var_v5.sh --log_file_path $OUTDIR
 sbatch slrum_trial_th_var_v6.sh --log_file_path $OUTDIR
-sbatch slrum_trial_amp_var_v1.sh --log_file_path $OUTDIR
-sbatch slrum_trial_amp_var_v2.sh --log_file_path $OUTDIR
-sbatch slrum_trial_amp_var_v3.sh --log_file_path $OUTDIR
-sbatch slrum_trial_amp_var_v4.sh --log_file_path $OUTDIR
-sbatch slrum_trial_amp_var_v5.sh --log_file_path $OUTDIR
-sbatch slrum_trial_amp_var_v6.sh --log_file_path $OUTDIR
+
 sbatch slrum_trial_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v3.sh --log_file_path $OUTDIR
@@ -17,3 +12,112 @@ sbatch slrum_trial_v4.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v5.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v6.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v7.sh --log_file_path $OUTDIR
+
+sbatch slrum_trial_amp_var_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v5.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v6.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v7.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_amp_var_v9.sh --log_file_path $OUTDIR
+
+sbatch slrum_trial_g_var_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v5.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v6.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v7.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v9.sh --log_file_path $OUTDIR
+sbatch slrum_trial_g_var_v10.sh --log_file_path $OUTDIR
+
+              63816916   ng1998 def-drod1901 slrum_trial_v1   R   16:26:21     1    2        N/A     32G cdr783 (None) 
+       63816943   ng1998 def-drod1901 slrum_trial_v2   R   16:26:21     1    2        N/A     32G cdr787 (None) 
+       63816968   ng1998 def-drod1901 slrum_trial_v3   R   16:26:21     1    2        N/A     32G cdr809 (None) 
+       63816995   ng1998 def-drod1901 slrum_trial_v4   R   16:26:21     1    2        N/A     32G cdr809 (None) 
+       63817298   ng1998 def-drod1901 slrum_trial_v5   R   16:26:21     1    2        N/A     32G cdr811 (None) 
+       63817328   ng1998 def-drod1901 slrum_trial_v6   R   16:26:21     1    2        N/A     32G cdr811 (None) 
+       63820217   ng1998 def-drod1901 slrum_trial_v1   R   16:33:46     1    2        N/A     32G cdr783 (None) 
+       63820219   ng1998 def-drod1901 slrum_trial_v2   R   16:33:46     1    2        N/A     32G cdr783 (None) 
+       63820220   ng1998 def-drod1901 slrum_trial_v3   R   16:33:46     1    2        N/A     32G cdr783 (None) 
+       63820221   ng1998 def-drod1901 slrum_trial_v4   R   16:33:46     1    2        N/A     32G cdr783 (None) 
+       63820222   ng1998 def-drod1901 slrum_trial_v5   R   16:33:46     1    2        N/A     32G cdr783 (None) 
+       63820224   ng1998 def-drod1901 slrum_trial_v6   R   16:33:46     1    2        N/A     32G cdr816 (None) 
+       63820264   ng1998 def-drod1901 slrum_trial_v7   R   16:34:45     1    2        N/A     32G cdr472 (None) 
+       63821039   ng1998 def-drod1901 slrum_trial_v1   R   16:40:21     1    2        N/A     32G cdr474 (None) 
+       63821040   ng1998 def-drod1901 slrum_trial_v2   R   16:40:21     1    2        N/A     32G cdr474 (None) 
+       63821042   ng1998 def-drod1901 slrum_trial_v3   R   16:40:21     1    2        N/A     32G cdr474 (None) 
+       63821043   ng1998 def-drod1901 slrum_trial_v4   R   16:40:21     1    2        N/A     32G cdr474 (None) 
+       63821044   ng1998 def-drod1901 slrum_trial_v5   R   16:40:21     1    2        N/A     32G cdr474 (None) 
+       63821055   ng1998 def-drod1901 slrum_trial_v6   R   16:40:21     1    2        N/A     32G cdr474 (None) 
+       63821056   ng1998 def-drod1901 slrum_trial_v7   R   16:40:21     1    2        N/A     32G cdr474 (None) 
+       63821907   ng1998 def-drod1901 slrum_trial_v1   R   16:55:06     1    2        N/A     32G cdr712 (None) 
+       63821908   ng1998 def-drod1901 slrum_trial_v2   R   16:55:06     1    2        N/A     32G cdr719 (None) 
+       63821909   ng1998 def-drod1901 slrum_trial_v3   R   16:55:06     1    2        N/A     32G cdr726 (None) 
+       63821910   ng1998 def-drod1901 slrum_trial_v4   R   16:55:06     1    2        N/A     32G cdr726 (None) 
+       63821924   ng1998 def-drod1901 slrum_trial_v5   R   16:55:06     1    2        N/A     32G cdr726 (None) 
+       63821926   ng1998 def-drod1901 slrum_trial_v6   R   16:55:06     1    2        N/A     32G cdr726 (None) 
+       63821950   ng1998 def-drod1901 slrum_trial_v7   R   16:55:06     1    2        N/A     32G cdr726 (None) 
+       63824054   ng1998 def-drod1901 slrum_trial_th   R   16:58:38     1    2        N/A     32G cdr469 (None) 
+       63824063   ng1998 def-drod1901 slrum_trial_th   R   16:58:38     1    2        N/A     32G cdr469 (None) 
+       63824074   ng1998 def-drod1901 slrum_trial_th   R   17:06:18     1    2        N/A     32G cdr811 (None) 
+       63824076   ng1998 def-drod1901 slrum_trial_th   R   17:06:18     1    2        N/A     32G cdr469 (None) 
+       63824081   ng1998 def-drod1901 slrum_trial_th   R   17:06:18     1    2        N/A     32G cdr474 (None) 
+       63824095   ng1998 def-drod1901 slrum_trial_th   R   17:06:18     1    2        N/A     32G cdr474 (None) 
+       63824563   ng1998 def-drod1901 slrum_trial_v1   R   17:06:18     1    2        N/A     32G cdr475 (None) 
+       63824565   ng1998 def-drod1901 slrum_trial_v2   R   17:06:18     1    2        N/A     32G cdr475 (None) 
+       63824567   ng1998 def-drod1901 slrum_trial_v3   R   17:08:00     1    2        N/A     32G cdr727 (None) 
+       63824568   ng1998 def-drod1901 slrum_trial_v4   R   17:08:00     1    2        N/A     32G cdr727 (None) 
+       63824570   ng1998 def-drod1901 slrum_trial_v5   R   17:08:00     1    2        N/A     32G cdr619 (None) 
+       63824572   ng1998 def-drod1901 slrum_trial_v6   R   17:08:00     1    2        N/A     32G cdr467 (None) 
+       63824574   ng1998 def-drod1901 slrum_trial_v7   R   17:08:00     1    2        N/A     32G cdr470 (None) 
+       63824878   ng1998 def-drod1901 slrum_trial_th   R   17:12:21     1    2        N/A     32G cdr813 (None) 
+       63824879   ng1998 def-drod1901 slrum_trial_th   R   17:12:21     1    2        N/A     32G cdr813 (None) 
+       63824880   ng1998 def-drod1901 slrum_trial_th   R   17:14:15     1    2        N/A     32G cdr809 (None) 
+       63824881   ng1998 def-drod1901 slrum_trial_th   R   17:14:15     1    2        N/A     32G cdr816 (None) 
+       63824882   ng1998 def-drod1901 slrum_trial_th   R   17:14:23     1    2        N/A     32G cdr813 (None) 
+       63824884   ng1998 def-drod1901 slrum_trial_th   R   17:14:23     1    2        N/A     32G cdr813 (None) 
+       63827100   ng1998 def-drod1901 slrum_trial_th   R   19:00:23     1    2        N/A     32G cdr1798 (None) 
+       63827101   ng1998 def-drod1901 slrum_trial_th   R   19:00:23     1    2        N/A     32G cdr1798 (None) 
+       63827102   ng1998 def-drod1901 slrum_trial_th   R   20:22:31     1    2        N/A     32G cdr1265 (None) 
+       63827103   ng1998 def-drod1901 slrum_trial_th   R   20:39:39     1    2        N/A     32G cdr1714 (None) 
+       63827104   ng1998 def-drod1901 slrum_trial_th   R   20:54:09     1    2        N/A     32G cdr1843 (None) 
+       63827105   ng1998 def-drod1901 slrum_trial_th   R   20:54:09     1    2        N/A     32G cdr1728 (None) 
+       63827563   ng1998 def-drod1901 slrum_trial_g_   R   21:08:46     1    2        N/A     32G cdr611 (None) 
+       63827564   ng1998 def-drod1901 slrum_trial_g_   R   21:17:35     1    2        N/A     32G cdr475 (None) 
+       63827565   ng1998 def-drod1901 slrum_trial_g_   R   21:35:08     1    2        N/A     32G cdr611 (None) 
+       63827566   ng1998 def-drod1901 slrum_trial_g_   R   22:27:23     1    2        N/A     32G cdr811 (None) 
+       63827567   ng1998 def-drod1901 slrum_trial_g_   R   22:38:58     1    2        N/A     32G cdr816 (None) 
+       63827568   ng1998 def-drod1901 slrum_trial_g_   R   22:38:58     1    2        N/A     32G cdr469 (None) 
+       63827569   ng1998 def-drod1901 slrum_trial_g_   R   22:38:58     1    2        N/A     32G cdr472 (None) 
+       63827570   ng1998 def-drod1901 slrum_trial_g_   R   22:46:43     1    2        N/A     32G cdr25 (None) 
+       63827571   ng1998 def-drod1901 slrum_trial_g_   R   22:46:43     1    2        N/A     32G cdr25 (None) 
+       63827575   ng1998 def-drod1901 slrum_trial_g_   R   22:46:43     1    2        N/A     32G cdr25 (None) 
+       63838557   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr783 (None) 
+       63838558   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr783 (None) 
+       63838560   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr783 (None) 
+       63838562   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr783 (None) 
+       63838563   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr783 (None) 
+       63838565   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr787 (None) 
+       63838566   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr787 (None) 
+       63838570   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr809 (None) 
+       63838571   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr811 (None) 
+       63838572   ng1998 def-drod1901 slrum_trial_g_   R   23:40:48     1    2        N/A     32G cdr811 (None) 
+       63838619   ng1998 def-drod1901 slrum_trial_th   R   23:41:50     1    2        N/A     32G cdr475 (None) 
+       63838984   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838985   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838987   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838988   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63839002   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63839004   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63839007   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63839009   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63839011   ng1998 def-drod1901 slrum_trial_am  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838622   ng1998 def-drod1901 slrum_trial_th  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838627   ng1998 def-drod1901 slrum_trial_th  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838630   ng1998 def-drod1901 slrum_trial_th  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838633   ng1998 def-drod1901 slrum_trial_th  PD   23:58:00     1    2        N/A     32G  (Priority) 
+       63838650   ng1998 def-drod1901 slrum_trial_th  PD   23:58:00     1    2        N/A     32G  (Priority) 
