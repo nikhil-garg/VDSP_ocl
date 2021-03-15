@@ -88,7 +88,6 @@ def evaluate_mnist_multiple_var_dw(args):
     #Input layer parameters
     n_in = args.n_in
     # g_max = 1/784 #Maximum output contribution
-    g_max = args.g_max
     n_neurons = args.n_neurons # Layer 1 neurons
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
@@ -102,7 +101,7 @@ def evaluate_mnist_multiple_var_dw(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Uniform(args.gain_in,args.gain_in),
             "bias":nengo.dists.Uniform(args.bias_in,args.bias_in),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -449,7 +448,7 @@ if __name__ == '__main__':
 
 
 
-    accuracy, weights = evaluate_mnist_multiple_var_amp(args)
+    accuracy, weights = evaluate_mnist_multiple_var_dw(args)
     print('accuracy:', accuracy)
 
     # now = time.strftime("%Y%m%d-%H%M%S")

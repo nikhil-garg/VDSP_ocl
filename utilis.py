@@ -757,7 +757,7 @@ class CustomRule_post_v2_tio2(nengo.Process):
 
 class CustomRule_post_v3(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_dw=0):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.16,vthn=0.15,var_dw=0,gmax=0.0085, gmin=0.0000085):
        
         self.vprog = vprog  
         
@@ -773,6 +773,8 @@ class CustomRule_post_v3(nengo.Process):
         self.lr = lr
         self.vthp = vthp
         self.vthn = vthn
+        self.gmin=gmin
+        self.gmax = gmax
         
         self.history = [0]
 
@@ -815,7 +817,7 @@ class CustomRule_post_v3(nengo.Process):
             # self.history = self.history[-2:]
             # self.history = self.w
             
-            return np.dot(self.w, x)
+            return np.dot((self.w*(self.gmax-self.gmin)) + self.gmin, x)
         
         return step   
 
