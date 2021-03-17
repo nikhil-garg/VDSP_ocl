@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-drod1901
-#SBATCH --time=0-23:58:00
+#SBATCH --time=1-23:58:00
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=32G
 OUTDIR=~/project/out/$SLURM_JOB_ID
@@ -29,6 +29,6 @@ cd ..
 git clone https://github.com/nikhil-garg/VDSP_ocl.git
 cd VDSP_ocl
 
-python mnist_multiple_exploration.py --log_file_path $OUTDIR
+python mnist_multiple_exploration_v1.py --log_file_path $OUTDIR
 
 tar xf $SLURM_TMPDIR/VDSP_ocl -C $OUTDIR
