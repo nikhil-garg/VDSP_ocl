@@ -60,6 +60,10 @@ def evaluate_mnist_multiple_local(args):
     label_train_filtered = np.array(label_train_filtered)
 
 
+    image_train_filtered = (image_train_filtered/255-0.1308)/0.3088
+    image_train_filtered = 255*(image_train_filtered-image_train_filtered.min())/(image_train_filtered.max()-image_train_filtered.min())
+
+
 
     # np.save(
     #     'mnist.npz',
@@ -90,7 +94,6 @@ def evaluate_mnist_multiple_local(args):
     #Input layer parameters
     n_in = args.n_in
     # g_max = 1/784 #Maximum output contribution
-    g_max = args.g_max
     n_neurons = args.n_neurons # Layer 1 neurons
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
@@ -104,7 +107,7 @@ def evaluate_mnist_multiple_local(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -240,8 +243,8 @@ def evaluate_mnist_multiple_local(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    # input_nbr = 60000
-    input_nbr = int(args.input_nbr/6)
+    input_nbr = 10000
+    # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
     # # (image_train, label_train), (image_test, label_test) = load_mnist()
@@ -262,6 +265,9 @@ def evaluate_mnist_multiple_local(args):
 
     image_test_filtered = np.array(image_test_filtered)
     label_test_filtered = np.array(label_test_filtered)
+
+    image_test_filtered = (image_test_filtered/255-0.1308)/0.3088
+    image_test_filtered = 255*(image_test_filtered-image_test_filtered.min())/(image_test_filtered.max()-image_test_filtered.min())
 
     #############################
 

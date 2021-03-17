@@ -70,7 +70,7 @@ def evaluate_mnist_multiple_var_amp(args):
  
     # )
 
-    data = np.load('qmnist.npz', allow_pickle=True)
+    data = np.load('mnist_norm.npz', allow_pickle=True)
     image_train_filtered = data['image_train_filtered']
     label_train_filtered = data['label_train_filtered']
     image_test_filtered = data['image_test_filtered']

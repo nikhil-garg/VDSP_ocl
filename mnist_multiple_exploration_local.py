@@ -30,7 +30,6 @@ if __name__ == '__main__':
 	df = pd.DataFrame({	"vprog":[],
 						"vth":[],
 						"input_nbr":[],
-						"g_max":[],
 						"tau_in" :[],
 						"tau_out":[],
                         "lr":[],
@@ -51,11 +50,10 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.75]
-		,input_nbr=[60000]
-		,g_max=[1/210]
+		,input_nbr=[1000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
-		, lr = [0.1]
+		, lr = [1]
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
@@ -68,9 +66,9 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
+	for args.vprog,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
+		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -85,7 +83,6 @@ if __name__ == '__main__':
 		df = df.append({ "vprog":args.vprog,
 						 "vth":args.vthp,
 						 "input_nbr":args.input_nbr,
-						 "g_max":args.g_max,
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
 						 "lr": args.lr,
