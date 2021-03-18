@@ -59,7 +59,7 @@ if __name__ == '__main__':
 		, presentation_time = [0.35]
 		, dt = [0.005]
 		, n_neurons = [20,30,40,50]
-		, seed = [100]
+		, seed = [400]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
