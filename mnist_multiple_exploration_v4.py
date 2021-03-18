@@ -58,7 +58,7 @@ if __name__ == '__main__':
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [30,50,70]
+		, n_neurons = [60,70,80]
 		, seed = [100]
 		, inhibition_time = [10]
     )
