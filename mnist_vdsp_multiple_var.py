@@ -142,6 +142,8 @@ def evaluate_mnist_multiple_var(args):
     vthp = np.random.normal(vthp, vthp*var_ratio, (n_neurons,n_in)) #between -1 to 1 of shape W
     vthn = np.random.normal(vthn, vthn*var_ratio, (n_neurons,n_in)) #between -1 to 1 of shape W
 
+    vthp = np.clip(vthp,0,None)
+    vthn = np.clip(vthn,0,None)
 
     learning_args = {
             "lr": args.lr,

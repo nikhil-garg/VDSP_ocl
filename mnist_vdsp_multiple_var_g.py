@@ -139,9 +139,15 @@ def evaluate_mnist_multiple_var_g(args):
     random.seed(args.seed)
     gmax = np.random.normal(args.gmax, args.gmax*args.g_var, (n_neurons,n_in)) #between -1 to 1 of shape W
 
+
+
     np.random.seed(args.seed + 1)
     random.seed(args.seed + 1)
     gmin = np.random.normal(args.gmin, args.gmin*args.g_var, (n_neurons,n_in)) #between -1 to 1 of shape W
+
+
+    gmax = np.clip(gmax,2*args.gmin,None)
+    gmin = np.clip(gmin, 0, 2*args.gmin)
 
 
     learning_args = {
