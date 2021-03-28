@@ -66,7 +66,7 @@ if __name__ == '__main__':
 		, lr = [0.1]
 		, presentation_time = [0.35]
 		, var_ratio = [0.45,0.6,0.75,0.9]
-		, seed = [200]
+		, seed = [300]
     )
 	param_values = [v for v in parameters.values()]
 
