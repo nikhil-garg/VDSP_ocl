@@ -55,10 +55,10 @@ if __name__ == '__main__':
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [0.1]
-		,iterations=[1]
+		,iterations=[1,3]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [20,30,40,50]
+		, n_neurons = [70]
 		, seed = [900]
 		, inhibition_time = [10]
     )

@@ -488,13 +488,14 @@ def fun_post_tio2(X,
        a1=1,a2=1,a3=1,a4=1
        ): 
     
-    w, vmem, vprog, vthp,vthn = X
-    # vthp=0.16
-    # vthn=0.15
+    w, vmem, vprog, vthp, vthn = X
+    # vthp=0.5
+    # vthn=0.5
     # vprog=0
-    xp=0.8
-    xn=0.6 
-    vapp = (vprog-vmem)*2 #scaling from (-1,1) to (-2,2)
+    xp=0.1
+    xn=0.1 
+    
+    vapp = vprog-vmem
     
     cond_pot_fast = w<xp
     cond_pot_slow = 1-cond_pot_fast
@@ -514,43 +515,78 @@ def fun_post_tio2(X,
     dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
     return dW
 
-def fun_post_var_tio2(X,
-       alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
-       a1=1,a2=1,a3=1,a4=1
-       ): 
-    
-    w, vmem, vprog, vthp,vthn,var  = X
-    # vthp=0.16
-    # vthn=0.15
-    # vprog=0
-    xp=0.8
-    xn=0.6 
-    vapp = (vprog-vmem)*2
 
-    Ap = var*Ap
-    An = var*An
-    
-    cond_pot_fast = w<xp
-    cond_pot_slow = 1-cond_pot_fast
-    
-    cond_dep_fast = w>(1-xn)
-    cond_dep_slow = 1-cond_dep_fast
-    
-    f_pot = (np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))*cond_pot_slow + cond_pot_fast*(a1*w+a2)
-    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast*(a3*w+a4)
-    
-    cond_pot = vapp > vthp
-    cond_dep = vapp < -vthn
-    
-    g_pot = Ap*(np.exp(vapp)-np.exp(vthp))
-    g_dep = -An*(np.exp(-vapp)-np.exp(vthn))
+popt_tio2 = np.array((1.46651857,  3.80325801,  0.23624587,  0.89399587,  0.10017536,
+       25.26480143, -0.25764469, -0.76019115,  1.37973896))
 
-    dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
-    return dW
 
-popt_tio2 = np.array((9.97129391e-01,  4.96300830e+00,  4.68921578e-04,  2.09469683e-03,
-        3.40589885e-01, -2.09867746e-06,  1.00181710e+00,  6.72011164e-04,
-        1.00866923e+00))
+
+class CustomRule_post_v2_tio2(nengo.Process):
+   
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0085,gmin=0.0000085):
+       
+        self.vprog = vprog  
+        
+        self.signal_vmem_pre = None
+        self.signal_out_post = None
+
+        self.winit_min = winit_min
+        self.winit_max = winit_max
+        
+        
+        self.sample_distance = sample_distance
+        self.lr = lr
+        self.vthp = vthp
+        self.vthn = vthn
+        self.gmax=gmax
+        self.gmin = gmin
+        
+        self.history = [0]
+
+        
+        # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
+        
+        super().__init__()
+        
+    def make_step(self, shape_in, shape_out, dt, rng, state=None):  
+       
+        self.w = np.random.uniform(self.winit_min, self.winit_max, (shape_out[0], shape_in[0]))
+
+        def step(t, x):
+
+            assert self.signal_vmem_pre is not None
+            assert self.signal_out_post is not None
+            
+            # vmem = np.clip(self.signal_vmem_pre, -1, 1)
+            
+            post_out = self.signal_out_post
+            
+            vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
+
+            post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
+
+            self.w = np.clip((self.w + dt*(fun_post((self.w,1.5*vmem, self.vprog, self.vthp,self.vthn),*popt))*post_out_matrix*self.lr), 0.001, 1)
+            
+            # if (self.tstep%self.sample_distance ==0):
+            #     self.history.append(self.w.copy())
+            
+            # self.tstep +=1
+            self.history[0] = self.w.copy()
+            # self.history.append(self.w.copy())
+            # self.history = self.history[-2:]
+            # self.history = self.w
+
+            return np.dot((self.w*(self.gmax-self.gmin)) + self.gmin, x)
+        
+        return step   
+
+        # self.current_weight = self.w
+    
+    def set_signal_vmem(self, signal):
+        self.signal_vmem_pre = signal
+        
+    def set_signal_out(self, signal):
+        self.signal_out_post = signal
 
 class CustomRule_post_v2(nengo.Process):
    

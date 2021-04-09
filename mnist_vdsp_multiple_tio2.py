@@ -31,7 +31,7 @@ from args_mnist import args as my_args
 import itertools
 import random
 import logging
-
+import random 
 # import nni
 
 
@@ -43,11 +43,36 @@ def evaluate_mnist_multiple_tio2(args):
     input_nbr = args.input_nbr
     input_nbr = args.input_nbr
 
+    # (image_train, label_train), (image_test, label_test) = (keras.datasets.mnist.load_data())
+
     probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
+    # # probe_sample_rate = 1000
+    # image_train_filtered = []
+    # label_train_filtered = []
 
     x = args.digit
+    np.random.seed(args.seed)
+    random.seed(args.seed)
+    # for i in range(0,input_nbr):
+      
+    #     image_train_filtered.append(image_train[i])
+    #     label_train_filtered.append(label_train[i])
 
-    data = np.load('qmnist.npz', allow_pickle=True)
+    # image_train_filtered = np.array(image_train_filtered)
+    # label_train_filtered = np.array(label_train_filtered)
+
+
+
+    # np.savez(
+    #     'mnist.npz',
+    #     image_train_filtered=image_train_filtered,
+    #     label_train_filtered=label_train_filtered,
+    #     image_test_filtered=image_test_filtered,
+    #     label_test_filtered=label_test_filtered,
+ 
+    # )
+
+    data = np.load('mnist_norm.npz', allow_pickle=True)
     image_train_filtered = data['image_train_filtered']
     label_train_filtered = data['label_train_filtered']
     image_test_filtered = data['image_test_filtered']
@@ -66,8 +91,11 @@ def evaluate_mnist_multiple_tio2(args):
     iterations=args.iterations
     #Input layer parameters
     n_in = args.n_in
-    g_max = args.g_max
+    # g_max = 1/784 #Maximum output contribution
+    amp_neuron = args.amp_neuron
     n_neurons = args.n_neurons # Layer 1 neurons
+    # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
+
 
     input_neurons_args = {
             "n_neurons":n_in,
@@ -78,7 +106,7 @@ def evaluate_mnist_multiple_tio2(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.g_max)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -100,7 +128,12 @@ def evaluate_mnist_multiple_tio2(args):
 
     # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 20), seed=1),     
 
-
+    #Lateral Inhibition parameters
+    # lateral_inhib_args = {
+    #         "transform": inhib_factor* (np.full((n_neurons, n_neurons), 1) - np.eye(n_neurons)),
+    #         "synapse":args.inhib_synapse,
+    #         "label":"Lateral Inhibition"
+    # }
 
     #Learning rule parameters
     learning_args = {
@@ -108,8 +141,10 @@ def evaluate_mnist_multiple_tio2(args):
             "winit_min":0,
             "winit_max":1,
             "vprog":args.vprog, 
-            "vthp":args.vthp,
-            "vthn":args.vthn,
+            "vthp":0.5,
+            "vthn":0.5,
+            "gmax":args.gmax,
+            "gmin":args.gmin,
     #         "tpw":50,
     #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
@@ -208,7 +243,30 @@ def evaluate_mnist_multiple_tio2(args):
     Testing
     '''
 
-    input_nbr = 60000
+    # img_rows, img_cols = 28, 28
+    input_nbr = 10000
+    # input_nbr = int(args.input_nbr/6)
+
+    # Dataset = "Mnist"
+    # # (image_train, label_train), (image_test, label_test) = load_mnist()
+    # (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
+
+
+    # #select the 0s and 1s as the two classes from MNIST data
+    # image_test_filtered = []
+    # label_test_filtered = []
+
+    # for i in range(0,input_nbr):
+    # #  if (label_train[i] == 1 or label_train[i] == 0):
+    #     image_test_filtered.append(image_test[i])
+    #     label_test_filtered.append(label_test[i])
+
+    # print("actual input",len(label_test_filtered))
+    # print(np.bincount(label_test_filtered))
+
+    # image_test_filtered = np.array(image_test_filtered)
+    # label_test_filtered = np.array(label_test_filtered)
+
     #############################
 
     model = nengo.Network(label="My network",)
@@ -254,6 +312,7 @@ def evaluate_mnist_multiple_tio2(args):
     labels = sim.data[p_true_label][:,0]
     output_spikes = sim.data[p_layer_1]
     n_classes = 10
+# rate_data = nengo.synapses.Lowpass(0.1).filtfilt(sim.data[p_layer_1])
     predicted_labels = []  
     true_labels = []
     correct_classified = 0
@@ -263,6 +322,7 @@ def evaluate_mnist_multiple_tio2(args):
     class_spikes = np.ones((10,1))
 
     for num in range(input_nbr):
+        #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
         output_spikes_num = output_spikes[num*int(presentation_time/args.dt):(num+1)*int(presentation_time/args.dt),:] # 0.350/0.005
         num_spikes = np.sum(output_spikes_num > 0, axis=0)
@@ -288,7 +348,13 @@ def evaluate_mnist_multiple_tio2(args):
         predicted_labels.append(class_pred)
 
         true_class = labels[(num*int(presentation_time/args.dt))]
+        # print(true_class)
+        # print(class_pred)
 
+        # if(neuron_class[k] == true_class):
+        #     correct_classified+=1
+        # else:
+        #     wrong_classified+=1
         if(class_pred == true_class):
             correct_classified+=1
         else:

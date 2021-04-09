@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple_var_g import *
+from mnist_vdsp_multiple_tio2 import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -26,26 +26,23 @@ if __name__ == '__main__':
 	seed = 50
 	random.seed(seed)
 	np.random.seed(seed)
-
+	pwd = os.getcwd()
 	df = pd.DataFrame({	"vprog":[],
+						"vth":[],
 						"input_nbr":[],
 						"tau_in" :[],
 						"tau_out":[],
-						"gain_in":[],
-						"gain_out":[],
-						"bias_in":[],
-						"bias_out":[],
-						"thr_out":[],
-						"inhibition_time":[],
                         "lr":[],
+                        "iterations":[],
                         "presentation_time":[],
-                        "g_var":[],
+                        "dt":[],
+                        "n_neurons":[],
                         "seed":[],
-                        "accuracy":[],
+                        "inhibition_time":[],
+                        "accuracy":[]
                          })
 
 	if args.log_file_path is None:
-		pwd = os.getcwd()
 		log_dir = pwd+'/log_dir/'
 	else : 
 		log_dir = args.log_file_path
@@ -53,20 +50,17 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.75]
+		vprog = [-0.75, -0.8, -0.85,-0.9,-0.95,-1,-1.05]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
-		,gain_in = [2]
-		,gain_out = [2]
-		,bias_in = [0]
-		,bias_out = [0]
-		,thr_out = [1]
-		,inhibition_time = [10]
 		, lr = [0.1]
+		,iterations=[1]
 		, presentation_time = [0.35]
-		, g_var = [0,0.1,0.2,0.3,0.4]
-		, seed = [500]
+		, dt = [0.005]
+		, n_neurons = [30]
+		, seed = [0]
+		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -74,7 +68,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.tau_in,args.tau_out,args.gain_in,args.gain_out,args.bias_in,args.bias_out,args.thr_out,args.inhibition_time,args.lr,args.presentation_time,args.g_var,args.seed in product(*param_values):
+	for args.vprog,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.seed,args.inhibition_time in product(*param_values):
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -82,29 +76,24 @@ if __name__ == '__main__':
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
-		# args.vthn = args.vthp
-		accuracy, weights = evaluate_mnist_multiple_var_g(args)
 
+		accuracy, weights = evaluate_mnist_multiple_tio2(args)
 
-		
 		df = df.append({ "vprog":args.vprog,
+						 "vth":args.vthp,
 						 "input_nbr":args.input_nbr,
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
-						 "gain_in":args.gain_in,
-						 "gain_out":args.gain_out,
-						 "bias_in":args.bias_in,
-						 "bias_out":args.bias_out,
-						 "thr_out":args.thr_out,
-						 "inhibition_time":args.inhibition_time,
 						 "lr": args.lr,
+						 "iterations":args.iterations,
 		                 "presentation_time":args.presentation_time,
-		                 "g_var":args.g_var,
+		                 "dt":args.dt,
+		                 "n_neurons":args.n_neurons,
 		                 "seed":args.seed,
+		                 "inhibition_time":args.inhibition_time,
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
 		
-
 
 		plot = False
 		if plot : 	
