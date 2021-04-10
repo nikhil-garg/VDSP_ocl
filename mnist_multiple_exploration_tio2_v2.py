@@ -28,9 +28,8 @@ if __name__ == '__main__':
 	np.random.seed(seed)
 	pwd = os.getcwd()
 	df = pd.DataFrame({	"vprog":[],
-						"vthp":[],
+						"vth":[],
 						"input_nbr":[],
-						"g_max":[],
 						"tau_in" :[],
 						"tau_out":[],
                         "lr":[],
@@ -38,6 +37,7 @@ if __name__ == '__main__':
                         "presentation_time":[],
                         "dt":[],
                         "n_neurons":[],
+                        "seed":[],
                         "inhibition_time":[],
                         "accuracy":[]
                          })
@@ -50,16 +50,16 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.576]
+		vprog = [-0.9]
 		,input_nbr=[60000]
-		,g_max=[1/210]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [0.1]
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [40,50]
+		, n_neurons = [90,100]
+		, seed = [0]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -68,24 +68,20 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.g_max,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
+	for args.vprog,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.seed,args.inhibition_time in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
+		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
-		args.vthp = 0.7
-		args.vthn = 0.8
 		accuracy, weights = evaluate_mnist_multiple_tio2(args)
 
-
 		df = df.append({ "vprog":args.vprog,
-						 "vthp":args.vthp,
+						 "vth":args.vthp,
 						 "input_nbr":args.input_nbr,
-						 "g_max":args.g_max,
 						 "tau_in":args.tau_in,
 						 "tau_out": args.tau_out,
 						 "lr": args.lr,
@@ -93,6 +89,7 @@ if __name__ == '__main__':
 		                 "presentation_time":args.presentation_time,
 		                 "dt":args.dt,
 		                 "n_neurons":args.n_neurons,
+		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
