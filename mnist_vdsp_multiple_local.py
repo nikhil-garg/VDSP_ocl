@@ -140,7 +140,7 @@ def evaluate_mnist_multiple_local(args):
     learning_args = {
             "lr": args.lr,
             "winit_min":0,
-            "winit_max":1,
+            "winit_max":0.25,
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,
@@ -243,7 +243,7 @@ def evaluate_mnist_multiple_local(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 10000
+    input_nbr = 1000
     # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
