@@ -523,7 +523,7 @@ popt_tio2 = np.array((1.46651857,  3.80325801,  0.23624587,  0.89399587,  0.1001
 
 class CustomRule_post_v2_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0085,gmin=0.0000085):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008):
        
         self.vprog = vprog  
         
@@ -565,7 +565,7 @@ class CustomRule_post_v2_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,1.5*vmem, self.vprog, self.vthp,self.vthn),*popt_tio2))*post_out_matrix*self.lr), 0.001, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem, self.vprog, self.vthp,self.vthn),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())

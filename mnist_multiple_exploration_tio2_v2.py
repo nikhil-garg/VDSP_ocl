@@ -27,39 +27,17 @@ if __name__ == '__main__':
 	random.seed(seed)
 	np.random.seed(seed)
 	pwd = os.getcwd()
-	df = pd.DataFrame({	"vprog":[],
-						"vth":[],
-						"input_nbr":[],
-						"tau_in" :[],
-						"tau_out":[],
-                        "lr":[],
-                        "iterations":[],
-                        "presentation_time":[],
-                        "dt":[],
-                        "n_neurons":[],
-                        "seed":[],
-                        "inhibition_time":[],
-                        "accuracy":[]
-                         })
-
-	if args.log_file_path is None:
-		log_dir = pwd+'/log_dir/'
-	else : 
-		log_dir = args.log_file_path
-		df.to_csv(log_dir+'test.csv', index=False)
-
-
 	parameters = dict(
-		vprog = [-0.95]
+		vprog = [-0.45,-0.40]
+		, amp_neuron=[0.06,0.07,0.08]
 		,input_nbr=[60000]
-		,tau_in = [0.06,0.1]
-		,tau_out = [0.06,0.1]
+		,tau_in = [0.06]
+		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [50]
-		, seed = [0]
+		, n_neurons = [30]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -68,7 +46,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.seed,args.inhibition_time in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -80,6 +58,7 @@ if __name__ == '__main__':
 		accuracy, weights = evaluate_mnist_multiple_tio2(args)
 
 		df = df.append({ "vprog":args.vprog,
+						"amp_neuron":args.amp_neuron,
 						 "vth":args.vthp,
 						 "input_nbr":args.input_nbr,
 						 "tau_in":args.tau_in,
