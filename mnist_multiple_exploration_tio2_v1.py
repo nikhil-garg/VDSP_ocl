@@ -27,6 +27,29 @@ if __name__ == '__main__':
 	random.seed(seed)
 	np.random.seed(seed)
 	pwd = os.getcwd()
+
+
+	df = pd.DataFrame({	"vprog":[],
+						"amp_neuron":[],
+						"vth":[],
+						"input_nbr":[],
+						"tau_in" :[],
+						"tau_out":[],
+                        "lr":[],
+                        "iterations":[],
+                        "presentation_time":[],
+                        "dt":[],
+                        "n_neurons":[],
+                        "inhibition_time":[],
+                        "accuracy":[]
+                         })
+
+	if args.log_file_path is None:
+		log_dir = pwd+'/log_dir/'
+	else : 
+		log_dir = args.log_file_path
+		df.to_csv(log_dir+'test.csv', index=False)
+
 	parameters = dict(
 		vprog = [-0.45,-0.40]
 		, amp_neuron=[0.03,0.04,0.05]
