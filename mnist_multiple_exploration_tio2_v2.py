@@ -48,8 +48,8 @@ if __name__ == '__main__':
 		log_dir = args.log_file_path
 		df.to_csv(log_dir+'test.csv', index=False)
 	parameters = dict(
-		vprog = [-0.45,-0.40]
-		, amp_neuron=[0.06,0.07,0.08]
+		vprog = [-0.45]
+		, amp_neuron=[0.08,0.09,0.1,0.11,0.12,0.13]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
