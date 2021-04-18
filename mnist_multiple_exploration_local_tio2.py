@@ -50,9 +50,9 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.45]
-		, amp_neuron=[0.005,0.01,0.02,0.03,0.04]
-		,input_nbr=[6000]
+		vprog = [-0.95]
+		, amp_neuron=[0.02]
+		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]

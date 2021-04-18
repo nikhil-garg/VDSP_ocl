@@ -54,6 +54,7 @@ sbatch slrum_trial_amp_var_v8.sh --log_file_path $OUTDIR
 sbatch slrum_trial_amp_var_v9.sh --log_file_path $OUTDIR
 
 
+sbatch slrum_trial_tio2_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_v4.sh --log_file_path $OUTDIR
