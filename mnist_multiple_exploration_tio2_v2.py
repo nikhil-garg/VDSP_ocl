@@ -94,7 +94,7 @@ if __name__ == '__main__':
 		                 },ignore_index=True)
 		
 
-		plot = False
+		plot = True
 		if plot : 	
 			print('accuracy', accuracy)
 			print(args.filename)
@@ -115,9 +115,15 @@ if __name__ == '__main__':
 			# ax1 = fig.add_subplot()
 			# cax = ax1.matshow(np.reshape(weights[0],(28,28)),interpolation='nearest', vmax=1, vmin=0)
 			# fig.colorbar(cax)
-			# plt.tight_layout()    
+			# plt.tight_layout() 
 
-			fig.savefig(folder+'/weights'+str(args.filename)+'.png')
+			if args.log_file_path is None:
+				log_dir = pwd+'/log_dir/'
+			else : 
+				log_dir = args.log_file_path
+			df.to_csv(log_dir+log_file_name, index=False)   
+
+			fig.savefig(log_dir+'weights.png')
 			plt.close()
 
 
