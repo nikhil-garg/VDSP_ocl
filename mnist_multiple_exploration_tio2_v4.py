@@ -27,6 +27,8 @@ if __name__ == '__main__':
 	random.seed(seed)
 	np.random.seed(seed)
 	pwd = os.getcwd()
+
+
 	df = pd.DataFrame({	"vprog":[],
 						"amp_neuron":[],
 						"vth":[],
@@ -47,17 +49,18 @@ if __name__ == '__main__':
 	else : 
 		log_dir = args.log_file_path
 		df.to_csv(log_dir+'test.csv', index=False)
+
 	parameters = dict(
 		vprog = [-0.95]
 		, amp_neuron=[0.02]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
-		,tau_out = [0.06]
+		,tau_out = [0.03]
 		, lr = [1]
-		, iterations=[3]
+		, iterations=[1,3]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [90,100,150]
+		, n_neurons = [150]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -125,7 +128,6 @@ if __name__ == '__main__':
 
 			fig.savefig(log_dir+'weights.png')
 			plt.close()
-
 
 
 			# plt.figure(figsize=(12,10))

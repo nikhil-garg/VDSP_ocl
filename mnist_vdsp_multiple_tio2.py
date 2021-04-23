@@ -143,8 +143,8 @@ def evaluate_mnist_multiple_tio2(args):
             "vprog":args.vprog, 
             "vthp":0.5,
             "vthn":0.5,
-            "gmax":args.gmax,
-            "gmin":args.gmin,
+            "gmax":0.0008,
+            "gmin":0.00008,
     #         "tpw":50,
     #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
