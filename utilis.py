@@ -483,6 +483,7 @@ popt = np.array((1.00220687e+00,  5.01196597e+00, -3.54137489e-03, -3.54157996e-
        -2.25853150e-01))
 
 
+
 def fun_post_tio2(X,
        alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
        a1=1,a2=1,a3=1,a4=1
@@ -492,8 +493,8 @@ def fun_post_tio2(X,
     # vthp=0.5
     # vthn=0.5
     # vprog=0
-    xp=0.1
-    xn=0.1 
+    xp=0.15
+    xn=0.1
     
     vapp = vprog-vmem
     
@@ -503,7 +504,7 @@ def fun_post_tio2(X,
     cond_dep_fast = w>(1-xn)
     cond_dep_slow = 1-cond_dep_fast
     
-    f_pot = (np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))*cond_pot_slow + cond_pot_fast*(a1*w+a2)
+    f_pot = cond_pot_fast*(a1*w+a2) + cond_pot_slow*(np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))
     f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast*(a3*w+a4)
     
     cond_pot = vapp > vthp
@@ -515,9 +516,8 @@ def fun_post_tio2(X,
     dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
     return dW
 
-
-popt_tio2 = np.array((1.46651857,  3.80325801,  0.23624587,  0.89399587,  0.10017536,
-       25.26480143, -0.25764469, -0.76019115,  1.37973896))
+popt_tio2 = np.array((1.03330358,  3.803258  ,  0.10815489,  0.49987185,  0.17915791,
+       -0.42001766,  1.52666717, -0.76019085,  1.37973867))
 
 
 
