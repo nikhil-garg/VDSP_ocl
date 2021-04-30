@@ -55,10 +55,10 @@ if __name__ == '__main__':
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [0.1]
-		,iterations=[1,3]
+		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [100]
+		, n_neurons = [30]
 		, seed = [0]
 		, inhibition_time = [10]
     )
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 		                 },ignore_index=True)
 		
 
-		plot = False
+		plot = True
 		if plot : 	
 			print('accuracy', accuracy)
 			print(args.filename)

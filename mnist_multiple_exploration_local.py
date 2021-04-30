@@ -49,15 +49,15 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.60,-0.65,-0.75]
-		,input_nbr=[1000]
+		vprog = [-0.75]
+		,input_nbr=[10,60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
-		, lr = [1]
+		, lr = [0.1]
 		,iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [20]
+		, n_neurons = [30]
 		, inhibition_time = [10]
     )
 	param_values = [v for v in parameters.values()]
@@ -100,12 +100,13 @@ if __name__ == '__main__':
 			print('accuracy', accuracy)
 			print(args.filename)
 			# weights = weights[-1]#Taking only the last weight for plotting
+			plt.axis('off')
+			columns = int(args.n_neurons/6)
 
-			columns = int(args.n_neurons/5)
-
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
-
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(25,30))
+			
 			for i in range(0,(args.n_neurons)):
+				axes[int(i/columns)][int(i%columns)].set_axis_off()
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
 
 			plt.tight_layout()    
@@ -118,7 +119,8 @@ if __name__ == '__main__':
 			# fig.colorbar(cax)
 			# plt.tight_layout()    
 
-			fig.savefig(folder+'/weights'+str(args.filename)+'.png')
+			fig.savefig(folder+'/weights'+str(args.filename)+'.svg', bbox_inches='tight',pad_inches = 0)
+			fig.savefig(folder+'/weights'+str(args.filename)+'.pdf', bbox_inches='tight',pad_inches = 0)
 			plt.close()
 
 

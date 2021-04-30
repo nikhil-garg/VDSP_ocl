@@ -243,8 +243,8 @@ def evaluate_mnist_multiple_local(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 1000
-    # input_nbr = int(args.input_nbr/6)
+    # input_nbr = 10000
+    input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
     # # (image_train, label_train), (image_test, label_test) = load_mnist()
