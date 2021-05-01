@@ -140,7 +140,7 @@ def evaluate_mnist_multiple_local(args):
     learning_args = {
             "lr": args.lr,
             "winit_min":0,
-            "winit_max":0.25,
+            "winit_max":1,
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,

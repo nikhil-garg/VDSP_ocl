@@ -101,16 +101,25 @@ if __name__ == '__main__':
 			print(args.filename)
 			# weights = weights[-1]#Taking only the last weight for plotting
 
-			columns = int(args.n_neurons/5)
+			columns = int(args.n_neurons/6)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(25,30))
 
 			for i in range(0,(args.n_neurons)):
+				axes[int(i/columns)][int(i%columns)].set_axis_off()
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
 
 			plt.tight_layout()    
 
-	   
+			if args.log_file_path is None:
+				log_dir = pwd+'/log_dir/'
+			else : 
+				log_dir = args.log_file_path
+			
+			# df.to_csv(log_dir+log_file_name, index=False)   
+
+			fig.savefig(log_dir+'weights.svg', bbox_inches='tight',pad_inches = 0)
+			plt.close()
 			# fig, axes = plt.subplots(1,1, figsize=(3,3))
 			# fig = plt.figure()
 			# ax1 = fig.add_subplot()
@@ -118,8 +127,7 @@ if __name__ == '__main__':
 			# fig.colorbar(cax)
 			# plt.tight_layout()    
 
-			fig.savefig(folder+'/weights'+str(args.filename)+'.png')
-			plt.close()
+		
 
 
 			# plt.figure(figsize=(12,10))
@@ -148,6 +156,7 @@ if __name__ == '__main__':
 		else : 
 			log_dir = args.log_file_path
 		df.to_csv(log_dir+log_file_name, index=False)
+
 
 	df.to_csv(log_file_name, index=False)
 
