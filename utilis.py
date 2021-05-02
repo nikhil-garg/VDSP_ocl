@@ -440,8 +440,9 @@ def fun_post(X,
     dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
     return dW
 
-popt = np.array((1.00220687e+00,  5.01196597e+00, -3.54137489e-03, -3.54157996e-03,
-       -2.25853150e-01))
+popt = np.array((1.00006690e+00, 5.00098722e+00, 1.27251859e-05, 1.27251790e-05,
+       6.28659913e+00))
+#The above popt is for Tpw = 20n, maximum dw=0.0001. Use lr=1
 
 
 
