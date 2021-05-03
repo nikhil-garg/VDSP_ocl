@@ -51,16 +51,16 @@ if __name__ == '__main__':
 		df.to_csv(log_dir+'test.csv', index=False)
 
 	parameters = dict(
-		vprog = [-0.95]
+		vprog = [-0.965]
 		, amp_neuron=[0.07]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.03]
 		, lr = [1]
-		, iterations=[5]
+		, iterations=[2]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [150]
+		, n_neurons = [30, 50, 70]
 		, inhibition_time = [10]
 		,seed =[100]
     )
