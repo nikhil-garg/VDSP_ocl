@@ -52,11 +52,11 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.965,-0.95]
-		, amp_neuron=[0.2,0.19,0.18,0.17,0.16]
+		, amp_neuron=[0.10,0.09,0.08,0.07,0.06]
 		,input_nbr=[60000]
 		,tau_in = [0.09,0.06,0.03]
 		,tau_out = [0.03,0.06]
-		, lr = [0.1]
+		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
