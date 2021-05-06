@@ -60,7 +60,7 @@ if __name__ == '__main__':
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
-		, dt = [0.001,0.005]
+		, dt = [0.005]
 		, n_neurons = [20]
 		, inhibition_time = [10]
 		, vprog_increment=[0]

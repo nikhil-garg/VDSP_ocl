@@ -178,16 +178,16 @@ def evaluate_mnist_multiple_local_tio2(args):
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
-        init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
+        # init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
         # conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=args.vprog, vthp=args.vthp,vthn=args.vthn),transform=init_weights)
 
         #Lateral inhibition
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
 
         #Probes
-        p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
-        p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
-        p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
+        # p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
+        # p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
+        # p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
 
         weights = w.output.history
@@ -218,7 +218,43 @@ def evaluate_mnist_multiple_local_tio2(args):
     # pickle.dump(argument_string, open( folder+"/arguments", "wb" ))
 
     
+    model = nengo.Network("My network", seed = 1)
+    #############################
+    # Model construction
+    #############################
+    with model:
+        # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
+        true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
+        # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
 
+        # input layer  
+        input_layer = nengo.Ensemble(**input_neurons_args)
+        input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
+
+        #first layer
+        layer1 = nengo.Ensemble(**layer_1_neurons_args)
+
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight)
+
+        #Probes
+        p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
+        p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
+        p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
+        probe_layer_1 = nengo.Probe(layer1.neurons)
+        # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
+
+        weights = w.output.history
+
+        
+
+    # with nengo_ocl.Simulator(model) as sim :   
+    with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
+
+        
+        # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
+        # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
+        sim.run((presentation_time+pause_time) * labels.shape[0])
 
     t_data = sim.trange(sample_every=probe_sample_rate)
     labels = sim.data[p_true_label][:,0]
@@ -237,7 +273,7 @@ def evaluate_mnist_multiple_local_tio2(args):
                 max_spike_times = num_spikes
                 
     # print("Neuron class: \n", neuron_class)
-
+    spikes_layer1_probe_train = sim.data[probe_layer_1]
     sim.close()
     '''
     Testing
@@ -367,7 +403,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     accuracy = correct_classified/ (correct_classified+wrong_classified)*100
 
 
-    accuracy_2 = evaluation(10,n_neurons,int(((step_time * label_test_filtered.shape[0]) / sim.dt) / input_nbr) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
+    accuracy_2 = evaluation_v2(10,n_neurons,int(((step_time * label_test_filtered.shape[0]) / sim.dt) / input_nbr) ,spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
     print("Accuracy: ", accuracy)
     print("Accuracy 2: ", accuracy_2)
