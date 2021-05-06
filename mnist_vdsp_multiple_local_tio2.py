@@ -244,7 +244,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 10000
+    input_nbr = 1000
     # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
@@ -365,14 +365,20 @@ def evaluate_mnist_multiple_local_tio2(args):
 
         
     accuracy = correct_classified/ (correct_classified+wrong_classified)*100
+
+
+    accuracy_2 = evaluation(10,n_neurons,int(((step_time * label_test_filtered.shape[0]) / sim.dt) / input_nbr) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
+
     print("Accuracy: ", accuracy)
+    print("Accuracy 2: ", accuracy_2)
+
     sim.close()
 
     # nni.report_final_result(accuracy)
 
     del weights, sim.data, labels, output_spikes, class_pred, t_data
 
-    return accuracy, last_weight
+    return accuracy,accuracy_2, last_weight
 
 
     # for tstep in np.arange(0, len(weights), 1):

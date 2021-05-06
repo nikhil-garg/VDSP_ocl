@@ -229,7 +229,7 @@ def args():
 
     parser.add_argument(
         "--tau_ref",
-        default=0.005,
+        default=0.002,
         type=float,
         help="Refractory period",
     )

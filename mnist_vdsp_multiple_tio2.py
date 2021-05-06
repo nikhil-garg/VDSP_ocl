@@ -309,6 +309,10 @@ def evaluate_mnist_multiple_tio2(args):
 
 
     
+
+    accuracy_2 = evaluation(10,n_neurons,int(((step_time * label_test_filtered.shape[0]) / sim.dt) / input_nbr) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
+
+
     labels = sim.data[p_true_label][:,0]
     output_spikes = sim.data[p_layer_1]
     n_classes = 10
@@ -369,7 +373,7 @@ def evaluate_mnist_multiple_tio2(args):
 
     del weights, sim.data, labels, output_spikes, class_pred, t_data
 
-    return accuracy, last_weight
+    return accuracy,accuracy_2, last_weight
 
 
     # for tstep in np.arange(0, len(weights), 1):

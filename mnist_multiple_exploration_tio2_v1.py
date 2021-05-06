@@ -42,7 +42,8 @@ if __name__ == '__main__':
                         "n_neurons":[],
                         "inhibition_time":[],
                         "tau_ref":[],
-                        "accuracy":[]
+                        "accuracy":[],
+                        "accuracy_2":[]
                          })
 
 	if args.log_file_path is None:
@@ -63,8 +64,8 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [30]
 		, inhibition_time = [10]
-		, tau_ref = [0.001,0.002,0.005,0.006,0.007]
-		,seed =[100]
+		, tau_ref = [0.002,0.005]
+		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -81,7 +82,7 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
-		accuracy, weights = evaluate_mnist_multiple_tio2(args)
+		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2(args)
 
 		df = df.append({ "vprog":args.vprog,
 						"amp_neuron":args.amp_neuron,
@@ -97,7 +98,8 @@ if __name__ == '__main__':
 		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
 		                 "tau_ref":args.tau_ref,
-		                 "accuracy":accuracy
+		                 "accuracy":accuracy,
+		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
 		
 
