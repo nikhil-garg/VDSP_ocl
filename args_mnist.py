@@ -220,6 +220,19 @@ def args():
         type=float,
         help="Seed of random number generator",
     )
+    parser.add_argument(
+        "--vprog_increment",
+        default=0,
+        type=float,
+        help="Vprog increment after every time step",
+    )
+
+    parser.add_argument(
+        "--tau_ref",
+        default=0.005,
+        type=float,
+        help="Refractory period",
+    )
 
     my_args = parser.parse_args()
 

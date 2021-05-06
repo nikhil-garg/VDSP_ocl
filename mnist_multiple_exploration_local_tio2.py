@@ -39,6 +39,7 @@ if __name__ == '__main__':
                         "dt":[],
                         "n_neurons":[],
                         "inhibition_time":[],
+                        "vprog_increment":[],
                         "accuracy":[]
                          })
 
@@ -61,6 +62,7 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [20]
 		, inhibition_time = [10]
+		, vprog_increment=[0]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -68,9 +70,9 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -94,6 +96,7 @@ if __name__ == '__main__':
 		                 "dt":args.dt,
 		                 "n_neurons":args.n_neurons,
 		                 "inhibition_time":args.inhibition_time,
+		                 "vprog_increment":args.vprog_increment,
 		                 "accuracy":accuracy
 		                 },ignore_index=True)
 		
