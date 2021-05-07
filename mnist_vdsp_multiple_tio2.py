@@ -422,7 +422,7 @@ def evaluate_mnist_multiple_tio2(args):
 
     # nni.report_final_result(accuracy)
 
-    del weights, sim.data, labels, output_spikes, class_pred, t_data
+    del weights, sim.data, labels, output_spikes, class_pred, t_data, spikes_layer1_probe_train
 
     return accuracy,accuracy_2, last_weight
 
