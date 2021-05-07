@@ -293,7 +293,7 @@ def evaluate_mnist_multiple_tio2(args):
             if(num_spikes>max_spike_times):
                 neuron_class[j] = i
                 max_spike_times = num_spikes
-    spikes_layer1_probe_train = sim.data[probe_layer_1]
+    spikes_layer1_probe_train = sim.data[p_layer_1]
 
     input_nbr = 10000
     # input_nbr = int(args.input_nbr/6)
