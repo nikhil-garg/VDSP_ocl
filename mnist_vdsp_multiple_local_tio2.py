@@ -218,7 +218,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     # pickle.dump(argument_string, open( folder+"/arguments", "wb" ))
 
     
-    model = nengo.Network("My network", seed = 1)
+    model = nengo.Network("My network", seed = args.seed)
     #############################
     # Model construction
     #############################
@@ -334,7 +334,7 @@ def evaluate_mnist_multiple_local_tio2(args):
        
         p_true_label = nengo.Probe(true_label)
         p_layer_1 = nengo.Probe(layer1.neurons)
-        p_input_layer = nengo.Probe(input_layer.neurons)
+        # p_input_layer = nengo.Probe(input_layer.neurons)
         #if(not full_log):
         #    nengo.Node(log)
 
