@@ -250,10 +250,7 @@ def evaluate_mnist_multiple_local_tio2(args):
 
     # with nengo_ocl.Simulator(model) as sim :   
     with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
-
         
-        # w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
-        # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         sim.run((presentation_time+pause_time) * labels.shape[0])
 
     t_data = sim.trange()
@@ -280,8 +277,8 @@ def evaluate_mnist_multiple_local_tio2(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    # input_nbr = 10000
-    input_nbr = int(args.input_nbr/6)
+    input_nbr = 6000
+    # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
     # # (image_train, label_train), (image_test, label_test) = load_mnist()
@@ -402,8 +399,9 @@ def evaluate_mnist_multiple_local_tio2(args):
         
     accuracy = correct_classified/ (correct_classified+wrong_classified)*100
 
+    accuracy_2 = evaluation(10,n_neurons,int(presentation_time/args.dt) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
-    accuracy_2 = evaluation_v2(10,n_neurons,int(((step_time * label_test_filtered.shape[0]) / sim.dt) / input_nbr) ,spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
+    # accuracy_2 = evaluation_v2(10,n_neurons,int(presentation_time/args.dt) ,spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
     print("Accuracy: ", accuracy)
     print("Accuracy 2: ", accuracy_2)

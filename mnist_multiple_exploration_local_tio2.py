@@ -53,15 +53,15 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.90]
-		, amp_neuron=[0.07]
+		, amp_neuron=[0.05,0.07,0.1,0.15,0.2,0.4]
 		,input_nbr=[1000]
-		,tau_in = [0.06]
-		,tau_out = [0.03]
+		,tau_in = [0.15,0.09,0.06,0.03]
+		,tau_out = [0.15,0.09,0.06,0.03]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [30,50,70,90,150]
+		, n_neurons = [20]
 		, inhibition_time = [10]
 		, vprog_increment=[0]
     )
