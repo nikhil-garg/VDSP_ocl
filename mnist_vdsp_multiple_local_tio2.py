@@ -107,7 +107,7 @@ def evaluate_mnist_multiple_local_tio2(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron,tau_ref=0.005)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron,tau_ref=args.tau_ref)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -124,7 +124,7 @@ def evaluate_mnist_multiple_local_tio2(args):
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
-            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=0.005)
+            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref)
     }
 
     # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 20), seed=1),     
