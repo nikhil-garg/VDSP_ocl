@@ -238,10 +238,10 @@ def evaluate_mnist_multiple_local_tio2(args):
         nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight)
 
         #Probes
-        p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
-        p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
-        p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
-        probe_layer_1 = nengo.Probe(layer1.neurons)
+        p_true_label = nengo.Probe(true_label)
+        # p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
+        p_layer_1 = nengo.Probe(layer1.neurons)
+        # probe_layer_1 = nengo.Probe(layer1.neurons)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
 
         # weights = w.output.history
@@ -256,7 +256,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         # w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         sim.run((presentation_time+pause_time) * labels.shape[0])
 
-    t_data = sim.trange(sample_every=probe_sample_rate)
+    t_data = sim.trange()
     labels = sim.data[p_true_label][:,0]
     output_spikes = sim.data[p_layer_1]
     neuron_class = np.zeros((n_neurons, 1))
@@ -273,15 +273,15 @@ def evaluate_mnist_multiple_local_tio2(args):
                 max_spike_times = num_spikes
                 
     # print("Neuron class: \n", neuron_class)
-    spikes_layer1_probe_train = sim.data[probe_layer_1]
+    spikes_layer1_probe_train = sim.data[p_layer_1]
     sim.close()
     '''
     Testing
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 1000
-    # input_nbr = int(args.input_nbr/6)
+    # input_nbr = 10000
+    input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
     # # (image_train, label_train), (image_test, label_test) = load_mnist()
