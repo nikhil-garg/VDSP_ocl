@@ -54,10 +54,10 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.95]
-		, amp_neuron=[0.07]
+		, amp_neuron=[0.01,0.05,0.07,0.1,0.15,0.2]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
-		,tau_out = [0.03]
+		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
