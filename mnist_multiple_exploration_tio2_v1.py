@@ -64,7 +64,7 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [30]
 		, inhibition_time = [10]
-		, tau_ref = [0.002,0.005]
+		, tau_ref = [0.001,0.002]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]

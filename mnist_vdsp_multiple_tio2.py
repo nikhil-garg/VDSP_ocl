@@ -156,7 +156,7 @@ def evaluate_mnist_multiple_tio2(args):
     labels = label_train_filtered
 
 
-    model = nengo.Network("My network", seed = 1)
+    model = nengo.Network("My network", seed = args.seed)
     #############################
     # Model construction
     #############################
@@ -185,9 +185,9 @@ def evaluate_mnist_multiple_tio2(args):
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
 
         #Probes
-        p_true_label = nengo.Probe(true_label)
-        p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
-        p_layer_1 = nengo.Probe(layer1.neurons)
+        # p_true_label = nengo.Probe(true_label)
+        # p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
+        # p_layer_1 = nengo.Probe(layer1.neurons)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
 
         weights = w.output.history
@@ -220,21 +220,7 @@ def evaluate_mnist_multiple_tio2(args):
     
 
 
-    t_data = sim.trange()
-    labels = sim.data[p_true_label][:,0]
-    output_spikes = sim.data[p_layer_1]
-    neuron_class = np.zeros((n_neurons, 1))
-    n_classes = 10
-    for j in range(n_neurons):
-        spike_times_neuron_j = t_data[np.where(output_spikes[:,j] > 0)]
-        max_spike_times = 0 
-        for i in range(n_classes):
-            class_presentation_times_i = t_data[np.where(labels == i)]
-            #Normalized number of spikes wrt class presentation time
-            num_spikes = len(np.intersect1d(spike_times_neuron_j,class_presentation_times_i))/(len(class_presentation_times_i)+1)
-            if(num_spikes>max_spike_times):
-                neuron_class[j] = i
-                max_spike_times = num_spikes
+
                 
     # print("Neuron class: \n", neuron_class)
 
@@ -272,7 +258,7 @@ def evaluate_mnist_multiple_tio2(args):
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
         nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight)
         #Probes
-        # p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
+        p_true_label = nengo.Probe(true_label)
         # p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
         p_layer_1 = nengo.Probe(layer1.neurons)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
@@ -292,7 +278,21 @@ def evaluate_mnist_multiple_tio2(args):
 
     # img_rows, img_cols = 28, 28
     
-
+    t_data = sim.trange()
+    labels = sim.data[p_true_label][:,0]
+    output_spikes = sim.data[p_layer_1]
+    neuron_class = np.zeros((n_neurons, 1))
+    n_classes = 10
+    for j in range(n_neurons):
+        spike_times_neuron_j = t_data[np.where(output_spikes[:,j] > 0)]
+        max_spike_times = 0 
+        for i in range(n_classes):
+            class_presentation_times_i = t_data[np.where(labels == i)]
+            #Normalized number of spikes wrt class presentation time
+            num_spikes = len(np.intersect1d(spike_times_neuron_j,class_presentation_times_i))/(len(class_presentation_times_i)+1)
+            if(num_spikes>max_spike_times):
+                neuron_class[j] = i
+                max_spike_times = num_spikes
     spikes_layer1_probe_train = sim.data[probe_layer_1]
 
     input_nbr = 10000

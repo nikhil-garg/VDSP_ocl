@@ -244,7 +244,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         probe_layer_1 = nengo.Probe(layer1.neurons)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
 
-        weights = w.output.history
+        # weights = w.output.history
 
         
 
