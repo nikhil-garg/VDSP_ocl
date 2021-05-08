@@ -61,7 +61,7 @@ def args():
 
     parser.add_argument(
         "--amp_neuron",
-        default=0.5607848,
+        default=0.1,
         type=float,
         help="Transform from synapse to output neurons"
     )
@@ -86,7 +86,7 @@ def args():
     )
     parser.add_argument(
         "--lr",
-        default=0.1,
+        default=1,
         type=float,
         help="Learning rate of VDSP",
     )
@@ -99,7 +99,7 @@ def args():
 
     parser.add_argument(
         "--vprog",
-        default=-0.75,
+        default=-0.9,
         type=float,
         help="vprog",
     )
@@ -162,13 +162,13 @@ def args():
     )
     parser.add_argument(
         "--vthp",
-        default=0.16,
+        default=0.5,
         type=float,
         help="Switching threshold of memristor",
     )
     parser.add_argument(
         "--vthn",
-        default=0.15,
+        default=0.5,
         type=float,
         help="Switching threshold of memristor",
     )
