@@ -53,8 +53,8 @@ if __name__ == '__main__':
 		df.to_csv(log_dir+'test.csv', index=False)
 
 	parameters = dict(
-		vprog = [-0.875]
-		, amp_neuron=[0.05,0.075,0.1]
+		vprog = [-0.9]
+		, amp_neuron=[0.075]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
@@ -62,7 +62,7 @@ if __name__ == '__main__':
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [50]
+		, n_neurons = [150,200]
 		, inhibition_time = [10]
 		, tau_ref = [0.002]
 		, seed =[100]
