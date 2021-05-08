@@ -52,9 +52,9 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.925,-0.90,-0.875]
-		, amp_neuron=[0.05]
-		,input_nbr=[1000]
+		vprog = [-0.90,-0.875]
+		, amp_neuron=[0.1,0.125,0.15,0.2]
+		,input_nbr=[6000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
@@ -77,7 +77,7 @@ if __name__ == '__main__':
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_3'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log_5'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
 			# plt.savefig(folder+'/raster'+str(args.filename)+'.png')
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_3'+'.csv'
+		log_file_name = 'accuracy_log_5'+'.csv'
 		pwd = os.getcwd()
 
 		if args.log_file_path is None:
