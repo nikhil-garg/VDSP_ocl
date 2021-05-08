@@ -52,9 +52,9 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.90,-0.80]
-		, amp_neuron=[0.07]
-		,input_nbr=[1000]
+		vprog = [-0.90]
+		, amp_neuron=[0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.5]
+		,input_nbr=[6000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
@@ -62,7 +62,7 @@ if __name__ == '__main__':
 		, presentation_time = [0.35]
 		, dt = [0.005]
 		, n_neurons = [20]
-		, inhibition_time = [5,10,15,20,25]
+		, inhibition_time = [10]
 		, vprog_increment=[0]
     )
 	param_values = [v for v in parameters.values()]
