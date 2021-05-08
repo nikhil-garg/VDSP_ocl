@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple_local_tio2 import *
+from fmnist_vdsp_multiple_local_tio2 import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -40,7 +40,6 @@ if __name__ == '__main__':
                         "n_neurons":[],
                         "inhibition_time":[],
                         "vprog_increment":[],
-                        "ref":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -53,29 +52,28 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.875]
+		vprog = [-0.90]
 		, amp_neuron=[0.1]
-		,input_nbr=[6000]
+		,input_nbr=[1000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
-		, dt = [0.005,0.001]
-		, n_neurons = [30]
+		, dt = [0.005]
+		, n_neurons = [50,100,200,400]
 		, inhibition_time = [10]
 		, vprog_increment=[0]
-		, tau_ref=[0.001,0.002,0.003,0.004,0.005]
     )
 	param_values = [v for v in parameters.values()]
 
 	now = time.strftime("%Y%m%d-%H%M%S")
-	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
+	folder = os.getcwd()+"/FMNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment,args.tau_ref in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -83,7 +81,7 @@ if __name__ == '__main__':
 		pwd = os.getcwd()
 
 
-		accuracy,accuracy_2, weights = evaluate_mnist_multiple_local_tio2(args)
+		accuracy,accuracy_2, weights = evaluate_fmnist_multiple_local_tio2(args)
 
 
 
@@ -100,7 +98,6 @@ if __name__ == '__main__':
 		                 "n_neurons":args.n_neurons,
 		                 "inhibition_time":args.inhibition_time,
 		                 "vprog_increment":args.vprog_increment,
-		                 "ref":args.tau_ref,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
