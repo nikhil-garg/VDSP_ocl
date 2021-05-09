@@ -608,7 +608,39 @@ def fun_post_tio2(X,
 
 popt_tio2 = np.array((1.62708935, 2.1204144 , 0.044, 0.07223655, 0.95411709))
 
+def fun_post_tio2_var(X,
+       alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
+       # a1=1,a2=1,a3=1,a4=1
+       ): 
+    
+    w, vmem, vprog, vthp, vthn, var_amp_1, var_amp_2 = X
+    # vthp=0.5
+    # vthn=0.5
+    # vprog=0
+    xp=0.01
+    xn=0.01
+    Ap = var_amp_1*Ap
+    An = var_amp_2*An
 
+    vapp = vprog-vmem
+    
+    cond_pot_fast = w<xp
+    cond_pot_slow = 1-cond_pot_fast
+    
+    cond_dep_fast = w>(1-xn)
+    cond_dep_slow = 1-cond_dep_fast
+    
+    f_pot = cond_pot_fast + cond_pot_slow*(np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))
+    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast
+    
+    cond_pot = vapp > vthp
+    cond_dep = vapp < -vthn
+    
+    g_pot = Ap*(np.exp(vapp)-np.exp(vthp))
+    g_dep = -An*(np.exp(-vapp)-np.exp(vthn))
+
+    dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
+    return dW
 
 class CustomRule_post_v2_tio2(nengo.Process):
    
@@ -1035,8 +1067,8 @@ class CustomRule_post_v4(nengo.Process):
         self.signal_out_post = signal
 
 class CustomRule_post_v4_tio2(nengo.Process):
-    #var is the matrix with random numbers to be multiplied with Ap and An. var=1 : no variability
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.7,vthn=0.8,var_amp= 1):
+   
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_1= 1,var_amp_2=1,gmax=0.0008,gmin=0.00008):
        
         self.vprog = vprog  
         
@@ -1051,7 +1083,10 @@ class CustomRule_post_v4_tio2(nengo.Process):
         self.lr = lr
         self.vthp = vthp
         self.vthn = vthn
-        self.var_amp = var_amp
+        self.gmax=gmax
+        self.gmin = gmin
+        self.var_amp_1=var_amp_1
+        self.var_amp_2=var_amp_2
         
         self.history = [0]
 
@@ -1077,7 +1112,7 @@ class CustomRule_post_v4_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_var_tio2((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2_var((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn,self.var_amp_1,self.var_amp_2),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
@@ -1087,8 +1122,8 @@ class CustomRule_post_v4_tio2(nengo.Process):
             # self.history.append(self.w.copy())
             # self.history = self.history[-2:]
             # self.history = self.w
-            
-            return np.dot(self.w, x)
+
+            return np.dot((self.w*(self.gmax-self.gmin)) + self.gmin, x)
         
         return step   
 

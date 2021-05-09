@@ -106,6 +106,8 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,
+            "var_amp_1":var_amp_matrix_1,
+            "var_amp_2":var_amp_matrix_2,
             "gmax":0.0008,
             "gmin":0.00008,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
@@ -130,7 +132,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v2_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v4_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=None)
         weights = w.output.history
