@@ -67,7 +67,7 @@ if __name__ == '__main__':
 		, inhibition_time = [10]
 		, tau_ref = [0.002]
 		,var_ratio=[0.6,0.8,1]
-		, seed =[100]
+		, seed =[200,300,400,500,600]
     )
 	param_values = [v for v in parameters.values()]
 
