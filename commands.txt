@@ -66,6 +66,12 @@ sbatch slrum_trial_tio2_v7.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
 
+sbatch slrum_trial_tio2_var_amp_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v2.sh --log_file_path $OUTDIR
+
+sbatch slrum_trial_tio2_var_g_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_g_v2.sh --log_file_path $OUTDIR
+
 
 
 image_test_filtered = (image_test_filtered/255-0.1308)/0.3088
