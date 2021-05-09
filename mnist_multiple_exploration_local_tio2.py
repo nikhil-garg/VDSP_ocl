@@ -65,7 +65,7 @@ if __name__ == '__main__':
 		, n_neurons = [30]
 		, inhibition_time = [5,10,20]
 		, vprog_increment=[0]
-		, tau_ref=[0.001,0.002,0.003,0.004,0.005,0.01]
+		, tau_ref=[0.002,0.005,0.01]
     )
 	param_values = [v for v in parameters.values()]
 
