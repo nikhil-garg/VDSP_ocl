@@ -67,7 +67,7 @@ def args():
     )
     parser.add_argument(
         "--n_neurons",
-        default=30,
+        default=50,
         type=float,
         help="Number of output neurons",
     )
@@ -199,12 +199,12 @@ def args():
 
     parser.add_argument(
         "--gmax",
-        default=0.0085,
+        default=0.0008,
         type=float,
     )
     parser.add_argument(
         "--gmin",
-        default=0.0000085,
+        default=0.00008,
         type=float,
     )
 
