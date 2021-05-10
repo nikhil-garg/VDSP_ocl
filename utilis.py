@@ -642,6 +642,42 @@ def fun_post_tio2_var(X,
     dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
     return dW
 
+def fun_post_tio2_var_v2(X,
+       alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
+       # a1=1,a2=1,a3=1,a4=1
+       ): 
+    
+    w, vmem, vprog, vthp, vthn, var_amp_1, var_amp_2 = X
+    # vthp=0.5
+    # vthn=0.5
+    # vprog=0
+    xp=0.01
+    xn=0.01
+    Ap = var_amp_1*Ap
+    An = var_amp_2*An
+    vthp = var_vthp*vthp
+    vthn = var_vthn*vthn
+
+    vapp = vprog-vmem
+    
+    cond_pot_fast = w<xp
+    cond_pot_slow = 1-cond_pot_fast
+    
+    cond_dep_fast = w>(1-xn)
+    cond_dep_slow = 1-cond_dep_fast
+    
+    f_pot = cond_pot_fast + cond_pot_slow*(np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))
+    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast
+    
+    cond_pot = vapp > vthp
+    cond_dep = vapp < -vthn
+    
+    g_pot = Ap*(np.exp(vapp)-np.exp(vthp))
+    g_dep = -An*(np.exp(-vapp)-np.exp(vthn))
+
+    dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
+    return dW
+
 class CustomRule_post_v2_tio2(nengo.Process):
    
     def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008):
@@ -754,7 +790,7 @@ class CustomRule_post_v3_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.vprog = np.clip((self.vprog + self.vprog_increment),-1,-0.55)
+            # self.vprog = np.clip((self.vprog + self.vprog_increment),-1,-0.55)
 
             self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
             
