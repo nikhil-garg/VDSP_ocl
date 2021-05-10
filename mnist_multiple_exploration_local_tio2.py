@@ -60,12 +60,12 @@ if __name__ == '__main__':
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
-		, presentation_time = [0.35]
-		, dt = [0.005,0.001]
-		, n_neurons = [30]
-		, inhibition_time = [5,10,20]
+		, presentation_time = [0.1]
+		, dt = [0.001]
+		, n_neurons = [20]
+		, inhibition_time = [2]
 		, vprog_increment=[0]
-		, tau_ref=[0.002,0.005,0.01]
+		, tau_ref=[0,0.002]
     )
 	param_values = [v for v in parameters.values()]
 

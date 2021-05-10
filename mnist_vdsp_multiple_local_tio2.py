@@ -235,7 +235,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=None)
 
         #Probes
         p_true_label = nengo.Probe(true_label)
@@ -277,7 +277,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 6000
+    input_nbr = 1000
     # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
@@ -326,7 +326,7 @@ def evaluate_mnist_multiple_local_tio2(args):
 
         # w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=784, size_out=n_neurons)
         
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=None)
      
        
         p_true_label = nengo.Probe(true_label)
