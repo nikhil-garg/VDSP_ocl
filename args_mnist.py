@@ -233,6 +233,12 @@ def args():
         type=float,
         help="Refractory period",
     )
+    parser.add_argument(
+        "--synapse_layer_1",
+        default=0,
+        type=float,
+        help="Refractory period",
+    )
 
     my_args = parser.parse_args()
 

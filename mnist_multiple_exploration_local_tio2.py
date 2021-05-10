@@ -41,6 +41,7 @@ if __name__ == '__main__':
                         "inhibition_time":[],
                         "vprog_increment":[],
                         "ref":[],
+                        "synapse_layer_1":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -61,11 +62,12 @@ if __name__ == '__main__':
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
-		, dt = [0.005]
+		, dt = [0.001]
 		, n_neurons = [30]
-		, inhibition_time = [10]
+		, inhibition_time = [2]
 		, vprog_increment=[0]
 		, tau_ref=[0.002]
+		, synapse_layer_1=[0.001,0.002,0.005,0]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -73,13 +75,13 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment,args.tau_ref in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment,args.tau_ref,args.synapse_layer_1 in product(*param_values):
 
 		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_5'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log_6'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
 
@@ -101,6 +103,7 @@ if __name__ == '__main__':
 		                 "inhibition_time":args.inhibition_time,
 		                 "vprog_increment":args.vprog_increment,
 		                 "ref":args.tau_ref,
+		                 "synapse_layer_1":args.synapse_layer_1,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
@@ -151,7 +154,7 @@ if __name__ == '__main__':
 
 			# plt.savefig(folder+'/raster'+str(args.filename)+'.png')
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_5'+'.csv'
+		log_file_name = 'accuracy_log_6'+'.csv'
 		pwd = os.getcwd()
 
 		if args.log_file_path is None:

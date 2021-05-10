@@ -42,6 +42,7 @@ if __name__ == '__main__':
                         "n_neurons":[],
                         "inhibition_time":[],
                         "tau_ref":[],
+                        "synapse_layer_1":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -54,17 +55,18 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [-0.9]
-		, amp_neuron=[0.075,0.1]
+		, amp_neuron=[0.075]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
-		,tau_out = [0.03]
+		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [100]
+		, n_neurons = [50]
 		, inhibition_time = [10]
 		, tau_ref = [0.002]
+		, synapse_layer_1=[0.01,0.02]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
@@ -73,7 +75,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.seed in product(*param_values):
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -98,6 +100,7 @@ if __name__ == '__main__':
 		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
 		                 "tau_ref":args.tau_ref,
+		                 "synapse_layer_1":args.synapse_layer_1,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)

@@ -176,7 +176,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         #Weights between input layer and layer 1
         w = nengo.Node(CustomRule_post_v3_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
-        nengo.Connection(w, layer1.neurons, synapse=None)
+        nengo.Connection(w, layer1.neurons, synapse=args.synapse_layer_1)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
         # init_weights = np.random.uniform(0, 1, (n_neurons, n_in))
         # conn1 = nengo.Connection(input_layer.neurons,layer1.neurons,learning_rule_type=VLR(learning_rate=args.lr,vprog=args.vprog, vthp=args.vthp,vthn=args.vthn),transform=init_weights)
@@ -235,7 +235,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=None)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=args.synapse_layer_1)
 
         #Probes
         p_true_label = nengo.Probe(true_label)
@@ -326,7 +326,7 @@ def evaluate_mnist_multiple_local_tio2(args):
 
         # w = nengo.Node(CustomRule_post_v2(**learning_args), size_in=784, size_out=n_neurons)
         
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=None)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=args.synapse_layer_1)
      
        
         p_true_label = nengo.Probe(true_label)
