@@ -185,6 +185,12 @@ def args():
         help="Variability of Ap and An in VDSP",
     )
     parser.add_argument(
+        "--amp_vth_var",
+        default=0,
+        type=float,
+        help="Variability of Vthp, Vthn, Ap and An in VDSP",
+    )
+    parser.add_argument(
         "--dw_var",
         default=0,
         type=float,

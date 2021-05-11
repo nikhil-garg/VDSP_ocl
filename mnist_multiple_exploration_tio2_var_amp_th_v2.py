@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple_local_tio2 import *
+from mnist_vdsp_multiple_tio2_var_amp_th import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -27,6 +27,8 @@ if __name__ == '__main__':
 	random.seed(seed)
 	np.random.seed(seed)
 	pwd = os.getcwd()
+
+
 	df = pd.DataFrame({	"vprog":[],
 						"amp_neuron":[],
 						"vth":[],
@@ -39,9 +41,8 @@ if __name__ == '__main__':
                         "dt":[],
                         "n_neurons":[],
                         "inhibition_time":[],
-                        "vprog_increment":[],
-                        "ref":[],
-                        "synapse_layer_1":[],
+                        "tau_ref":[],
+                        "amp_vth_var":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -52,11 +53,10 @@ if __name__ == '__main__':
 		log_dir = args.log_file_path
 		df.to_csv(log_dir+'test.csv', index=False)
 
-
 	parameters = dict(
-		vprog = [-0.9,-0.875,-0.8,-0.75]
+		vprog = [-0.9]
 		, amp_neuron=[0.075]
-		,input_nbr=[6000]
+		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
@@ -65,9 +65,9 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
-		, vprog_increment=[0]
-		, tau_ref=[0.002]
-		, synapse_layer_1=[0.004]
+		, tau_ref = [0.002]
+		,amp_vth_var=[0.6,0.8,1]
+		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -75,19 +75,16 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment,args.tau_ref,args.synapse_layer_1 in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.amp_vth_var,args.seed in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)+str(args.synapse_layer_1)
+		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_6'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
 		pwd = os.getcwd()
 
-
-		accuracy,accuracy_2, weights = evaluate_mnist_multiple_local_tio2(args)
-
-
+		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2_var_amp_th(args)
 
 		df = df.append({ "vprog":args.vprog,
 						"amp_neuron":args.amp_neuron,
@@ -100,16 +97,16 @@ if __name__ == '__main__':
 		                 "presentation_time":args.presentation_time,
 		                 "dt":args.dt,
 		                 "n_neurons":args.n_neurons,
+		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
-		                 "vprog_increment":args.vprog_increment,
-		                 "ref":args.tau_ref,
-		                 "synapse_layer_1":args.synapse_layer_1,
+		                 "tau_ref":args.tau_ref,
+		                 "amp_vth_var":args.amp_vth_var,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
 		
 
-		plot = True
+		plot = False
 		if plot : 	
 			print('accuracy', accuracy)
 			print(args.filename)
@@ -130,9 +127,15 @@ if __name__ == '__main__':
 			# ax1 = fig.add_subplot()
 			# cax = ax1.matshow(np.reshape(weights[0],(28,28)),interpolation='nearest', vmax=1, vmin=0)
 			# fig.colorbar(cax)
-			# plt.tight_layout()    
+			# plt.tight_layout() 
 
-			fig.savefig(folder+'/weights'+str(args.filename)+'.png')
+			if args.log_file_path is None:
+				log_dir = pwd+'/log_dir/'
+			else : 
+				log_dir = args.log_file_path
+			df.to_csv(log_dir+log_file_name, index=False)   
+
+			fig.savefig(log_dir+'weights.png')
 			plt.close()
 
 
@@ -154,7 +157,7 @@ if __name__ == '__main__':
 
 			# plt.savefig(folder+'/raster'+str(args.filename)+'.png')
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_6'+'.csv'
+		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
 		if args.log_file_path is None:
