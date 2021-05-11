@@ -151,7 +151,7 @@ def evaluate_mnist_multiple_tio2(args):
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=synapse_layer_1)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=args.synapse_layer_1)
         #Probes
         p_true_label = nengo.Probe(true_label)
         p_layer_1 = nengo.Probe(layer1.neurons)
@@ -190,7 +190,7 @@ def evaluate_mnist_multiple_tio2(args):
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=synapse_layer_1)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=args.synapse_layer_1)
         p_true_label = nengo.Probe(true_label)
         p_layer_1 = nengo.Probe(layer1.neurons)
 
