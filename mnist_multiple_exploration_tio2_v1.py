@@ -74,7 +74,7 @@ if __name__ == '__main__':
 		, winit_max = [1]
 		, vprog_increment = [0,0.00000001,0.0000001,0.000001,0.00001,0.0001]
 		, voltage_clip_max=[None]
-		, voltage_clip_min = [None]
+		, voltage_clip_min = [-2]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
