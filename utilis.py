@@ -729,7 +729,7 @@ class CustomRule_post_v2_tio2(nengo.Process):
             self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn,self.voltage_clip_max,self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
 
             post_spiked = post_out_matrix*dt
-            self.vprog += post_spiked*vprog_increment
+            self.vprog += post_spiked*self.vprog_increment
             self.vprog = np.clip(self.vprog, None, 0)
             
             # if (self.tstep%self.sample_distance ==0):
