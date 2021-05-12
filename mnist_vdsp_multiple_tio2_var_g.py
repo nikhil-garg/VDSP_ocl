@@ -93,8 +93,8 @@ def evaluate_mnist_multiple_tio2_var_g(args):
     np.random.seed(args.seed)
     random.seed(args.seed)
     gmax = np.random.normal(args.gmax, args.gmax*args.g_var, (n_neurons,n_in)) #between -1 to 1 of shape W
-    np.random.seed(args.seed + 1)
-    random.seed(args.seed + 1)
+    # np.random.seed(args.seed + 1)
+    # random.seed(args.seed + 1)
     gmin = np.random.normal(args.gmin, args.gmin*args.g_var, (n_neurons,n_in)) #between -1 to 1 of shape W
     gmax = np.clip(gmax,2*args.gmin,None)
     gmin = np.clip(gmin, 0, 2*args.gmin)
@@ -116,7 +116,8 @@ def evaluate_mnist_multiple_tio2_var_g(args):
 
     images = image_train_filtered
     labels = label_train_filtered
-
+    np.random.seed(args.seed)
+    random.seed(args.seed) 
 
     model = nengo.Network("My network", seed = args.seed)
     #############################

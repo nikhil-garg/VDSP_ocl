@@ -118,6 +118,8 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
     images = image_train_filtered
     labels = label_train_filtered
 
+    np.random.seed(args.seed)
+    random.seed(args.seed) 
 
     model = nengo.Network("My network", seed = args.seed)
     #############################

@@ -43,6 +43,10 @@ if __name__ == '__main__':
                         "inhibition_time":[],
                         "tau_ref":[],
                         "synapse_layer_1":[],
+                        "winit_max":[],
+                        "vprog_increment":[],
+                        "voltage_clip_max":[],
+                        "voltage_clip_min":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -63,10 +67,14 @@ if __name__ == '__main__':
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [50]
+		, n_neurons = [30]
 		, inhibition_time = [10]
 		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
+		, winit_max = [1]
+		, vprog_increment = [0,0.00000001,0.0000001,0.000001,0.00001,0.0001]
+		, voltage_clip_max=[None]
+		, voltage_clip_min = [None]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
@@ -75,7 +83,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.seed in product(*param_values):
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -101,12 +109,16 @@ if __name__ == '__main__':
 		                 "inhibition_time":args.inhibition_time,
 		                 "tau_ref":args.tau_ref,
 		                 "synapse_layer_1":args.synapse_layer_1,
+		                 "winit_max":args.winit_max,
+		                 "vprog_increment":args.vprog_increment,
+		                 "voltage_clip_max":args.voltage_clip_max,
+		                 "voltage_clip_min":args.voltage_clip_min,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
 		
 
-		plot = True
+		plot = False
 		if plot : 	
 			print('accuracy', accuracy)
 			print(args.filename)

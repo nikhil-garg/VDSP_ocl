@@ -241,10 +241,29 @@ def args():
     )
     parser.add_argument(
         "--synapse_layer_1",
-        default=0,
+        default=None,
         type=float,
         help="Refractory period",
     )
+    parser.add_argument(
+        "--winit_max",
+        default=1,
+        type=float,
+        help="Maximum value of winit",
+    )
+    parser.add_argument(
+        "--voltage_clip_max",
+        default=None,
+        type=float,
+        help="Maximum value of voltage clipping",
+    )
+    parser.add_argument(
+        "--voltage_clip_min",
+        default=None,
+        type=float,
+        help="Minimum value of voltage clipping",
+    )
+
 
     my_args = parser.parse_args()
 

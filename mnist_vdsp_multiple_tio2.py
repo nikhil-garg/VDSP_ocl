@@ -94,12 +94,15 @@ def evaluate_mnist_multiple_tio2(args):
     learning_args = {
             "lr": args.lr,
             "winit_min":0,
-            "winit_max":1,
+            "winit_max":args.winit_max,
             "vprog":args.vprog, 
             "vthp":0.5,
             "vthn":0.5,
             "gmax":0.0008,
             "gmin":0.00008,
+            "vprog_increment":args.vprog_increment,
+            "voltage_clip_max":args.voltage_clip_max,
+            "voltage_clip_min":args.voltage_clip_min,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
 
@@ -107,7 +110,8 @@ def evaluate_mnist_multiple_tio2(args):
 
     images = image_train_filtered
     labels = label_train_filtered
-
+    np.random.seed(args.seed)
+    random.seed(args.seed) 
 
     model = nengo.Network("My network", seed = args.seed)
     #############################
