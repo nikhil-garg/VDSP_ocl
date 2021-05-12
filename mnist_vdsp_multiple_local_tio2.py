@@ -277,7 +277,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 1000
+    input_nbr = 10000
     # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"

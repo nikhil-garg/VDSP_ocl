@@ -54,9 +54,9 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.9,-0.875,-0.8,-0.75]
+		vprog = [-0.9]
 		, amp_neuron=[0.075]
-		,input_nbr=[6000]
+		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 		, inhibition_time = [10]
 		, vprog_increment=[0]
 		, tau_ref=[0.002]
-		, synapse_layer_1=[0.004]
+		, synapse_layer_1=[None]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,10))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
@@ -133,8 +133,24 @@ if __name__ == '__main__':
 			# plt.tight_layout()    
 
 			fig.savefig(folder+'/weights'+str(args.filename)+'.png')
-			plt.close()
+			plt.clf()
+			plt.close('all')
 
+			  # for tstep in np.arange(0, len(weights), 1):
+		        # tstep = int(tstep)
+		        # print(tstep)
+			# fig, axes = plt.subplots(1,1, figsize=(10,10))
+
+			        
+			# ax1 = fig.add_subplot()
+			# cax = ax1
+			plt.hist(weights.flatten())
+
+			plt.tight_layout()    
+			plt.savefig(folder+'/histogram'+str(args.filename)+'.png')
+			plt.close('all')
+
+		    # gen_video(folder, "histogram")
 
 			# plt.figure(figsize=(12,10))
 
