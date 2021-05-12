@@ -66,7 +66,7 @@ if __name__ == '__main__':
 		, n_neurons = [50]
 		, inhibition_time = [10]
 		, tau_ref = [0.002]
-		, synapse_layer_1=[0.004,0.008,0.001,0]
+		, synapse_layer_1=[None]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 		                 },ignore_index=True)
 		
 
-		plot = False
+		plot = True
 		if plot : 	
 			print('accuracy', accuracy)
 			print(args.filename)
@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,10))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
@@ -137,6 +137,11 @@ if __name__ == '__main__':
 
 			fig.savefig(log_dir+'weights.png')
 			plt.close()
+
+			plt.hist(weights.flatten())
+
+			plt.tight_layout()    
+			plt.savefig(log_dir+'histogram.png')
 
 
 			# plt.figure(figsize=(12,10))
