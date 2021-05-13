@@ -579,14 +579,16 @@ def fun_post_tio2(X,
        # a1=1,a2=1,a3=1,a4=1
        ): 
     
-    w, vmem, vprog, vthp, vthn, voltage_clip_max, voltage_clip_min = X
+    w, vmem, vprog, vthp, vthn, voltage_clip_max, voltage_clip_min, Vapp_multiplier = X
     # vthp=0.5
     # vthn=0.5
     # vprog=0
     xp=0.01
     xn=0.01
     
-    vapp = np.clip(vprog-vmem, voltage_clip_min, voltage_clip_max)
+    vapp = (vprog-vmem)*(1+w*Vapp_multiplier)
+
+    vapp = np.clip(vapp, voltage_clip_min, voltage_clip_max)
     
     cond_pot_fast = w<xp
     cond_pot_slow = 1-cond_pot_fast
@@ -680,7 +682,7 @@ def fun_post_tio2_var_v2(X,
 
 class CustomRule_post_v2_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008,vprog_increment=0,voltage_clip_max=None,voltage_clip_min=None):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008,vprog_increment=0,voltage_clip_max=None,voltage_clip_min=None,Vapp_multiplier=0):
        
         self.vprog = vprog  
         
@@ -703,6 +705,7 @@ class CustomRule_post_v2_tio2(nengo.Process):
         self.voltage_clip_min=voltage_clip_min
         self.voltage_clip_max=voltage_clip_max
         self.vprog_increment=vprog_increment
+        self.Vapp_multiplier = Vapp_multiplier
 
         
         # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
@@ -726,7 +729,7 @@ class CustomRule_post_v2_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn,self.voltage_clip_max,self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn,self.voltage_clip_max,self.voltage_clip_min,self.Vapp_multiplier),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
 
             post_spiked = post_out_matrix*dt
             self.vprog += post_spiked*self.vprog_increment

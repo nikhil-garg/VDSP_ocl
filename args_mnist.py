@@ -253,13 +253,13 @@ def args():
     )
     parser.add_argument(
         "--voltage_clip_max",
-        default=None,
+        default=3,
         type=float,
         help="Maximum value of voltage clipping",
     )
     parser.add_argument(
         "--voltage_clip_min",
-        default=None,
+        default=-3,
         type=float,
         help="Minimum value of voltage clipping",
     )
@@ -275,6 +275,13 @@ def args():
         type=float,
         help="Adaption increment",
     )
+    parser.add_argument(
+        "--Vapp_multiplier",
+        default=0,
+        type=float,
+        help="Multiplier for Vapp",
+    )
+
 
 
     my_args = parser.parse_args()

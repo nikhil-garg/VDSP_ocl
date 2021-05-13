@@ -103,6 +103,7 @@ def evaluate_mnist_multiple_tio2(args):
             "vprog_increment":args.vprog_increment,
             "voltage_clip_max":args.voltage_clip_max,
             "voltage_clip_min":args.voltage_clip_min,
+            "Vapp_multiplier":args.Vapp_multiplier,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
 

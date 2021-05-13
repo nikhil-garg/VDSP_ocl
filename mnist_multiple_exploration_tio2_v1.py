@@ -47,6 +47,7 @@ if __name__ == '__main__':
                         "vprog_increment":[],
                         "voltage_clip_max":[],
                         "voltage_clip_min":[],
+                        "Vapp_multiplier":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -72,9 +73,10 @@ if __name__ == '__main__':
 		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
 		, winit_max = [1]
-		, vprog_increment = [0,0.00000001,0.0000001,0.000001,0.00001,0.0001]
-		, voltage_clip_max=[1.5]
-		, voltage_clip_min = [-1,-1.5,-2]
+		, vprog_increment = [0]
+		, voltage_clip_max=[2]
+		, voltage_clip_min = [-2, None]
+		, Vapp_multiplier = [0,1,0.5,2]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
@@ -83,7 +85,7 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.seed in product(*param_values):
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
 		
@@ -113,6 +115,7 @@ if __name__ == '__main__':
 		                 "vprog_increment":args.vprog_increment,
 		                 "voltage_clip_max":args.voltage_clip_max,
 		                 "voltage_clip_min":args.voltage_clip_min,
+		                 "Vapp_multiplier":args.Vapp_multiplier,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)

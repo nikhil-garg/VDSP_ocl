@@ -61,7 +61,7 @@ def evaluate_mnist_multiple_local_tio2(args):
 
 
     image_train_filtered = (image_train_filtered/255-0.1308)/0.3088
-    image_train_filtered = 255*(image_train_filtered-image_train_filtered.min())/(image_train_filtered.max()-image_train_filtered.min())
+    image_train_filtered = (image_train_filtered-image_train_filtered.min())/(image_train_filtered.max()-image_train_filtered.min())
 
 
 
@@ -145,6 +145,8 @@ def evaluate_mnist_multiple_local_tio2(args):
             "vthp":0.5,
             "vthn":0.5,
             "vprog_increment":args.vprog_increment,
+            "voltage_clip_max":args.voltage_clip_max,
+            "voltage_clip_min":args.voltage_clip_min,
     #         "tpw":50,
     #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
@@ -174,7 +176,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v3_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v2_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=args.synapse_layer_1)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
@@ -277,7 +279,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 10000
+    input_nbr = 1000
     # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
@@ -301,7 +303,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     label_test_filtered = np.array(label_test_filtered)
 
     image_test_filtered = (image_test_filtered/255-0.1308)/0.3088
-    image_test_filtered = 255*(image_test_filtered-image_test_filtered.min())/(image_test_filtered.max()-image_test_filtered.min())
+    image_test_filtered = (image_test_filtered-image_test_filtered.min())/(image_test_filtered.max()-image_test_filtered.min())
 
     #############################
 
