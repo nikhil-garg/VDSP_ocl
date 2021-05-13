@@ -62,26 +62,26 @@ if __name__ == '__main__':
 		df.to_csv(log_dir+'test.csv', index=False)
 
 	parameters = dict(
-		vprog = [0,-0.55]
-		, amp_neuron=[1]
+		vprog = [-0.9]
+		, amp_neuron=[0.5,1]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
-		, presentation_time = [0.35]
-		, pause_time = [0.15]
-		, dt = [0.005]
+		, presentation_time = [0.20]
+		, pause_time = [0.1]
+		, dt = [0.001]
 		, n_neurons = [10]
-		, inhibition_time = [5,10,15,20]
-		, tau_ref = [0.002,0.01]
+		, inhibition_time = [2,10]
+		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
-		, winit_max = [0.5]
+		, winit_max = [0.15,0.5]
 		, vprog_increment = [0]
 		, voltage_clip_max=[2]
 		, voltage_clip_min = [-3]
 		, Vapp_multiplier = [0]
-		, gain_in = [2]
+		, gain_in = [4]
 		, noise_input = [0]
 		, seed =[100]
     )
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 		# args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+str(args.pause_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)+str(args.gain_in)+str(args.noise_input)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref)+'gain-'+str(args.gain_in)+'noise'+str(args.noise_input)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
