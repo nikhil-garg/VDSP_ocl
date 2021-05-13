@@ -73,8 +73,8 @@ if __name__ == '__main__':
 		, synapse_layer_1=[None]
 		, winit_max = [1]
 		, vprog_increment = [0,0.00000001,0.0000001,0.000001,0.00001,0.0001]
-		, voltage_clip_max=[None]
-		, voltage_clip_min = [-2]
+		, voltage_clip_max=[1.5]
+		, voltage_clip_min = [-1,-1.5,-2]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]

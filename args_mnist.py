@@ -263,6 +263,18 @@ def args():
         type=float,
         help="Minimum value of voltage clipping",
     )
+    parser.add_argument(
+        "--tau_n",
+        default=1,
+        type=float,
+        help="Adaption leak time constant",
+    )
+    parser.add_argument(
+        "--inc_n",
+        default=0.01,
+        type=float,
+        help="Adaption increment",
+    )
 
 
     my_args = parser.parse_args()
