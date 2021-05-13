@@ -281,6 +281,12 @@ def args():
         type=float,
         help="Multiplier for Vapp",
     )
+    parser.add_argument(
+        "--noise_input",
+        default=0,
+        type=float,
+        help="Input noise",
+    )
 
 
 
