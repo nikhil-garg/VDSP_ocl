@@ -73,7 +73,7 @@ if __name__ == '__main__':
 		, synapse_layer_1=[None]
 		, winit_max = [1]
 		, vprog_increment = [0]
-		, voltage_clip_max=[None]
+		, voltage_clip_max=[1.5]
 		, voltage_clip_min = [None, -1, -1.5]
 		, seed =[100]
     )
