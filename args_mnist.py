@@ -41,7 +41,7 @@ def args():
     )
     parser.add_argument(
         "--pause_time",
-        default=0,
+        default=0.15,
         type=float,
         help="Pause time",
     )

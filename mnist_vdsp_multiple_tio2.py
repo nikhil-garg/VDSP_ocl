@@ -38,9 +38,9 @@ def evaluate_mnist_multiple_tio2(args):
     random.seed(args.seed)
 
     data = np.load('mnist_norm.npz', allow_pickle=True)
-    image_train_filtered = data['image_train_filtered']
+    image_train_filtered = data['image_train_filtered']/255
     label_train_filtered = data['label_train_filtered']
-    image_test_filtered = data['image_test_filtered']
+    image_test_filtered = data['image_test_filtered']/255
     label_test_filtered = data['label_test_filtered']
 
     image_train_filtered = np.tile(image_train_filtered,(args.iterations,1,1))
@@ -183,7 +183,7 @@ def evaluate_mnist_multiple_tio2(args):
                 max_spike_times = num_spikes
     spikes_layer1_probe_train = sim.data[p_layer_1]
 
-    input_nbr = 10000
+    input_nbr = 100
     
     model = nengo.Network(label="My network",)
 
@@ -210,6 +210,7 @@ def evaluate_mnist_multiple_tio2(args):
 
 
     labels = sim.data[p_true_label][:,0]
+    t_data = sim.trange()
     output_spikes = sim.data[p_layer_1]
     n_classes = 10
     predicted_labels = []  
@@ -253,9 +254,9 @@ def evaluate_mnist_multiple_tio2(args):
     print("Accuracy: ", accuracy)
     sim.close()
 
-    del weights, sim.data, labels, output_spikes, class_pred, t_data, spikes_layer1_probe_train
+    del weights, sim.data, labels, class_pred, spikes_layer1_probe_train
 
-    return accuracy,accuracy_2, last_weight
+    return accuracy, accuracy_2, last_weight
 
 
     # for tstep in np.arange(0, len(weights), 1):

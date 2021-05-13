@@ -1404,6 +1404,85 @@ def build_or_passthrough(model, obj, signal):
 
 #create new neuron type STDPLIF 
 
+# class STDPLIF(AdaptiveLIF):
+#     probeable = ('spikes', 'voltage', 'refractory_time','adaptation','inhib') #,'inhib'
+    
+#     def __init__(self, spiking_threshold =1, inhibition_time=10,inhib=[],T = 0.0, **lif_args): # inhib=[],T = 0.0
+#         super(STDPLIF, self).__init__(**lif_args)
+#         # neuron args (if you have any new parameters other than gain
+#         # an bais )
+#         self.inhib = inhib
+#         self.T = T
+#         self.spiking_threshold=spiking_threshold
+#         self.inhibition_time=inhibition_time
+#     @property
+#     def _argreprs(self):
+#         args = super(STDPLIF, self)._argreprs
+#         print("argreprs")
+#         return args
+
+#     # dt : timestamps 
+#     # J : Input currents associated with each neuron.
+#     # output : Output activities associated with each neuron.
+#     def step(self, dt, J, output, voltage, refractory_time, adaptation,inhib):#inhib
+
+#         self.T += dt
+        
+#         # if(np.max(J) !=0):
+#         #     J = np.divide(J,np.max(J)) * 2
+
+#         n = adaptation
+        
+#         J = J - n
+#         # ----------------------------
+
+#         # look these up once to avoid repeated parameter accesses
+#         tau_rc = self.tau_rc
+#         min_voltage = self.min_voltage
+
+#         # reduce all refractory times by dt
+#         refractory_time -= dt
+
+#         # compute effective dt for each neuron, based on remaining time.
+#         # note that refractory times that have completed midway into this
+#         # timestep will be given a partial timestep, and moreover these will
+#         # be subtracted to zero at the next timestep (or reset by a spike)
+#         delta_t = clip((dt - refractory_time), 0, dt)
+
+#         # update voltage using discretized lowpass filter
+#         # since v(t) = v(0) + (J - v(0))*(1 - exp(-t/tau)) assuming
+#         # J is constant over the interval [t, t + dt)
+#         voltage -= (J - voltage) * np.expm1(-delta_t / tau_rc)
+
+#         # determine which neurons spiked (set them to 1/dt, else 0)
+#         spiked_mask = (voltage > self.spiking_threshold)
+#         output[:] = spiked_mask * (self.amplitude / dt)
+#         output[voltage != np.max(voltage)] = 0  
+#         if(np.sum(output) != 0):
+#             voltage[voltage != np.max(voltage)] = 0 
+#             # inhib[(voltage != np.max(voltage)) & (inhib == 0)] = 2
+#             inhib[(voltage != np.max(voltage)) & (inhib == 0)] = self.inhibition_time/(dt*1000)
+#         #print("voltage : ",voltage)
+#         voltage[inhib != 0] = 0
+#         J[inhib != 0] = 0
+#         # set v(0) = 1 and solve for t to compute the spike time
+#         t_spike = dt + tau_rc * np.log1p(
+#             -(voltage[spiked_mask] - 1) / (J[spiked_mask] - 1)
+#         )
+#         # set spiked voltages to zero, refractory times to tau_ref, and
+#         # rectify negative voltages to a floor of min_voltage
+#         voltage[voltage < min_voltage] = min_voltage
+#         voltage[spiked_mask] = -1 #Reset voltage
+#         voltage[refractory_time > 0] = -1 #Refractory voltage
+#         refractory_time[spiked_mask] = self.tau_ref + t_spike
+#         # ----------------------------
+
+#         n += (dt / self.tau_n) * (self.inc_n * output - n)
+
+#         #AdaptiveLIF.step(self, dt, J, output, voltage, refractory_time, adaptation)
+#         inhib[inhib != 0] += - 1
+#         #J[...] = 0
+#         #output[...] = 0
 class STDPLIF(AdaptiveLIF):
     probeable = ('spikes', 'voltage', 'refractory_time','adaptation','inhib') #,'inhib'
     
@@ -1472,8 +1551,8 @@ class STDPLIF(AdaptiveLIF):
         # set spiked voltages to zero, refractory times to tau_ref, and
         # rectify negative voltages to a floor of min_voltage
         voltage[voltage < min_voltage] = min_voltage
-        voltage[spiked_mask] = -1 #Reset voltage
-        voltage[refractory_time > 0] = -1 #Refractory voltage
+        voltage[spiked_mask] = 0#-1 #Reset voltage
+        voltage[refractory_time > 0] = 0#-1 #Refractory voltage
         refractory_time[spiked_mask] = self.tau_ref + t_spike
         # ----------------------------
 

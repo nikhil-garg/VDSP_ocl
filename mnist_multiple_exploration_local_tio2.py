@@ -54,20 +54,21 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.9,-0.85,-0.8]
-		, amp_neuron=[0.075,0.1,0.5,1,10]
-		,input_nbr=[1000]
+		vprog = [-0.3,-0.55,-0.6,-0.85,-0.8]
+		, amp_neuron=[0.5,1]
+		,input_nbr=[6000]
 		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [50]
+		, n_neurons = [10]
 		, inhibition_time = [10]
 		, vprog_increment=[0]
 		, tau_ref=[0.002]
 		, synapse_layer_1=[None]
+		, gain_in =[6,2]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -75,9 +76,9 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment,args.tau_ref,args.synapse_layer_1 in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment,args.tau_ref,args.synapse_layer_1,args.gain_in in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)+str(args.synapse_layer_1)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)+str(args.gain_in)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -85,7 +86,7 @@ if __name__ == '__main__':
 		pwd = os.getcwd()
 
 
-		accuracy,accuracy_2, weights = evaluate_mnist_multiple_local_tio2(args)
+		accuracy,accuracy_2, weights, output_spikes,t_data = evaluate_mnist_multiple_local_tio2(args)
 
 
 
@@ -104,6 +105,7 @@ if __name__ == '__main__':
 		                 "vprog_increment":args.vprog_increment,
 		                 "ref":args.tau_ref,
 		                 "synapse_layer_1":args.synapse_layer_1,
+		                 "gain_in":args.gain_in,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
@@ -117,7 +119,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,10))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(10,25))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
@@ -162,9 +164,10 @@ if __name__ == '__main__':
 
 			# plt.subplot(2, 1, 2)
 			# plt.title('Output neurons')
-			# rasterplot(time_points, p_layer_1)
-			# plt.xlabel("Time [s]")
-			# plt.ylabel("Neuron index")
+			rasterplot(t_data, output_spikes)
+			plt.xlabel("Time [s]")
+			plt.ylabel("Neuron index")
+			plt.savefig(folder+'/raster'+str(args.filename)+'.png')
 
 			# plt.tight_layout()
 

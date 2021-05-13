@@ -47,6 +47,8 @@ if __name__ == '__main__':
                         "vprog_increment":[],
                         "voltage_clip_max":[],
                         "voltage_clip_min":[],
+                        "Vapp_multiplier":[],
+                        "gain_in":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -58,23 +60,25 @@ if __name__ == '__main__':
 		df.to_csv(log_dir+'test.csv', index=False)
 
 	parameters = dict(
-		vprog = [-0.9]
-		, amp_neuron=[0.05,0.06,0.075,0.04]
+		vprog = [-0.25]
+		, amp_neuron=[1.5]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
-		,tau_out = [0.06,0.12,0.2]
+		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [50]
+		, n_neurons = [10]
 		, inhibition_time = [10]
-		, tau_ref = [0.002]
+		, tau_ref = [0.002,0.01]
 		, synapse_layer_1=[None]
-		, winit_max = [1]
+		, winit_max = [0.5,1]
 		, vprog_increment = [0]
-		, voltage_clip_max=[None]
-		, voltage_clip_min = [-2]
+		, voltage_clip_max=[2]
+		, voltage_clip_min = [-3]
+		, Vapp_multiplier = [0]
+		, gain_in = [4,6,8]
 		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
@@ -83,10 +87,13 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.seed in product(*param_values):
+
+
+		args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)+str(args.gain_in)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
@@ -113,12 +120,14 @@ if __name__ == '__main__':
 		                 "vprog_increment":args.vprog_increment,
 		                 "voltage_clip_max":args.voltage_clip_max,
 		                 "voltage_clip_min":args.voltage_clip_min,
+		                 "Vapp_multiplier":args.Vapp_multiplier,
+		                 "gain_in":args.gain_in,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
 		
 
-		plot = False
+		plot = True
 		if plot : 	
 			print('accuracy', accuracy)
 			print(args.filename)
@@ -126,7 +135,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,10))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(10,25))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
@@ -147,7 +156,7 @@ if __name__ == '__main__':
 				log_dir = args.log_file_path
 			df.to_csv(log_dir+log_file_name, index=False)   
 
-			fig.savefig(log_dir+'weights.png')
+			fig.savefig(log_dir+args.filename+'weights.png')
 			plt.close()
 
 			plt.hist(weights.flatten())

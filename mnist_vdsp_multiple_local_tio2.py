@@ -59,9 +59,9 @@ def evaluate_mnist_multiple_local_tio2(args):
     image_train_filtered = np.array(image_train_filtered)
     label_train_filtered = np.array(label_train_filtered)
 
-
-    image_train_filtered = (image_train_filtered/255-0.1308)/0.3088
-    image_train_filtered = (image_train_filtered-image_train_filtered.min())/(image_train_filtered.max()-image_train_filtered.min())
+    image_train_filtered = image_train_filtered/255
+    # image_train_filtered = (image_train_filtered/255-0.1308)/0.3088
+    # image_train_filtered = (image_train_filtered-image_train_filtered.min())/(image_train_filtered.max()-image_train_filtered.min())
 
 
 
@@ -163,10 +163,10 @@ def evaluate_mnist_multiple_local_tio2(args):
     # Model construction
     #############################
     with model:
-        # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-        picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
-        true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
-        # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
+        picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        # picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
+        # true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
+        true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
 
         # input layer  
         input_layer = nengo.Ensemble(**input_neurons_args)
@@ -225,10 +225,10 @@ def evaluate_mnist_multiple_local_tio2(args):
     # Model construction
     #############################
     with model:
-        # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-        picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
-        true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
-        # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
+        picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        # picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
+        # true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
+        true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
 
         # input layer  
         input_layer = nengo.Ensemble(**input_neurons_args)
@@ -299,11 +299,11 @@ def evaluate_mnist_multiple_local_tio2(args):
     print("actual input",len(label_test_filtered))
     print(np.bincount(label_test_filtered))
 
-    image_test_filtered = np.array(image_test_filtered)
+    image_test_filtered = np.array(image_test_filtered)/255
     label_test_filtered = np.array(label_test_filtered)
-
-    image_test_filtered = (image_test_filtered/255-0.1308)/0.3088
-    image_test_filtered = (image_test_filtered-image_test_filtered.min())/(image_test_filtered.max()-image_test_filtered.min())
+    # image_test_filtered = image_train_filtered/255
+    # image_test_filtered = (image_test_filtered/255-0.1308)/0.3088
+    # image_test_filtered = (image_test_filtered-image_test_filtered.min())/(image_test_filtered.max()-image_test_filtered.min())
 
     #############################
 
@@ -315,10 +315,10 @@ def evaluate_mnist_multiple_local_tio2(args):
 
     with model:
         # input layer 
-          # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-        picture = nengo.Node(nengo.processes.PresentInput(image_test_filtered, presentation_time=presentation_time))
-        true_label = nengo.Node(nengo.processes.PresentInput(label_test_filtered, presentation_time=presentation_time))
-            # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
+        picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        # picture = nengo.Node(nengo.processes.PresentInput(image_test_filtered, presentation_time=presentation_time))
+        # true_label = nengo.Node(nengo.processes.PresentInput(label_test_filtered, presentation_time=presentation_time))
+        true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
         input_layer = nengo.Ensemble(**input_neurons_args)
 
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
@@ -355,6 +355,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     true_labels = []
     correct_classified = 0
     wrong_classified = 0
+    t_data = sim.trange()
 
 
     class_spikes = np.ones((10,1))
@@ -362,7 +363,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     for num in range(input_nbr):
         #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
-        output_spikes_num = output_spikes[num*int(presentation_time/args.dt):(num+1)*int(presentation_time/args.dt),:] # 0.350/0.005
+        output_spikes_num = output_spikes[num*int((presentation_time + pause_time) /args.dt):(num+1)*int((presentation_time + pause_time) /args.dt),:] # 0.350/0.005
         num_spikes = np.sum(output_spikes_num > 0, axis=0)
 
         for i in range(n_classes):
@@ -385,7 +386,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         class_pred = np.argmax(class_spikes)
         predicted_labels.append(class_pred)
 
-        true_class = labels[(num*int(presentation_time/args.dt))]
+        true_class = labels[(num*int((presentation_time + pause_time) /args.dt))]
         # print(true_class)
         # print(class_pred)
 
@@ -401,7 +402,7 @@ def evaluate_mnist_multiple_local_tio2(args):
         
     accuracy = correct_classified/ (correct_classified+wrong_classified)*100
 
-    accuracy_2 = evaluation(10,n_neurons,int(presentation_time/args.dt) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
+    accuracy_2 = evaluation(10,n_neurons,int((presentation_time+pause_time)/args.dt) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
     # accuracy_2 = evaluation_v2(10,n_neurons,int(presentation_time/args.dt) ,spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
@@ -412,9 +413,9 @@ def evaluate_mnist_multiple_local_tio2(args):
 
     # nni.report_final_result(accuracy)
 
-    del weights, sim.data, labels, output_spikes, class_pred, t_data
+    del weights, sim.data, labels, class_pred
 
-    return accuracy,accuracy_2, last_weight
+    return accuracy,accuracy_2, last_weight, output_spikes, t_data
 
 
     # for tstep in np.arange(0, len(weights), 1):
