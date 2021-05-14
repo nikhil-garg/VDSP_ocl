@@ -62,25 +62,25 @@ if __name__ == '__main__':
 		df.to_csv(log_dir+'test.csv', index=False)
 
 	parameters = dict(
-		vprog = [-0.55,-0.75,0]
-		, amp_neuron=[1,0.5]
+		vprog = [-0.55]
+		, amp_neuron=[1]
 		,input_nbr=[60000]
-		,tau_in = [0.3]
+		,tau_in = [0.06]
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
-		, presentation_time = [0.20]
-		, pause_time = [0.1]
+		, presentation_time = [0.35]
+		, pause_time = [0.15]
 		, dt = [0.005]
-		, n_neurons = [10]
+		, n_neurons = [20]
 		, inhibition_time = [10]
-		, tau_ref = [0.002,0.01]
+		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
 		, winit_max = [0.5]
 		, vprog_increment = [0]
 		, voltage_clip_max=[2]
-		, voltage_clip_min = [-3]
-		, Vapp_multiplier = [1]
+		, voltage_clip_min = [-2]
+		, Vapp_multiplier = [2,3,4,6]
 		, gain_in = [2,4]
 		, noise_input = [0]
 		, seed =[100]
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(10,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
@@ -165,6 +165,7 @@ if __name__ == '__main__':
 			fig.savefig(log_dir+args.filename+'weights.png')
 			plt.close()
 
+			plt.clf()
 			plt.hist(weights.flatten())
 
 			plt.tight_layout()    

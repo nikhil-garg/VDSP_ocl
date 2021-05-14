@@ -589,7 +589,7 @@ def fun_post_tio2(X,
     # vapp = (vprog-vmem)*(1+w*Vapp_multiplier)
     vapp = (vprog-vmem)*Vapp_multiplier
 
-    vapp = np.clip(vapp, -1.5, 1.5)
+    vapp = np.clip(vapp, voltage_clip_min, voltage_clip_max)
     
     cond_pot_fast = w<xp
     cond_pot_slow = 1-cond_pot_fast
