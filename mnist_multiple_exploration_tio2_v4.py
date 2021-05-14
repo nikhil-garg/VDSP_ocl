@@ -72,7 +72,7 @@ if __name__ == '__main__':
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
-		, dt = [0.005]
+		, dt = [0.001]
 		, n_neurons = [20]
 		, inhibition_time = [10]
 		, tau_ref = [0.002]

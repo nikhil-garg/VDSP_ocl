@@ -36,12 +36,20 @@ if __name__ == '__main__':
                         "lr":[],
                         "iterations":[],
                         "presentation_time":[],
+                        "pause_time":[],
                         "dt":[],
                         "n_neurons":[],
                         "inhibition_time":[],
-                        "vprog_increment":[],
-                        "ref":[],
+                        "tau_ref":[],
                         "synapse_layer_1":[],
+                        "winit_max":[],
+                        "vprog_increment":[],
+                        "voltage_clip_max":[],
+                        "voltage_clip_min":[],
+                        "Vapp_multiplier":[],
+                        "gain_in":[],
+                        "bias_in":[],
+                        "noise_input":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -54,21 +62,29 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [0,-0.05,-0.1]
-		, amp_neuron=[0.5,1,1.5]
-		,input_nbr=[6000]
-		,tau_in = [0.06,0.2,0.3]
+		vprog = [0,-0.25,-0.55]
+		, amp_neuron=[1]
+		,input_nbr=[1000]
+		,tau_in = [0.1]
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
+		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [10]
+		, n_neurons = [20]
 		, inhibition_time = [10]
-		, vprog_increment=[0]
-		, tau_ref=[0.002,0.01]
+		, tau_ref = [0.002,0.01]
 		, synapse_layer_1=[None]
-		, gain_in =[2,4]
+		, winit_max = [1]
+		, vprog_increment = [0]
+		, voltage_clip_max=[2]
+		, voltage_clip_min = [-2]
+		, Vapp_multiplier = [1,2,4]
+		, gain_in = [2]
+		, bias_in = [0.2,0.4,0.6]
+		, noise_input = [0]
+		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -76,9 +92,9 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time, args.dt,args.n_neurons,args.inhibition_time,args.vprog_increment,args.tau_ref,args.synapse_layer_1,args.gain_in in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time) + 'vprog_increment'+str(args.vprog_increment)+str(args.dt)+str(args.tau_ref)+str(args.gain_in)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
 		
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -99,13 +115,21 @@ if __name__ == '__main__':
 						 "lr": args.lr,
 						 "iterations":args.iterations,
 		                 "presentation_time":args.presentation_time,
+		                 "pause_time":args.pause_time,
 		                 "dt":args.dt,
 		                 "n_neurons":args.n_neurons,
+		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
-		                 "vprog_increment":args.vprog_increment,
-		                 "ref":args.tau_ref,
+		                 "tau_ref":args.tau_ref,
 		                 "synapse_layer_1":args.synapse_layer_1,
+		                 "winit_max":args.winit_max,
+		                 "vprog_increment":args.vprog_increment,
+		                 "voltage_clip_max":args.voltage_clip_max,
+		                 "voltage_clip_min":args.voltage_clip_min,
+		                 "Vapp_multiplier":args.Vapp_multiplier,
 		                 "gain_in":args.gain_in,
+		                 "bias_in":args.bias_in,
+		                 "noise_input":args.noise_input,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
@@ -119,7 +143,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(10,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)

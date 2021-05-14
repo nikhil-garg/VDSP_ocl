@@ -72,9 +72,9 @@ if __name__ == '__main__':
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
-		, dt = [0.005]
+		, dt = [0.001]
 		, n_neurons = [20]
-		, inhibition_time = [10]
+		, inhibition_time = [2]
 		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
 		, winit_max = [0.5]
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-2]
 		, Vapp_multiplier = [1,2,4]
 		, gain_in = [2]
-		, bias_in = [0.2,0.4,0.6]
+		, bias_in = [0.4,0.6]
 		, noise_input = [0]
 		, seed =[100]
     )
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
 		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2(args)
