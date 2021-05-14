@@ -73,7 +73,7 @@ if __name__ == '__main__':
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.001]
-		, n_neurons = [20]
+		, n_neurons = [10]
 		, inhibition_time = [2]
 		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(10,25))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
