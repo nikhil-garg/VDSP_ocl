@@ -76,7 +76,7 @@ if __name__ == '__main__':
 		, inhibition_time = [10]
 		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
-		, winit_max = [1]
+		, winit_max = [0.25]
 		, vprog_increment = [0]
 		, voltage_clip_max=[2]
 		, voltage_clip_min = [-2]
