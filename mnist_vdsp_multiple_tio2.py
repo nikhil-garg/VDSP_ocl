@@ -70,7 +70,7 @@ def evaluate_mnist_multiple_tio2(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(args.noise_input, (args.noise_input/2)+0.00001), seed=1), 
+            # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(args.noise_input, (args.noise_input/2)+0.00001), seed=1), 
 
             "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron, tau_ref=args.tau_ref)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
@@ -121,10 +121,10 @@ def evaluate_mnist_multiple_tio2(args):
     # Model construction
     #############################
     with model:
-        picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-        # picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
-        # true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
-        true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
+        # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
+        true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
+        # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
         # input layer  
         input_layer = nengo.Ensemble(**input_neurons_args)
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
@@ -152,10 +152,10 @@ def evaluate_mnist_multiple_tio2(args):
 
     with model:
 
-        picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-        # picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
-        # true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
-        true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
+        # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
+        true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
+        # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
         # input layer  
         input_layer = nengo.Ensemble(**input_neurons_args)
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
@@ -194,10 +194,10 @@ def evaluate_mnist_multiple_tio2(args):
 
     with model:
 
-        picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-        # picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
-        # true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
-        true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
+        # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
+        true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
+        # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
         input_layer = nengo.Ensemble(**input_neurons_args)
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
         #first layer

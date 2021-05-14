@@ -71,7 +71,7 @@ if __name__ == '__main__':
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
-		, pause_time = [0.15]
+		, pause_time = [0]
 		, dt = [0.005]
 		, n_neurons = [20]
 		, inhibition_time = [10]
