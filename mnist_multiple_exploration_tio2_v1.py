@@ -50,6 +50,7 @@ if __name__ == '__main__':
                         "voltage_clip_min":[],
                         "Vapp_multiplier":[],
                         "gain_in":[],
+                        "bias_in":[],
                         "noise_input":[],
                         "accuracy":[],
                         "accuracy_2":[]
@@ -70,18 +71,19 @@ if __name__ == '__main__':
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
-		, pause_time = [0.0001]
+		, pause_time = [0.15]
 		, dt = [0.005]
 		, n_neurons = [20]
 		, inhibition_time = [10]
 		, tau_ref = [0.002]
 		, synapse_layer_1=[None]
-		, winit_max = [0.25]
+		, winit_max = [0.5]
 		, vprog_increment = [0]
 		, voltage_clip_max=[2]
 		, voltage_clip_min = [-2]
-		, Vapp_multiplier = [2,3,4,6]
-		, gain_in = [2,4]
+		, Vapp_multiplier = [1,2,4]
+		, gain_in = [2]
+		, bias_in = [0.2,0.4,0.6]
 		, noise_input = [0]
 		, seed =[100]
     )
@@ -91,13 +93,13 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.noise_input,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
 
 
 		# args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref)+'gain-'+str(args.gain_in)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
@@ -127,6 +129,7 @@ if __name__ == '__main__':
 		                 "voltage_clip_min":args.voltage_clip_min,
 		                 "Vapp_multiplier":args.Vapp_multiplier,
 		                 "gain_in":args.gain_in,
+		                 "bias_in":args.bias_in,
 		                 "noise_input":args.noise_input,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
