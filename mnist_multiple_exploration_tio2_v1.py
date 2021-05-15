@@ -72,10 +72,10 @@ if __name__ == '__main__':
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
-		, dt = [0.001]
-		, n_neurons = [10]
-		, inhibition_time = [2]
-		, tau_ref = [0.002]
+		, dt = [0.005]
+		, n_neurons = [20]
+		, inhibition_time = [10]
+		, tau_ref = [0.01]
 		, synapse_layer_1=[None]
 		, winit_max = [0.5]
 		, vprog_increment = [0]
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-2]
 		, Vapp_multiplier = [1,2,4]
 		, gain_in = [2]
-		, bias_in = [0.4,0.6]
+		, bias_in = [0.2,0.4,0.6]
 		, noise_input = [0]
 		, seed =[100]
     )
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
 			columns = int(args.n_neurons/5)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(10,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
