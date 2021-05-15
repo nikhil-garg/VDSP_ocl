@@ -62,17 +62,17 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [0,-0.25]
+		vprog = [-0.25]
 		, amp_neuron=[1]
-		,input_nbr=[6000]
-		,tau_in = [0.2,0.1]
+		,input_nbr=[60000]
+		,tau_in = [0.1]
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [20, 50]
+		, n_neurons = [30,50]
 		, inhibition_time = [10]
 		, tau_ref = [0.01]
 		, synapse_layer_1=[None]
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1.8]
 		, Vapp_multiplier = [1]
 		, gain_in = [2]
-		, bias_in = [0.4,0.6]
+		, bias_in = [0.6]
 		, noise_input = [0]
 		, seed =[100]
     )
@@ -197,7 +197,7 @@ if __name__ == '__main__':
 
 			# plt.savefig(folder+'/raster'+str(args.filename)+'.png')
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_6'+'.csv'
+		log_file_name = 'accuracy_log_7'+'.csv'
 		pwd = os.getcwd()
 
 		if args.log_file_path is None:

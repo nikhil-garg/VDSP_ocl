@@ -148,6 +148,14 @@ def evaluate_mnist_multiple_tio2(args):
 
     sim.close()
 
+
+
+    #Neuron class assingment
+
+    images = image_train_filtered
+    labels = label_train_filtered
+
+
     model = nengo.Network("My network", seed = args.seed)
 
     with model:
@@ -188,6 +196,15 @@ def evaluate_mnist_multiple_tio2(args):
                 max_spike_times = num_spikes
     spikes_layer1_probe_train = sim.data[p_layer_1]
 
+
+
+    #Testing
+
+    images = image_test_filtered
+    labels = label_test_filtered
+
+
+
     input_nbr = 10000
     
     model = nengo.Network(label="My network",)
@@ -211,9 +228,9 @@ def evaluate_mnist_multiple_tio2(args):
 
     with nengo.Simulator(model,dt=args.dt) as sim:
            
-        sim.run(step_time * label_test_filtered.shape[0])
+        sim.run(presentation_time * label_test_filtered.shape[0])
 
-    accuracy_2 = evaluation_v2(10,n_neurons,int(((step_time * label_test_filtered.shape[0]) / sim.dt) / input_nbr),spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
+    accuracy_2 = evaluation_v2(10,n_neurons,int(((presentation_time * label_test_filtered.shape[0]) / sim.dt) / input_nbr),spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
 
     labels = sim.data[p_true_label][:,0]
@@ -228,8 +245,9 @@ def evaluate_mnist_multiple_tio2(args):
     class_spikes = np.ones((10,1))
 
     for num in range(input_nbr):
+        #np.sum(sim.data[my_spike_probe] > 0, axis=0)
 
-        output_spikes_num = output_spikes[num*int((presentation_time+pause_time)/args.dt):(num+1)*int((presentation_time+pause_time)/args.dt),:] # 0.350/0.005
+        output_spikes_num = output_spikes[num*int((presentation_time + pause_time) /args.dt):(num+1)*int((presentation_time + pause_time) /args.dt),:] # 0.350/0.005
         num_spikes = np.sum(output_spikes_num > 0, axis=0)
 
         for i in range(n_classes):
@@ -246,16 +264,25 @@ def evaluate_mnist_multiple_tio2(args):
                 class_spikes[i] = sum_temp
                 # class_spikes[i] = sum_temp/count_temp
 
+        # print(class_spikes)
         k = np.argmax(num_spikes)
+        # predicted_labels.append(neuron_class[k])
         class_pred = np.argmax(class_spikes)
         predicted_labels.append(class_pred)
 
-        true_class = labels[(num*int((presentation_time+pause_time)/args.dt))]
+        true_class = labels[(num*int((presentation_time + pause_time) /args.dt))]
+        # print(true_class)
+        # print(class_pred)
 
+        # if(neuron_class[k] == true_class):
+        #     correct_classified+=1
+        # else:
+        #     wrong_classified+=1
         if(class_pred == true_class):
             correct_classified+=1
         else:
             wrong_classified+=1
+
         
     accuracy = correct_classified/ (correct_classified+wrong_classified)*100
     print("Accuracy: ", accuracy)
