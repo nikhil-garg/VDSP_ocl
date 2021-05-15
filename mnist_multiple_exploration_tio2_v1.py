@@ -63,7 +63,7 @@ if __name__ == '__main__':
 		df.to_csv(log_dir+'test.csv', index=False)
 
 	parameters = dict(
-		vprog = [-0.55]
+		vprog = [-0.25]
 		, amp_neuron=[1]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1.8]
 		, Vapp_multiplier = [1,2,4]
 		, gain_in = [2]
-		, bias_in = [0.2,0.4,0.6]
+		, bias_in = [0.4,0.6]
 		, noise_input = [0]
 		, seed =[100]
     )

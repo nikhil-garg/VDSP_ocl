@@ -75,7 +75,7 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [20]
 		, inhibition_time = [10]
-		, tau_ref = [0.01,0.002]
+		, tau_ref = [0.01]
 		, synapse_layer_1=[None]
 		, winit_max = [0.5]
 		, vprog_increment = [0]
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1.8]
 		, Vapp_multiplier = [2,4]
 		, gain_in = [2]
-		, bias_in = [0.2,0.4,0.6]
+		, bias_in = [0.4,0.6]
 		, noise_input = [0]
 		, seed =[100]
     )
