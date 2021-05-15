@@ -66,7 +66,7 @@ if __name__ == '__main__':
 		vprog = [-0.15]
 		, amp_neuron=[1]
 		,input_nbr=[60000]
-		,tau_in = [0.06,0.1]
+		,tau_in = [0.1,0.06]
 		,tau_out = [0.06,0.1]
 		, lr = [1]
 		, iterations=[1]
