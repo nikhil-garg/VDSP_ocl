@@ -63,8 +63,8 @@ if __name__ == '__main__':
 		df.to_csv(log_dir+'test.csv', index=False)
 
 	parameters = dict(
-		vprog = [-0.15]
-		, amp_neuron=[1.25,0.75]
+		vprog = [0]
+		, amp_neuron=[1.5,0.05]
 		,input_nbr=[60000]
 		,tau_in = [0.03]
 		,tau_out = [0.06,0.1]
