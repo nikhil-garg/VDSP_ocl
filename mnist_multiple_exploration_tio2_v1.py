@@ -75,7 +75,7 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [20,30,50,70,100,150,200]
 		, inhibition_time = [10]
-		, tau_ref = [0.01,0.002]
+		, tau_ref = [0.01]
 		, synapse_layer_1=[0.004]
 		, winit_max = [1]
 		, vprog_increment = [0]
