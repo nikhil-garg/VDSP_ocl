@@ -70,7 +70,7 @@ if __name__ == '__main__':
 		,tau_out = [0.06]
 		, lr = [1,0.1,0.001,0.0001]
 		, iterations=[1]
-		, presentation_time = [0.20]
+		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
 		, n_neurons = [50]

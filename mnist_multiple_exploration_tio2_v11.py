@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1.8]
 		, Vapp_multiplier = [1]
 		, gain_in = [3,4]
-		, bias_in = [1.1]
+		, bias_in = [0.9]
 		, noise_input = [0]
 		, seed =[100]
     )
