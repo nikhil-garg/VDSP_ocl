@@ -62,6 +62,15 @@ sbatch slrum_trial_tio2_v5.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_v6.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_v7.sh --log_file_path $OUTDIR
 
+sbatch slrum_trial_tio2_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v9.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v10.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v11.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v12.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v13.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v14.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v15.sh --log_file_path $OUTDIR
+
 
 sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
