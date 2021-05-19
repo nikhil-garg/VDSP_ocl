@@ -50,7 +50,7 @@ def evaluate_mnist_multiple_tio2(args):
     #Presentation time
     presentation_time = args.presentation_time #0.20
     #Pause time
-    pause_time = args.pause_time
+    pause_time = args.pause_time + 0.0001
     #Iterations
     iterations=args.iterations
     #Input layer parameters
@@ -121,10 +121,10 @@ def evaluate_mnist_multiple_tio2(args):
     # Model construction
     #############################
     with model:
-        # picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
-        picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
-        true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
-        # true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
+        picture = nengo.Node(PresentInputWithPause(images, presentation_time, pause_time,0))
+        # picture = nengo.Node(nengo.processes.PresentInput(images, presentation_time=presentation_time))
+        # true_label = nengo.Node(nengo.processes.PresentInput(labels, presentation_time=presentation_time))
+        true_label = nengo.Node(PresentInputWithPause(labels, presentation_time, pause_time,-1))
         # input layer  
         input_layer = nengo.Ensemble(**input_neurons_args)
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)

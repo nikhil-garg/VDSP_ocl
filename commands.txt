@@ -71,6 +71,22 @@ sbatch slrum_trial_tio2_v13.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_v14.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_v15.sh --log_file_path $OUTDIR
 
+sbatch slrum_trial_tio2_v16.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v17.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v18.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v19.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v20.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v21.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v22.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_v23.sh --log_file_path $OUTDIR
+
+
+git add --all
+git commit -m updates
+git push
+
+
+
 
 sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
