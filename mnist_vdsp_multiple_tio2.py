@@ -148,7 +148,7 @@ def evaluate_mnist_multiple_tio2(args):
 
     sim.close()
 
-
+    pause_time = 0
 
     #Neuron class assingment
 

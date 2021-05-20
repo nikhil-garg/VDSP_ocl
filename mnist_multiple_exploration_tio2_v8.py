@@ -80,7 +80,7 @@ if __name__ == '__main__':
 		, inhibition_time = [10]
 		, tau_ref_in = [0.002]
 		, tau_ref_out = [0.002]
-		, inc_n = [0.01,0.02,0.03]
+		, inc_n = [0.001]
 		, tau_n = [1]
 		, synapse_layer_1=[0.004]
 		, winit_max = [1]

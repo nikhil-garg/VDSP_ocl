@@ -52,16 +52,16 @@ if __name__ == '__main__':
 
 
 	parameters = dict(
-		vprog = [-0.90]
+		vprog = [-0.55]
 		, amp_neuron=[0.1]
-		,input_nbr=[1000]
-		,tau_in = [0.06]
+		,input_nbr=[100]
+		,tau_in = [0.03]
 		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, dt = [0.005]
-		, n_neurons = [50,100,200,400]
+		, n_neurons = [20]
 		, inhibition_time = [10]
 		, vprog_increment=[0]
     )

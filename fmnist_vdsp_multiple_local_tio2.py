@@ -32,6 +32,9 @@ import itertools
 import random
 import logging
 
+
+from DataLog import DataLog
+
 # import nni
 
 
@@ -56,12 +59,12 @@ def evaluate_fmnist_multiple_local_tio2(args):
         image_train_filtered.append(image_train[i])
         label_train_filtered.append(label_train[i])
 
-    image_train_filtered = np.array(image_train_filtered)
+    image_train_filtered = np.array(image_train_filtered)/255
     label_train_filtered = np.array(label_train_filtered)
 
 
-    image_train_filtered = (image_train_filtered/255-0.2859)/0.3530
-    image_train_filtered = 255*(image_train_filtered-image_train_filtered.min())/(image_train_filtered.max()-image_train_filtered.min())
+    # image_train_filtered = (image_train_filtered/255-0.2859)/0.3530
+    # image_train_filtered = 255*(image_train_filtered-image_train_filtered.min())/(image_train_filtered.max()-image_train_filtered.min())
 
 
 
@@ -107,7 +110,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron,tau_ref=args.tau_ref)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -124,7 +127,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
-            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref)
+            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time)
     }
 
     # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 20), seed=1),     
@@ -145,6 +148,10 @@ def evaluate_fmnist_multiple_local_tio2(args):
             "vthp":0.5,
             "vthn":0.5,
             "vprog_increment":args.vprog_increment,
+            "voltage_clip_max":args.voltage_clip_max,
+            "voltage_clip_min":args.voltage_clip_min,
+            "Vapp_multiplier":args.Vapp_multiplier,
+
     #         "tpw":50,
     #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
@@ -154,7 +161,11 @@ def evaluate_fmnist_multiple_local_tio2(args):
 
     images = image_train_filtered
     labels = label_train_filtered
+    # Log
+    full_log = False
 
+    # if(not full_log):
+    log = DataLog()
 
     model = nengo.Network("My network", seed = 1)
     #############################
@@ -174,7 +185,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v3_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v2_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
@@ -185,18 +196,24 @@ def evaluate_fmnist_multiple_local_tio2(args):
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
 
         #Probes
+        # layer1_synapses_probe = nengo.Probe(conn1,"weights",label="layer1_synapses") # ('output', 'input', 'weights')
+        layer1_voltage_probe = nengo.Probe(layer1.neurons, "voltage", label="layer1_voltage") # ('output', 'input', 'spikes', 'voltage', 'refractory_time', 'adaptation', 'inhib')
+        layer1_spikes_probe = nengo.Probe(layer1.neurons, "spikes", label="layer1_spikes") 
         # p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
         # p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
         # p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
+        # if(not full_log):
+        nengo.Node(log)
 
         weights = w.output.history
 
         
-
+    Args = {"backend":"Nengo","Dataset":"fashion_mnist","Labels":label_train_filtered,"step_time":presentation_time,"input_nbr":input_nbr}
     # with nengo_ocl.Simulator(model) as sim :   
     with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
-
+        if(not full_log):
+            log.set(sim,"log.txt",True,False)
         
         w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
@@ -277,7 +294,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 6000
+    input_nbr = 60
     # input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
@@ -297,11 +314,11 @@ def evaluate_fmnist_multiple_local_tio2(args):
     print("actual input",len(label_test_filtered))
     print(np.bincount(label_test_filtered))
 
-    image_test_filtered = np.array(image_test_filtered)
+    image_test_filtered = np.array(image_test_filtered)/255
     label_test_filtered = np.array(label_test_filtered)
 
-    image_test_filtered = (image_test_filtered/255-0.2859)/0.3530
-    image_test_filtered = 255*(image_test_filtered-image_test_filtered.min())/(image_test_filtered.max()-image_test_filtered.min())
+    # image_test_filtered = (image_test_filtered/255-0.2859)/0.3530
+    # image_test_filtered = 255*(image_test_filtered-image_test_filtered.min())/(image_test_filtered.max()-image_test_filtered.min())
 
     #############################
 
