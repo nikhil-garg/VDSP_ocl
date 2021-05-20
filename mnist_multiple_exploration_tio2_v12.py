@@ -42,7 +42,10 @@ if __name__ == '__main__':
                         "dt":[],
                         "n_neurons":[],
                         "inhibition_time":[],
-                        "tau_ref":[],
+                        "tau_ref_in":[],
+                        "tau_ref_out":[],
+                        "inc_n":[],
+                        "tau_n":[],
                         "synapse_layer_1":[],
                         "winit_max":[],
                         "vprog_increment":[],
@@ -64,25 +67,28 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [0]
-		, amp_neuron=[0.75]
+		, amp_neuron=[0.5,0.75,1]
 		,input_nbr=[60000]
-		,tau_in = [0.1,0.06,0.03]
-		,tau_out = [0.03]
+		,tau_in = [0.1]
+		,tau_out = [0.06]
 		, lr = [1]
 		, iterations=[1]
-		, presentation_time = [0.20]
+		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
-		, tau_ref = [0.002]
+		, tau_ref_in = [0.002]
+		, tau_ref_out = [0.002]
+		, inc_n = [0.01]
+		, tau_n = [1]
 		, synapse_layer_1=[0.004]
 		, winit_max = [1]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
 		, voltage_clip_min = [-1.8]
 		, Vapp_multiplier = [1]
-		, gain_in = [3.5,4.5]
+		, gain_in = [3,4]
 		, bias_in = [0.9]
 		, noise_input = [0]
 		, seed =[100]
@@ -93,13 +99,13 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref_in,args.tau_ref_out,args.inc_n,args.tau_n,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
 
 
 		# args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+'.csv'
@@ -121,7 +127,10 @@ if __name__ == '__main__':
 		                 "n_neurons":args.n_neurons,
 		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
-		                 "tau_ref":args.tau_ref,
+		                 "tau_ref_in":args.tau_ref_in,
+		                 "tau_ref_out":args.tau_ref_out,
+		                 "inc_n":args.inc_n,
+		                 "tau_n":args.tau_n,
 		                 "synapse_layer_1":args.synapse_layer_1,
 		                 "winit_max":args.winit_max,
 		                 "vprog_increment":args.vprog_increment,

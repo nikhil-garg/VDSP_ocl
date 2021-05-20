@@ -61,7 +61,7 @@ def args():
 
     parser.add_argument(
         "--amp_neuron",
-        default=0.1,
+        default=0.5,
         type=float,
         help="Transform from synapse to output neurons"
     )
@@ -99,7 +99,7 @@ def args():
 
     parser.add_argument(
         "--vprog",
-        default=-0.9,
+        default=0,
         type=float,
         help="vprog",
     )
@@ -234,7 +234,13 @@ def args():
     )
 
     parser.add_argument(
-        "--tau_ref",
+        "--tau_ref_in",
+        default=0.002,
+        type=float,
+        help="Refractory period",
+    )
+    parser.add_argument(
+        "--tau_ref_out",
         default=0.002,
         type=float,
         help="Refractory period",
