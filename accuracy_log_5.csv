@@ -1,2 +1,2 @@
 vprog,amp_neuron,vth,input_nbr,tau_in,tau_out,lr,iterations,presentation_time,dt,n_neurons,inhibition_time,vprog_increment,accuracy,accuracy_2
--0.55,0.1,0.5,100.0,0.03,0.06,1.0,1.0,0.35,0.005,20.0,10.0,0.0,8.333333333333332,36.67
+-0.55,0.1,0.5,200.0,0.03,0.06,1.0,1.0,0.35,0.005,20.0,10.0,0.0,18.333333333333332,36.67

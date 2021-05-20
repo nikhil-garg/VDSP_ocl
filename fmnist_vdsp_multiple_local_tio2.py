@@ -33,7 +33,9 @@ import random
 import logging
 
 
-from DataLog import DataLog
+# from DataLog import DataLog
+
+from simulators_Nengo_MongoDB import *
 
 # import nni
 
@@ -165,7 +167,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
     full_log = False
 
     # if(not full_log):
-    log = DataLog()
+    log = Nengo_MongoDB()
 
     model = nengo.Network("My network", seed = 1)
     #############################
@@ -209,17 +211,17 @@ def evaluate_fmnist_multiple_local_tio2(args):
         weights = w.output.history
 
         
-    Args = {"backend":"Nengo","Dataset":"fashion_mnist","Labels":label_train_filtered,"step_time":presentation_time,"input_nbr":input_nbr}
+    Args = {"backend":"Nengo","Dataset":"fashion_mnist","Labels":labels,"step_time":presentation_time,"input_nbr":input_nbr}
     # with nengo_ocl.Simulator(model) as sim :   
     with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
-        if(not full_log):
-            log.set(sim,"log.txt",True,False)
+        # if(not full_log):
+        log.set(sim,Args)
         
         w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         
         
-        sim.run((presentation_time+pause_time) * labels.shape[0])
+        sim.run((presentation_time) * labels.shape[0])
 
     #save the model
     # now = time.strftime("%Y%m%d-%H%M%S")
@@ -424,7 +426,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
     print("Accuracy 2: ", accuracy_2)
 
     sim.close()
-
+    log.closeLog()
     # nni.report_final_result(accuracy)
 
     del weights, sim.data, labels, output_spikes, class_pred, t_data
