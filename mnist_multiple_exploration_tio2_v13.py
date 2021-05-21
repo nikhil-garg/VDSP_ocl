@@ -69,24 +69,24 @@ if __name__ == '__main__':
 		vprog = [0]
 		, amp_neuron=[0.5]
 		,input_nbr=[60000]
-		,tau_in = [0.03]
-		,tau_out = [0.06]
+		,tau_in = [0.02]
+		,tau_out = [0.03]
 		, lr = [1]
 		, iterations=[1]
-		, presentation_time = [0.35]
+		, presentation_time = [0.20]
 		, pause_time = [0]
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
-		, tau_ref_in = [0.002,0.005,0.01]
+		, tau_ref_in = [0.002,0.005]
 		, tau_ref_out = [0.002,0.005]
-		, inc_n = [0.01]
+		, inc_n = [0.001]
 		, tau_n = [1]
-		, synapse_layer_1=[0.004]
+		, synapse_layer_1=[0.005]
 		, winit_max = [1]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
-		, voltage_clip_min = [-1.8]
+		, voltage_clip_min = [-1.8,-1.5]
 		, Vapp_multiplier = [1]
 		, gain_in = [3]
 		, bias_in = [0.9]
@@ -105,7 +105,7 @@ if __name__ == '__main__':
 		# args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+'.csv'
