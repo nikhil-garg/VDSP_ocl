@@ -82,7 +82,7 @@ if __name__ == '__main__':
 		, tau_ref_out = [0.002,0.005]
 		, inc_n = [0.01]
 		, tau_n = [1]
-		, synapse_layer_1=[0.004]
+		, synapse_layer_1=[0.005]
 		, winit_max = [1]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
