@@ -74,7 +74,7 @@ if __name__ == '__main__':
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.2,0.35]
-		, pause_time = [0.0001]
+		, pause_time = [0]
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
@@ -181,7 +181,7 @@ if __name__ == '__main__':
 			plt.hist(weights.flatten())
 
 			plt.tight_layout()    
-			plt.savefig(log_dir+'histogram.png')
+			plt.savefig(log_dir+args.filename+'histogram.png')
 
 
 			# plt.figure(figsize=(12,10))

@@ -74,7 +74,7 @@ if __name__ == '__main__':
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.2,0.35]
-		, pause_time = [0.0001]
+		, pause_time = [0]
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
@@ -82,13 +82,13 @@ if __name__ == '__main__':
 		, tau_ref_out = [0.002,0.005]
 		, inc_n = [0.01]
 		, tau_n = [1]
-		, synapse_layer_1=[0.005]
+		, synapse_layer_1=[0.004]
 		, winit_max = [1]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
 		, voltage_clip_min = [-1.5]
 		, Vapp_multiplier = [1]
-		, gain_in = [4]
+		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
 		, seed =[100]
@@ -181,7 +181,7 @@ if __name__ == '__main__':
 			plt.hist(weights.flatten())
 
 			plt.tight_layout()    
-			plt.savefig(log_dir+'histogram.png')
+			plt.savefig(log_dir+args.filename+'histogram.png')
 
 
 			# plt.figure(figsize=(12,10))
