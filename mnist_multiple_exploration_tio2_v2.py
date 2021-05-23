@@ -67,14 +67,14 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [0]
-		, amp_neuron=[0.5,0.75]
+		, amp_neuron=[0.5]
 		,input_nbr=[60000]
-		,tau_in = [0.03,0.1]
+		,tau_in = [0.03]
 		,tau_out = [0.03]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.2]
-		, pause_time = [0.1]
+		, pause_time = [0]
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
@@ -82,13 +82,13 @@ if __name__ == '__main__':
 		, tau_ref_out = [0.002,0.005,0.01]
 		, inc_n = [0.01]
 		, tau_n = [1]
-		, synapse_layer_1=[0.004]
+		, synapse_layer_1=[0.005,0.004]
 		, winit_max = [1]
 		, vprog_increment = [0]
-		, voltage_clip_max=[1.8]
+		, voltage_clip_max=[1.5]
 		, voltage_clip_min = [-1.5]
 		, Vapp_multiplier = [1]
-		, gain_in = [3.5]
+		, gain_in = [4]
 		, bias_in = [0.85]
 		, noise_input = [0]
 		, seed =[100]
@@ -181,7 +181,7 @@ if __name__ == '__main__':
 			plt.hist(weights.flatten())
 
 			plt.tight_layout()    
-			plt.savefig(log_dir+'histogram.png')
+			plt.savefig(log_dir+args.filename+'histogram.png')
 
 
 			# plt.figure(figsize=(12,10))
