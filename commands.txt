@@ -85,7 +85,7 @@ git add --all
 git commit -m updates
 git push
 
-
+mongod --dbpath ~/Desktop/mongodata/
 
 
 sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR

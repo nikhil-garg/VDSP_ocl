@@ -36,7 +36,7 @@ import logging
 # from DataLog import DataLog
 
 from simulators_Nengo_MongoDB import *
-
+import tensorflow as tf
 # import nni
 
 
@@ -47,7 +47,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
     #############################
     input_nbr = args.input_nbr
 
-    (image_train, label_train), (image_test, label_test) = (keras.datasets.fashion_mnist.load_data())
+    (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.fashion_mnist.load_data())
 
     probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
     # # probe_sample_rate = 1000
