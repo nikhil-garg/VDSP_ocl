@@ -76,7 +76,7 @@ if __name__ == '__main__':
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [50,30,70]
+		, n_neurons = [50]
 		, inhibition_time = [10]
 		, tau_ref_in = [0.01]
 		, tau_ref_out = [0.005]
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
-		, seed =[100]
+		, seed =[100,200,300]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -105,7 +105,7 @@ if __name__ == '__main__':
 		# args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)+str(args.n_neurons)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+'.csv'
@@ -152,8 +152,9 @@ if __name__ == '__main__':
 			# weights = weights[-1]#Taking only the last weight for plotting
 
 			columns = int(args.n_neurons/5)
+			rows = int(args.n_neurons/columns)
 
-			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(20,25))
+			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(columns*5,rows*5))
 
 			for i in range(0,(args.n_neurons)):
 				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
