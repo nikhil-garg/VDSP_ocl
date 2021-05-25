@@ -202,8 +202,8 @@ def evaluate_fmnist_multiple_local_tio2(args):
         layer1_voltage_probe = nengo.Probe(layer1.neurons, "voltage", label="layer1_voltage") # ('output', 'input', 'spikes', 'voltage', 'refractory_time', 'adaptation', 'inhib')
         layer1_spikes_probe = nengo.Probe(layer1.neurons, "spikes", label="layer1_spikes") 
         # p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
-        # p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
-        # p_layer_1 = nengo.Probe(layer1.neurons, sample_every=probe_sample_rate)
+        p_input_layer = nengo.Probe(input_layer.neurons)
+        p_layer_1 = nengo.Probe(layer1.neurons)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
         # if(not full_log):
         nengo.Node(log)
@@ -222,7 +222,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
         
         
         sim.run((presentation_time) * labels.shape[0])
-
+    log.closeLog()
     #save the model
     # now = time.strftime("%Y%m%d-%H%M%S")
     # folder = os.getcwd()+"/MNIST_VDSP"+now
@@ -426,7 +426,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
     print("Accuracy 2: ", accuracy_2)
 
     sim.close()
-    log.closeLog()
+    
     # nni.report_final_result(accuracy)
 
     del weights, sim.data, labels, output_spikes, class_pred, t_data
