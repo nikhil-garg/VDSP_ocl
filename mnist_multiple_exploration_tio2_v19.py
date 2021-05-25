@@ -71,7 +71,7 @@ if __name__ == '__main__':
 		,input_nbr=[60000]
 		,tau_in = [0.03]
 		,tau_out = [0.03]
-		, lr = [1]
+		, lr = [0.5]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
