@@ -69,7 +69,7 @@ if __name__ == '__main__':
 		vprog = [0]
 		, amp_neuron=[0.5]
 		,input_nbr=[60000]
-		,tau_in = [0.025]
+		,tau_in = [0.03]
 		,tau_out = [0.03]
 		, lr = [1]
 		, iterations=[1]
@@ -85,11 +85,11 @@ if __name__ == '__main__':
 		, synapse_layer_1=[0.005]
 		, winit_max = [1]
 		, vprog_increment = [0]
-		, voltage_clip_max=[1.5,1.25]
-		, voltage_clip_min = [-1.5,-1.25,-1]
+		, voltage_clip_max=[1.8,1.7,1.6,1.5]
+		, voltage_clip_min = [-1.5]
 		, Vapp_multiplier = [1]
-		, gain_in = [3.25]
-		, bias_in = [0.8]
+		, gain_in = [3.5]
+		, bias_in = [0.85]
 		, noise_input = [0]
 		, seed =[100]
     )
@@ -105,7 +105,7 @@ if __name__ == '__main__':
 		# args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)+str(args.n_neurons)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)+str(args.n_neurons)+str(args.seed)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+'.csv'

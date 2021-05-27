@@ -192,7 +192,7 @@ class MyLIF_in(LIFRate):
         voltage -= (J - voltage) * np.expm1(-delta_t / tau_rc)
 
         # determine which neurons spiked (set them to 1/dt, else 0)
-        spiked_mask = voltage > 1.5
+        spiked_mask = voltage > 1.8
         output[:] = spiked_mask * (self.amplitude / dt)
 
         # set v(0) = 1 and solve for t to compute the spike time
@@ -203,7 +203,7 @@ class MyLIF_in(LIFRate):
         # set spiked voltages to zero, refractory times to tau_ref, and
         # rectify negative voltages to a floor of min_voltage
         voltage[voltage < min_voltage] = min_voltage
-        voltage[spiked_mask] = -1.5 #reset voltage
+        voltage[spiked_mask] = -1.8 #reset voltage
         refractory_time[spiked_mask] = self.tau_ref + t_spike
 
 def plan_MyLIF_in(
