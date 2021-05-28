@@ -32,6 +32,10 @@ import itertools
 import random
 import logging
 
+
+from simulators_Nengo_MongoDB import *
+import tensorflow as tf
+
 # import nni
 
 
@@ -42,7 +46,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     #############################
     input_nbr = args.input_nbr
 
-    (image_train, label_train), (image_test, label_test) = (keras.datasets.mnist.load_data())
+    (image_train, label_train), (image_test, label_test) = (tf.keras.datasets.mnist.load_data())
 
     probe_sample_rate = (input_nbr/10)/1000 #Probe sample rate. Proportional to input_nbr to scale down sampling rate of simulations 
     # # probe_sample_rate = 1000
@@ -107,7 +111,9 @@ def evaluate_mnist_multiple_local_tio2(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron,tau_ref=args.tau_ref)
+            # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(args.noise_input, (args.noise_input/2)+0.00001), seed=1), 
+
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1.8, amplitude=args.amp_neuron, tau_ref=args.tau_ref_in)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -124,41 +130,33 @@ def evaluate_mnist_multiple_local_tio2(args):
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
-            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref)
+            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref_out,inc_n=args.inc_n,tau_n=args.tau_n)
     }
-
-    # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 20), seed=1),     
-
-    #Lateral Inhibition parameters
-    # lateral_inhib_args = {
-    #         "transform": inhib_factor* (np.full((n_neurons, n_neurons), 1) - np.eye(n_neurons)),
-    #         "synapse":args.inhib_synapse,
-    #         "label":"Lateral Inhibition"
-    # }
 
     #Learning rule parameters
     learning_args = {
             "lr": args.lr,
             "winit_min":0,
-            "winit_max":1,
+            "winit_max":args.winit_max,
             "vprog":args.vprog, 
             "vthp":0.5,
             "vthn":0.5,
+            "gmax":0.0008,
+            "gmin":0.00008,
             "vprog_increment":args.vprog_increment,
             "voltage_clip_max":args.voltage_clip_max,
             "voltage_clip_min":args.voltage_clip_min,
             "Vapp_multiplier":args.Vapp_multiplier,
-
-    #         "tpw":50,
-    #         "prev_flag":True,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
+
 
     # argument_string = "presentation_time: "+ str(presentation_time)+ "\n pause_time: "+ str(pause_time)+ "\n input_neurons_args: " + str(input_neurons_args)+ " \n layer_1_neuron_args: " + str(layer_1_neurons_args)+"\n Lateral Inhibition parameters: " + str(lateral_inhib_args) + "\n learning parameters: " + str(learning_args)+ "\n g_max: "+ str(g_max) 
 
     images = image_train_filtered
     labels = label_train_filtered
 
+    log = Nengo_MongoDB()
 
     model = nengo.Network("My network", seed = 1)
     #############################
@@ -187,7 +185,15 @@ def evaluate_mnist_multiple_local_tio2(args):
 
         #Lateral inhibition
         # inhib = nengo.Connection(layer1.neurons,layer1.neurons,**lateral_inhib_args) 
-
+        layer1_voltage_probe = nengo.Probe(layer1.neurons, "voltage", label="layer1_voltage") # ('output', 'input', 'spikes', 'voltage', 'refractory_time', 'adaptation', 'inhib')
+        layer1_spikes_probe = nengo.Probe(layer1.neurons, "spikes", label="layer1_spikes") 
+        # p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
+        # p_input_layer = nengo.Probe(input_layer.neurons,label='input_layer')
+        # p_layer_1 = nengo.Probe(layer1.neurons)
+        # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
+        # if(not full_log):
+        
+        nengo.Node(log)
         #Probes
         # p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
         # p_input_layer = nengo.Probe(input_layer.neurons, sample_every=probe_sample_rate)
@@ -197,11 +203,12 @@ def evaluate_mnist_multiple_local_tio2(args):
         weights = w.output.history
 
         
+    Args = {"backend":"Nengo","Dataset":"mnist","Labels":labels,"step_time":presentation_time,"input_nbr":input_nbr}
 
     # with nengo_ocl.Simulator(model) as sim :   
     with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
 
-        
+        log.set(sim,Args,weights)
         w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         
@@ -213,6 +220,7 @@ def evaluate_mnist_multiple_local_tio2(args):
     # folder = os.getcwd()+"/MNIST_VDSP"+now
     # os.mkdir(folder)
     # print(weights)
+    log.closeLog()
     
     # weights = sim.data[weights_probe]
 
@@ -281,8 +289,8 @@ def evaluate_mnist_multiple_local_tio2(args):
     '''
 
     # img_rows, img_cols = 28, 28
-    input_nbr = 10000
-    # input_nbr = int(args.input_nbr/6)
+    # input_nbr = 10000
+    input_nbr = int(args.input_nbr/6)
 
     # Dataset = "Mnist"
     # # (image_train, label_train), (image_test, label_test) = load_mnist()
@@ -406,6 +414,7 @@ def evaluate_mnist_multiple_local_tio2(args):
 
     accuracy_2 = evaluation(10,n_neurons,int((presentation_time+pause_time)/args.dt) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
+    # log.storeTestInfo(accuracy,neuron_class,layer1)
     # accuracy_2 = evaluation_v2(10,n_neurons,int(presentation_time/args.dt) ,spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
     print("Accuracy: ", accuracy)

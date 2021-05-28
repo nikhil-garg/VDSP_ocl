@@ -71,7 +71,7 @@ if __name__ == '__main__':
 		,input_nbr=[60000]
 		,tau_in = [0.03]
 		,tau_out = [0.03]
-		, lr = [1]
+		, lr = [0.65,0.60,0.55,0.5]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1.5]
 		, Vapp_multiplier = [1]
 		, gain_in = [3.5]
-		, bias_in = [0.83,0.84,0.85,0.86,0.87]
+		, bias_in = [0.85]
 		, noise_input = [0]
 		, seed =[100]
     )

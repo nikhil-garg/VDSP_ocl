@@ -27,6 +27,8 @@ if __name__ == '__main__':
 	random.seed(seed)
 	np.random.seed(seed)
 	pwd = os.getcwd()
+
+
 	df = pd.DataFrame({	"vprog":[],
 						"amp_neuron":[],
 						"vth":[],
@@ -40,7 +42,10 @@ if __name__ == '__main__':
                         "dt":[],
                         "n_neurons":[],
                         "inhibition_time":[],
-                        "tau_ref":[],
+                        "tau_ref_in":[],
+                        "tau_ref_out":[],
+                        "inc_n":[],
+                        "tau_n":[],
                         "synapse_layer_1":[],
                         "winit_max":[],
                         "vprog_increment":[],
@@ -60,29 +65,31 @@ if __name__ == '__main__':
 		log_dir = args.log_file_path
 		df.to_csv(log_dir+'test.csv', index=False)
 
-
 	parameters = dict(
-		vprog = [-0.25]
-		, amp_neuron=[1]
+		vprog = [0]
+		, amp_neuron=[0.5]
 		,input_nbr=[6000]
-		,tau_in = [0.06]
-		,tau_out = [0.06]
-		, lr = [1]
+		,tau_in = [0.03]
+		,tau_out = [0.03]
+		, lr = [0.5]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [30,50,100,150,200,300]
+		, n_neurons = [20]
 		, inhibition_time = [10]
-		, tau_ref = [0.01]
-		, synapse_layer_1=[None]
+		, tau_ref_in = [0.01]
+		, tau_ref_out = [0.005]
+		, inc_n = [0.01]
+		, tau_n = [1]
+		, synapse_layer_1=[0.005]
 		, winit_max = [1]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
-		, voltage_clip_min = [-1.8]
+		, voltage_clip_min = [-1.5]
 		, Vapp_multiplier = [1]
-		, gain_in = [2]
-		, bias_in = [0.6]
+		, gain_in = [3.5]
+		, bias_in = [0.85]
 		, noise_input = [0]
 		, seed =[100]
     )
@@ -92,19 +99,19 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref_in,args.tau_ref_out,args.inc_n,args.tau_n,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
 
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)
-		
+
+		# args.pause_time = 0
+
+		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)+str(args.n_neurons)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_6'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
-
-		accuracy,accuracy_2, weights, output_spikes,t_data = evaluate_mnist_multiple_local_tio2(args)
-
-
+		accuracy, accuracy_2,weights = evaluate_mnist_multiple_local_tio2(args)
 
 		df = df.append({ "vprog":args.vprog,
 						"amp_neuron":args.amp_neuron,
@@ -120,7 +127,10 @@ if __name__ == '__main__':
 		                 "n_neurons":args.n_neurons,
 		                 "seed":args.seed,
 		                 "inhibition_time":args.inhibition_time,
-		                 "tau_ref":args.tau_ref,
+		                 "tau_ref_in":args.tau_ref_in,
+		                 "tau_ref_out":args.tau_ref_out,
+		                 "inc_n":args.inc_n,
+		                 "tau_n":args.tau_n,
 		                 "synapse_layer_1":args.synapse_layer_1,
 		                 "winit_max":args.winit_max,
 		                 "vprog_increment":args.vprog_increment,
@@ -156,27 +166,23 @@ if __name__ == '__main__':
 			# ax1 = fig.add_subplot()
 			# cax = ax1.matshow(np.reshape(weights[0],(28,28)),interpolation='nearest', vmax=1, vmin=0)
 			# fig.colorbar(cax)
-			# plt.tight_layout()    
+			# plt.tight_layout() 
 
-			fig.savefig(folder+'/weights'+str(args.filename)+'.png')
+			if args.log_file_path is None:
+				log_dir = pwd+'/log_dir/'
+			else : 
+				log_dir = args.log_file_path
+			df.to_csv(log_dir+log_file_name, index=False)   
+
+			fig.savefig(log_dir+args.filename+'weights.png')
+			plt.close()
+
 			plt.clf()
-			plt.close('all')
-
-			  # for tstep in np.arange(0, len(weights), 1):
-		        # tstep = int(tstep)
-		        # print(tstep)
-			# fig, axes = plt.subplots(1,1, figsize=(10,10))
-
-			        
-			# ax1 = fig.add_subplot()
-			# cax = ax1
 			plt.hist(weights.flatten())
 
 			plt.tight_layout()    
-			plt.savefig(folder+'/histogram'+str(args.filename)+'.png')
-			plt.close('all')
+			plt.savefig(log_dir+args.filename+'histogram.png')
 
-		    # gen_video(folder, "histogram")
 
 			# plt.figure(figsize=(12,10))
 
@@ -188,16 +194,15 @@ if __name__ == '__main__':
 
 			# plt.subplot(2, 1, 2)
 			# plt.title('Output neurons')
-			rasterplot(t_data, output_spikes)
-			plt.xlabel("Time [s]")
-			plt.ylabel("Neuron index")
-			plt.savefig(folder+'/raster'+str(args.filename)+'.png')
+			# rasterplot(time_points, p_layer_1)
+			# plt.xlabel("Time [s]")
+			# plt.ylabel("Neuron index")
 
 			# plt.tight_layout()
 
 			# plt.savefig(folder+'/raster'+str(args.filename)+'.png')
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log_7'+'.csv'
+		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
 		if args.log_file_path is None:

@@ -110,7 +110,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
             "encoders":nengo.dists.Choice([[1]]),
             # "max_rates":nengo.dists.Uniform(22,22),
             # "intercepts":nengo.dists.Uniform(0,0),
-            "gain":nengo.dists.Choice([args.gain_in]),
+            "gain":nengo.dists.Choice([4]),
             "bias":nengo.dists.Choice([args.bias_in]),
             "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
@@ -187,7 +187,7 @@ def evaluate_fmnist_multiple_local_tio2(args):
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
 
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v2_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v3_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=None)
         # nengo.Connection(w, layer1.neurons,transform=g_max, synapse=None)
@@ -202,20 +202,22 @@ def evaluate_fmnist_multiple_local_tio2(args):
         layer1_voltage_probe = nengo.Probe(layer1.neurons, "voltage", label="layer1_voltage") # ('output', 'input', 'spikes', 'voltage', 'refractory_time', 'adaptation', 'inhib')
         layer1_spikes_probe = nengo.Probe(layer1.neurons, "spikes", label="layer1_spikes") 
         # p_true_label = nengo.Probe(true_label, sample_every=probe_sample_rate)
-        p_input_layer = nengo.Probe(input_layer.neurons)
-        p_layer_1 = nengo.Probe(layer1.neurons)
+        # p_input_layer = nengo.Probe(input_layer.neurons,label='input_layer')
+        # p_layer_1 = nengo.Probe(layer1.neurons)
         # weights_probe = nengo.Probe(conn1,"weights",sample_every=probe_sample_rate)
         # if(not full_log):
+        
         nengo.Node(log)
 
-        weights = w.output.history
+        weights = w.output.current_weight
+        # weights_probe = nengo.Probe(weights)
 
         
     Args = {"backend":"Nengo","Dataset":"fashion_mnist","Labels":labels,"step_time":presentation_time,"input_nbr":input_nbr}
     # with nengo_ocl.Simulator(model) as sim :   
     with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
         # if(not full_log):
-        log.set(sim,Args)
+        log.set(sim,Args,weights)
         
         w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])

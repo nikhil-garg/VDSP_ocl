@@ -760,7 +760,7 @@ class CustomRule_post_v2_tio2(nengo.Process):
 
 class CustomRule_post_v3_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008,vprog_increment=0):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008,vprog_increment=0,voltage_clip_max=None,voltage_clip_min=None,Vapp_multiplier=0):
        
         self.vprog = vprog  
         
@@ -769,7 +769,7 @@ class CustomRule_post_v3_tio2(nengo.Process):
 
         self.winit_min = winit_min
         self.winit_max = winit_max
-        self.vprog_increment=vprog_increment
+        
         
         self.sample_distance = sample_distance
         self.lr = lr
@@ -779,6 +779,12 @@ class CustomRule_post_v3_tio2(nengo.Process):
         self.gmin = gmin
         
         self.history = [0]
+        self.current_weight = [0]
+
+        self.voltage_clip_min=voltage_clip_min
+        self.voltage_clip_max=voltage_clip_max
+        self.vprog_increment=vprog_increment
+        self.Vapp_multiplier = Vapp_multiplier
 
         
         # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
@@ -802,15 +808,19 @@ class CustomRule_post_v3_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            # self.vprog = np.clip((self.vprog + self.vprog_increment),-1,-0.55)
+            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem, self.vprog, self.vthp,self.vthn,self.voltage_clip_max,self.voltage_clip_min,self.Vapp_multiplier),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            post_spiked = post_out_matrix*dt
+            self.vprog += post_spiked*self.vprog_increment
+            self.vprog = np.clip(self.vprog, None, 0)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
             
             # self.tstep +=1
             self.history[0] = self.w.copy()
+
+            self.current_weight[0] = self.w.copy()
             # self.history.append(self.w.copy())
             # self.history = self.history[-2:]
             # self.history = self.w

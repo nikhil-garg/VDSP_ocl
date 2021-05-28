@@ -123,7 +123,10 @@ class Nengo_MongoDB:
 
     def storeSpikes(self,t,Probe_spikes):
         # Collect Spikes for couple of steps
+        # import numpy as np
+        # print(np.sum(self.sim._sim_data[Probe_spikes]))
         if(len(self.sim._sim_data[Probe_spikes])!=0):
+
             for i,n in enumerate(self.sim._sim_data[Probe_spikes][0].tolist()):
                 if(n != 0):
                     self.SpikesData.append({"i": {"L": Probe_spikes.target.ensemble.label,"N":i},"T":round(t,3),"Input":int(str(self.Labels[int(round(t,2) / self.step_time)-1])),"S":int(n*self.sim.dt)})
@@ -157,7 +160,8 @@ class Nengo_MongoDB:
     def storeWeightsV2(self,t,weights):
         # Collect Weights for couple of steps
         # 423 ms ± 7.91 ms per loop (mean ± std. dev. of 10 runs, 1 loop each) normal one
-
+        # print(len(self.WeightsDataTMP))
+        # print(np.sum(self.WeightsDataTMP))
         if(len(self.WeightsDataTMP) == 0):
             for i,f in enumerate(weights[0].tolist()):
                 for j,v in enumerate(f):
@@ -228,8 +232,10 @@ class Nengo_MongoDB:
         if self.sim is not None:
             assert len(self.sim.model.probes) != 0 , "No Probes to store"
 
+
             for probe in self.sim.model.probes:
-                
+                # print(probe.attr)
+
                 if(self.backend == "Nengo"):
                     if len(self.sim._sim_data[probe]) != 0: 
                         self.sim._sim_data[probe] = [self.sim._sim_data[probe][-1]]
@@ -239,14 +245,23 @@ class Nengo_MongoDB:
                 #  Process simulation data
                 
                 if (probe.attr == "spikes"):
+                    # print('spikes storing')
                     self.storeSpikes(t,probe)
                 if (probe.attr == "voltage"):
                     self.storePotential(t,probe)
                 
                 if math.isclose(math.fmod(t,0.1),0,abs_tol=1e-3):
+                    # print('Inside')
                     if (probe.attr == "weights"):
+                        # print('Inside 1.0')
                         self.storeWeights(t,probe)
+
+                    # print(bool(self.weightV2 != None))
+                    # print(len(self.weightV2) != None)
+                    # print(not isinstance(self.weightV2[0],int))
+                    # print(self.weightV2[0])
                     if (self.weightV2 != None and len(self.weightV2) != None and not isinstance(self.weightV2[0],int)):
+                        # print('Inside 2.0')
                         self.storeWeightsV2(t,self.weightV2)
             
             self.storeLabels(t)
