@@ -36,11 +36,11 @@ def evaluate_mnist_multiple_tio2_var_th(args):
     x = args.digit
     np.random.seed(args.seed)
     random.seed(args.seed)
-
+    
     data = np.load('mnist_norm.npz', allow_pickle=True)
-    image_train_filtered = data['image_train_filtered']
+    image_train_filtered = data['image_train_filtered']/255
     label_train_filtered = data['label_train_filtered']
-    image_test_filtered = data['image_test_filtered']
+    image_test_filtered = data['image_test_filtered']/255
     label_test_filtered = data['label_test_filtered']
 
     image_train_filtered = np.tile(image_train_filtered,(args.iterations,1,1))

@@ -38,9 +38,9 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
     random.seed(args.seed)
 
     data = np.load('mnist_norm.npz', allow_pickle=True)
-    image_train_filtered = data['image_train_filtered']
+    image_train_filtered = data['image_train_filtered']/255
     label_train_filtered = data['label_train_filtered']
-    image_test_filtered = data['image_test_filtered']
+    image_test_filtered = data['image_test_filtered']/255
     label_test_filtered = data['label_test_filtered']
 
     image_train_filtered = np.tile(image_train_filtered,(args.iterations,1,1))
@@ -70,7 +70,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron, tau_ref=args.tau_ref)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron, tau_ref=args.tau_ref_in)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -87,7 +87,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
-            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref)
+            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref_out)
     }
 
     np.random.seed(args.seed)
