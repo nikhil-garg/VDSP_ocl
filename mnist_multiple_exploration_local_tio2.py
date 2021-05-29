@@ -68,15 +68,15 @@ if __name__ == '__main__':
 	parameters = dict(
 		vprog = [0]
 		, amp_neuron=[0.5]
-		,input_nbr=[6000]
+		,input_nbr=[60000]
 		,tau_in = [0.03]
 		,tau_out = [0.03]
-		, lr = [0.5]
+		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [20]
+		, n_neurons = [10]
 		, inhibition_time = [10]
 		, tau_ref_in = [0.01]
 		, tau_ref_out = [0.005]
@@ -111,7 +111,7 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
-		accuracy, accuracy_2,weights = evaluate_mnist_multiple_local_tio2(args)
+		accuracy,accuracy_2, weights, output_spikes, t_data = evaluate_mnist_multiple_local_tio2(args)
 
 		df = df.append({ "vprog":args.vprog,
 						"amp_neuron":args.amp_neuron,

@@ -412,9 +412,9 @@ def evaluate_mnist_multiple_local_tio2(args):
         
     accuracy = correct_classified/ (correct_classified+wrong_classified)*100
 
-    accuracy_2 = evaluation(10,n_neurons,int((presentation_time+pause_time)/args.dt) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
-
-    # log.storeTestInfo(accuracy,neuron_class,layer1)
+    classes, accuracy_2 = evaluation(10,n_neurons,int((presentation_time+pause_time)/args.dt) ,sim.data[p_layer_1],label_test_filtered,sim.dt)
+    print(type(classes))
+    log.storeTestInfo(accuracy_2,classes,"layer1")
     # accuracy_2 = evaluation_v2(10,n_neurons,int(presentation_time/args.dt) ,spikes_layer1_probe_train,label_train_filtered,sim.data[p_layer_1],label_test_filtered,sim.dt)
 
     print("Accuracy: ", accuracy)

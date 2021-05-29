@@ -83,7 +83,7 @@ def evaluation(classes,n_neurons,presentation_time,spikes_layer1_probe,label_tes
         x = x + 1
         total += 1
 
-    return round((Good * 100)/(Good+Bad),2)
+    return Classes, round((Good * 100)/(Good+Bad),2)
 
 
 def evaluation_v2(classes,n_neurons,presentation_time,spikes_layer1_probe_train,label_train_filtered,spikes_layer1_probe_test,label_test_filtered,dt):
