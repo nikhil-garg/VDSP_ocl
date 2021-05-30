@@ -92,7 +92,7 @@ if __name__ == '__main__':
 		, bias_in = [0.85]
 		, noise_input = [0]
 		, amp_vth_var = [0,0.2,0.4,0.6,0.8,1]
-		, seed =[900,0]
+		, seed =[0]
     )
 	param_values = [v for v in parameters.values()]
 
