@@ -70,7 +70,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron, tau_ref=args.tau_ref)
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron, tau_ref=args.tau_ref_in)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -87,7 +87,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
-            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref)
+            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref_out)
     }
 
     vthp=args.vthp
@@ -112,6 +112,8 @@ def evaluate_mnist_multiple_tio2_var_th(args):
             "vthn":vthn,
             "gmax":0.0008,
             "gmin":0.00008,
+            "voltage_clip_max":args.voltage_clip_max,
+            "voltage_clip_min":args.voltage_clip_min,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
 

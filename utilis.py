@@ -616,7 +616,7 @@ def fun_post_tio2_var(X,
        # a1=1,a2=1,a3=1,a4=1
        ): 
     
-    w, vmem, vprog, vthp, vthn, var_amp_1, var_amp_2 = X
+    w, vmem, vprog, vthp, vthn, var_amp_1, var_amp_2, voltage_clip_max, voltage_clip_min = X
     # vthp=0.5
     # vthn=0.5
     # vprog=0
@@ -626,6 +626,7 @@ def fun_post_tio2_var(X,
     An = var_amp_2*An
 
     vapp = vprog-vmem
+    vapp = np.clip(vapp, voltage_clip_min, voltage_clip_max)
     
     cond_pot_fast = w<xp
     cond_pot_slow = 1-cond_pot_fast
@@ -650,7 +651,7 @@ def fun_post_tio2_var_v2(X,
        # a1=1,a2=1,a3=1,a4=1
        ): 
     
-    w, vmem, vprog, vthp, vthn, var_amp_1, var_amp_2, var_vthp, var_vthn = X
+    w, vmem, vprog, vthp, vthn, var_amp_1, var_amp_2, var_vthp, var_vthn, voltage_clip_max, voltage_clip_min = X
     # vthp=0.5
     # vthn=0.5
     # vprog=0
@@ -1126,7 +1127,7 @@ class CustomRule_post_v4(nengo.Process):
 
 class CustomRule_post_v4_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_1= 1,var_amp_2=1,gmax=0.0008,gmin=0.00008):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_1= 1,var_amp_2=1,gmax=0.0008,gmin=0.00008,voltage_clip_max=None,voltage_clip_min=None):
        
         self.vprog = vprog  
         
@@ -1135,6 +1136,9 @@ class CustomRule_post_v4_tio2(nengo.Process):
 
         self.winit_min = winit_min
         self.winit_max = winit_max
+
+        self.voltage_clip_min=voltage_clip_min
+        self.voltage_clip_max=voltage_clip_max
         
         
         self.sample_distance = sample_distance
@@ -1170,7 +1174,7 @@ class CustomRule_post_v4_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2_var((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn,self.var_amp_1,self.var_amp_2),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2_var((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp_1,self.var_amp_2, self.voltage_clip_max, self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
@@ -1195,7 +1199,7 @@ class CustomRule_post_v4_tio2(nengo.Process):
 
 class CustomRule_post_v5_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_1= 1,var_amp_2=1,var_vthp=1,var_vthn=1,gmax=0.0008,gmin=0.00008):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_1= 1,var_amp_2=1,var_vthp=1,var_vthn=1,gmax=0.0008,gmin=0.00008, voltage_clip_max=None, voltage_clip_min=None):
        
         self.vprog = vprog  
         
@@ -1216,6 +1220,9 @@ class CustomRule_post_v5_tio2(nengo.Process):
         self.var_amp_2=var_amp_2
         self.var_vthp=var_vthp
         self.var_vthn=var_vthn
+
+        self.voltage_clip_min=voltage_clip_min
+        self.voltage_clip_max=voltage_clip_max
         
         self.history = [0]
 
@@ -1241,7 +1248,7 @@ class CustomRule_post_v5_tio2(nengo.Process):
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2_var_v2((self.w,vmem*1.5, self.vprog, self.vthp,self.vthn,self.var_amp_1,self.var_amp_2,self.var_vthp,self.var_vthn),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2_var_v2((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp_1,self.var_amp_2,self.var_vthp,self.var_vthn, self.voltage_clip_max, self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())

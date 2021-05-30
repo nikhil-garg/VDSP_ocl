@@ -116,6 +116,8 @@ def evaluate_mnist_multiple_tio2_var_amp_th(args):
             "var_amp_2":var_amp_matrix_2,
             "var_vthp":var_vthp_matrix,
             "var_vthn":var_vthn_matrix,
+            "voltage_clip_max":args.voltage_clip_max,
+            "voltage_clip_min":args.voltage_clip_min,
             "gmax":0.0008,
             "gmin":0.00008,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
