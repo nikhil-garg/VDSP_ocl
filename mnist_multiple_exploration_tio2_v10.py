@@ -69,14 +69,14 @@ if __name__ == '__main__':
 		vprog = [0]
 		, amp_neuron=[0.5]
 		,input_nbr=[60000]
-		,tau_in = [0.03,0.02]
+		,tau_in = [0.03]
 		,tau_out = [0.03]
 		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [100]
+		, n_neurons = [50,100]
 		, inhibition_time = [10]
 		, tau_ref_in = [0.01]
 		, tau_ref_out = [0.005]
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 		, voltage_clip_max=[1.8]
 		, voltage_clip_min = [-1.5]
 		, Vapp_multiplier = [1]
-		, gain_in = [4]
+		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
 		, seed =[100]
@@ -157,7 +157,7 @@ if __name__ == '__main__':
 			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(columns*5,rows*5))
 
 			for i in range(0,(args.n_neurons)):
-				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
+				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0,cmap='hot')
 
 			plt.tight_layout()    
 
