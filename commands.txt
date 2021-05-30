@@ -88,23 +88,36 @@ git push
 mongod --dbpath ~/Desktop/mongodata/
 
 
-sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
-sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
+
 sbatch slrum_trial_tio2_var_amp_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_g_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_g_v2.sh --log_file_path $OUTDIR
 
+
+sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v5.sh --log_file_path $OUTDIR
+
+sbatch slrum_trial_tio2_var_amp_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v5.sh --log_file_path $OUTDIR
+
+
+
 sbatch slrum_trial_tio2_var_g_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_g_v4.sh --log_file_path $OUTDIR
 
 
 sbatch slrum_trial_tio2_var_amp_th_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v5.sh --log_file_path $OUTDIR
 
 
 sudo docker run --rm -d -p 8050:8050 -p 27017:27017 -v ~/Desktop/mongodata:/home/data/db  helbez/vs2n:0.35
