@@ -61,7 +61,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
 
- input_neurons_args = {
+    input_neurons_args = {
             "n_neurons":n_in,
             "dimensions":1,
             "label":"Input layer",
