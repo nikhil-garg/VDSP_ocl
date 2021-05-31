@@ -91,8 +91,8 @@ if __name__ == '__main__':
 		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
-		, amp_var = [0,0.2,0.4,0.6,0.8,1]
-		, seed =[100]
+		, amp_var = [0.8,1]
+		, seed =[100,200]
     )
 	param_values = [v for v in parameters.values()]
 
