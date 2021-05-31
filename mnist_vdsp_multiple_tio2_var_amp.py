@@ -61,7 +61,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
     # inhib_factor = args.inhib_factor #Multiplication factor for lateral inhibition
 
 
-    input_neurons_args = {
+ input_neurons_args = {
             "n_neurons":n_in,
             "dimensions":1,
             "label":"Input layer",
@@ -70,7 +70,9 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
             # "intercepts":nengo.dists.Uniform(0,0),
             "gain":nengo.dists.Choice([args.gain_in]),
             "bias":nengo.dists.Choice([args.bias_in]),
-            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1, amplitude=args.amp_neuron, tau_ref=args.tau_ref_in)
+            # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(args.noise_input, (args.noise_input/2)+0.00001), seed=1), 
+
+            "neuron_type":MyLIF_in(tau_rc=args.tau_in,min_voltage=-1.8, amplitude=args.amp_neuron, tau_ref=args.tau_ref_in)
             # "neuron_type":nengo.neurons.SpikingRectifiedLinear()#SpikingRelu neuron. 
     }
 
@@ -87,7 +89,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
             # "noise":nengo.processes.WhiteNoise(dist=nengo.dists.Gaussian(0, 0.5), seed=1), 
             # "neuron_type":nengo.neurons.LIF(tau_rc=args.tau_out, min_voltage=0)
             # "neuron_type":MyLIF_out(tau_rc=args.tau_out, min_voltage=-1)
-            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref_out)
+            "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref_out,inc_n=args.inc_n,tau_n=args.tau_n)
     }
 
     np.random.seed(args.seed)
@@ -138,7 +140,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
         #Weights between input layer and layer 1
         w = nengo.Node(CustomRule_post_v4_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
-        nengo.Connection(w, layer1.neurons, synapse=None)
+        nengo.Connection(w, layer1.neurons, synapse=args.synapse_layer_1)
         weights = w.output.history
         
     # with nengo_ocl.Simulator(model) as sim :   
@@ -165,7 +167,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight, synapse=args.synapse_layer_1)
         #Probes
         p_true_label = nengo.Probe(true_label)
         p_layer_1 = nengo.Probe(layer1.neurons)
@@ -204,7 +206,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight,synapse=args.synapse_layer_1)
         p_true_label = nengo.Probe(true_label)
         p_layer_1 = nengo.Probe(layer1.neurons)
 
