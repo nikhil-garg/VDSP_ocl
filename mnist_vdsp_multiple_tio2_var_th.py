@@ -36,7 +36,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
     x = args.digit
     np.random.seed(args.seed)
     random.seed(args.seed)
-    
+
     data = np.load('mnist_norm.npz', allow_pickle=True)
     image_train_filtered = data['image_train_filtered']/255
     label_train_filtered = data['label_train_filtered']
@@ -92,17 +92,13 @@ def evaluate_mnist_multiple_tio2_var_th(args):
             "neuron_type":STDPLIF(tau_rc=args.tau_out, min_voltage=-1, spiking_threshold=args.thr_out, inhibition_time=args.inhibition_time,tau_ref=args.tau_ref_out,inc_n=args.inc_n,tau_n=args.tau_n)
     }
 
-    vthp=args.vthp
-    vthn=args.vthn    
     np.random.seed(args.seed)
-    random.seed(args.seed)
-    var_ratio=args.var_ratio
+    random.seed(args.seed) 
+    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    var_th_matrix_1 = 1 + (random_matrix*args.th_var)
 
-    vthp = np.random.normal(vthp, vthp*var_ratio, (n_neurons,n_in)) #between -1 to 1 of shape W
-    vthn = np.random.normal(vthn, vthn*var_ratio, (n_neurons,n_in)) #between -1 to 1 of shape W
-
-    vthp = np.clip(vthp,0,None)
-    vthn = np.clip(vthn,0,None)
+    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    var_th_matrix_2 = 1 + (random_matrix*args.th_var)
 
     #Learning rule parameters
     learning_args = {
@@ -110,12 +106,14 @@ def evaluate_mnist_multiple_tio2_var_th(args):
             "winit_min":0,
             "winit_max":1,
             "vprog":args.vprog, 
-            "vthp":vthp,
-            "vthn":vthn,
-            "gmax":0.0008,
-            "gmin":0.00008,
+            "vthp":args.vthp,
+            "vthn":args.vthn,
+            "var_th_1":var_th_matrix_1,
+            "var_th_2":var_th_matrix_2,
             "voltage_clip_max":args.voltage_clip_max,
             "voltage_clip_min":args.voltage_clip_min,
+            "gmax":0.0008,
+            "gmin":0.00008,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
 
@@ -123,6 +121,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
 
     images = image_train_filtered
     labels = label_train_filtered
+
     np.random.seed(args.seed)
     random.seed(args.seed) 
 
@@ -139,7 +138,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v2_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v5_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=args.synapse_layer_1)
         weights = w.output.history
@@ -147,6 +146,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
     # with nengo_ocl.Simulator(model) as sim :   
     with nengo.Simulator(model, dt=args.dt, optimize=True) as sim:
 
+        
         w.output.set_signal_vmem(sim.signals[sim.model.sig[input_layer.neurons]["voltage"]])
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         sim.run((presentation_time+pause_time) * labels.shape[0])
@@ -154,9 +154,6 @@ def evaluate_mnist_multiple_tio2_var_th(args):
     last_weight = weights[-1]
 
     sim.close()
-
-    images = image_train_filtered
-    labels = label_train_filtered
 
     model = nengo.Network("My network", seed = args.seed)
 
@@ -170,7 +167,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
         input_conn = nengo.Connection(picture,input_layer.neurons,synapse=None)
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
-        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight ,synapse=args.synapse_layer_1)
+        nengo.Connection(input_layer.neurons, layer1.neurons,transform=last_weight, synapse=args.synapse_layer_1)
         #Probes
         p_true_label = nengo.Probe(true_label)
         p_layer_1 = nengo.Probe(layer1.neurons)

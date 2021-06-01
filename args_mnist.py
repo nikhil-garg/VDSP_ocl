@@ -155,7 +155,7 @@ def args():
         help="inhibition_time",
     )
     parser.add_argument(
-        "--var_ratio",
+        "--th_var",
         default=0,
         type=float,
         help="Variability of vth. Between 0 and 1",

@@ -145,7 +145,7 @@ def evaluate_mnist_multiple_tio2_var_amp_th(args):
         #first layer
         layer1 = nengo.Ensemble(**layer_1_neurons_args)
         #Weights between input layer and layer 1
-        w = nengo.Node(CustomRule_post_v5_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
+        w = nengo.Node(CustomRule_post_v6_tio2(**learning_args), size_in=n_in, size_out=n_neurons)
         nengo.Connection(input_layer.neurons, w, synapse=None)
         nengo.Connection(w, layer1.neurons, synapse=args.synapse_layer_1)
         weights = w.output.history

@@ -646,6 +646,41 @@ def fun_post_tio2_var(X,
     dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
     return dW
 
+def fun_post_tio2_var_th(X,
+       alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
+       # a1=1,a2=1,a3=1,a4=1
+       ): 
+    
+    w, vmem, vprog, vthp, vthn, var_th_1, var_th_2, voltage_clip_max, voltage_clip_min = X
+    # vthp=0.5
+    # vthn=0.5
+    # vprog=0
+    xp=0.01
+    xn=0.01
+    vthp = var_th_1*vthp
+    vthn = var_th_2*vthn
+
+    vapp = vprog-vmem
+    vapp = np.clip(vapp, voltage_clip_min, voltage_clip_max)
+    
+    cond_pot_fast = w<xp
+    cond_pot_slow = 1-cond_pot_fast
+    
+    cond_dep_fast = w>(1-xn)
+    cond_dep_slow = 1-cond_dep_fast
+    
+    f_pot = cond_pot_fast + cond_pot_slow*(np.exp(-alphap*(w-xp))*((xp-w)/(1-xp) + 1))
+    f_dep = (np.exp(alphan*(w+xn-1))*w/(1-xn))*cond_dep_slow + cond_dep_fast
+    
+    cond_pot = vapp > vthp
+    cond_dep = vapp < -vthn
+    
+    g_pot = Ap*(np.exp(vapp)-np.exp(vthp))
+    g_dep = -An*(np.exp(-vapp)-np.exp(vthn))
+
+    dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
+    return dW
+
 def fun_post_tio2_var_v2(X,
        alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
        # a1=1,a2=1,a3=1,a4=1
@@ -663,6 +698,7 @@ def fun_post_tio2_var_v2(X,
     vthn = var_vthn*vthn
 
     vapp = vprog-vmem
+    vapp = np.clip(vapp, voltage_clip_min, voltage_clip_max)
     
     cond_pot_fast = w<xp
     cond_pot_slow = 1-cond_pot_fast
@@ -1198,6 +1234,78 @@ class CustomRule_post_v4_tio2(nengo.Process):
         self.signal_out_post = signal
 
 class CustomRule_post_v5_tio2(nengo.Process):
+   
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_th_1= 1,var_th_2=1,gmax=0.0008,gmin=0.00008,voltage_clip_max=None,voltage_clip_min=None):
+       
+        self.vprog = vprog  
+        
+        self.signal_vmem_pre = None
+        self.signal_out_post = None
+
+        self.winit_min = winit_min
+        self.winit_max = winit_max
+
+        self.voltage_clip_min=voltage_clip_min
+        self.voltage_clip_max=voltage_clip_max
+        
+        
+        self.sample_distance = sample_distance
+        self.lr = lr
+        self.vthp = vthp
+        self.vthn = vthn
+        self.gmax=gmax
+        self.gmin = gmin
+        self.var_th_1=var_th_1
+        self.var_th_2=var_th_2
+        
+        self.history = [0]
+
+        
+        # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
+        
+        super().__init__()
+        
+    def make_step(self, shape_in, shape_out, dt, rng, state=None):  
+       
+        self.w = np.random.uniform(self.winit_min, self.winit_max, (shape_out[0], shape_in[0]))
+
+        def step(t, x):
+
+            assert self.signal_vmem_pre is not None
+            assert self.signal_out_post is not None
+            
+            # vmem = np.clip(self.signal_vmem_pre, -1, 1)
+            
+            post_out = self.signal_out_post
+            
+            vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
+
+            post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
+
+            self.w = np.clip((self.w + dt*(fun_post_tio2_var_th((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_th_1,self.var_th_2, self.voltage_clip_max, self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            
+            # if (self.tstep%self.sample_distance ==0):
+            #     self.history.append(self.w.copy())
+            
+            # self.tstep +=1
+            self.history[0] = self.w.copy()
+            # self.history.append(self.w.copy())
+            # self.history = self.history[-2:]
+            # self.history = self.w
+
+            return np.dot((self.w*(self.gmax-self.gmin)) + self.gmin, x)
+        
+        return step   
+
+        # self.current_weight = self.w
+    
+    def set_signal_vmem(self, signal):
+        self.signal_vmem_pre = signal
+        
+    def set_signal_out(self, signal):
+        self.signal_out_post = signal
+
+class CustomRule_post_v6_tio2(nengo.Process):
    
     def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_1= 1,var_amp_2=1,var_vthp=1,var_vthn=1,gmax=0.0008,gmin=0.00008, voltage_clip_max=None, voltage_clip_min=None):
        
