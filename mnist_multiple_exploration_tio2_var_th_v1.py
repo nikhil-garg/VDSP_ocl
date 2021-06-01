@@ -110,7 +110,7 @@ if __name__ == '__main__':
 		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
-		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2_th_amp(args)
+		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2_var_th(args)
 
 		df = df.append({ "vprog":args.vprog,
 						"amp_neuron":args.amp_neuron,
