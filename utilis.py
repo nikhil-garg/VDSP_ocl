@@ -323,6 +323,80 @@ def plan_MyLIF_in(
         **kwargs,
     )
 
+class MyLIF_in_v2(LIFRate):
+    """Spiking version of the leaky integrate-and-fire (LIF) neuron model.
+
+    Parameters
+    ----------
+    tau_rc : float
+        Membrane RC time constant, in seconds. Affects how quickly the membrane
+        voltage decays to zero in the absence of input (larger = slower decay).
+    tau_ref : float
+        Absolute refractory period, in seconds. This is how long the
+        membrane voltage is held at zero after a spike.
+    min_voltage : float
+        Minimum value for the membrane voltage. If ``-np.inf``, the voltage
+        is never clipped.
+    amplitude : float
+        Scaling factor on the neuron output. Corresponds to the relative
+        amplitude of the output spikes of the neuron.
+    initial_state : {str: Distribution or array_like}
+        Mapping from state variables names to their desired initial value.
+        These values will override the defaults set in the class's state attribute.
+    """
+
+    state = {
+        "voltage": Uniform(low=0, high=1),
+        "refractory_time": Choice([0]),
+    }
+    spiking = True
+
+    min_voltage = NumberParam("min_voltage", high=0)
+
+    def __init__(
+        self, tau_rc=0.02, tau_ref=0.002, min_voltage=0, amplitude=1, initial_state=None
+    ):
+        super().__init__(
+            tau_rc=tau_rc,
+            tau_ref=tau_ref,
+            amplitude=amplitude,
+            initial_state=initial_state,
+        )
+        self.min_voltage = min_voltage
+
+    def step(self, dt, J, output, voltage, refractory_time):
+        # look these up once to avoid repeated parameter accesses
+        tau_rc = self.tau_rc
+        min_voltage = self.min_voltage
+
+        # reduce all refractory times by dt
+        refractory_time -= dt
+
+        # compute effective dt for each neuron, based on remaining time.
+        # note that refractory times that have completed midway into this
+        # timestep will be given a partial timestep, and moreover these will
+        # be subtracted to zero at the next timestep (or reset by a spike)
+        delta_t = clip((dt - refractory_time), 0, dt)
+
+        # update voltage using discretized lowpass filter
+        # since v(t) = v(0) + (J - v(0))*(1 - exp(-t/tau)) assuming
+        # J is constant over the interval [t, t + dt)
+        voltage -= (J - voltage) * np.expm1(-delta_t / tau_rc)
+
+        # determine which neurons spiked (set them to 1/dt, else 0)
+        spiked_mask = voltage > 1
+        output[:] = spiked_mask * (self.amplitude / dt)
+
+        # set v(0) = 1 and solve for t to compute the spike time
+        t_spike = dt + tau_rc * np.log1p(
+            -(voltage[spiked_mask] - 1) / (J[spiked_mask] - 1)
+        )
+
+        # set spiked voltages to zero, refractory times to tau_ref, and
+        # rectify negative voltages to a floor of min_voltage
+        voltage[voltage < min_voltage] = min_voltage
+        voltage[spiked_mask] = -1 #reset voltage
+        refractory_time[spiked_mask] = self.tau_ref + t_spike
 
         
 class MyLIF_out(LIFRate):
@@ -1799,85 +1873,6 @@ def build_STDPLIF(model, STDPlif, neurons):
                                     "inhib": model.sig[neurons]['inhib']
                                      }))
 
-
-
-
-
-
-class MyLIF_in_v2(LIFRate):
-    """Spiking version of the leaky integrate-and-fire (LIF) neuron model.
-
-    Parameters
-    ----------
-    tau_rc : float
-        Membrane RC time constant, in seconds. Affects how quickly the membrane
-        voltage decays to zero in the absence of input (larger = slower decay).
-    tau_ref : float
-        Absolute refractory period, in seconds. This is how long the
-        membrane voltage is held at zero after a spike.
-    min_voltage : float
-        Minimum value for the membrane voltage. If ``-np.inf``, the voltage
-        is never clipped.
-    amplitude : float
-        Scaling factor on the neuron output. Corresponds to the relative
-        amplitude of the output spikes of the neuron.
-    initial_state : {str: Distribution or array_like}
-        Mapping from state variables names to their desired initial value.
-        These values will override the defaults set in the class's state attribute.
-    """
-
-    state = {
-        "voltage": Uniform(low=0, high=1),
-        "refractory_time": Choice([0]),
-    }
-    spiking = True
-
-    min_voltage = NumberParam("min_voltage", high=0)
-
-    def __init__(
-        self, tau_rc=0.02, tau_ref=0.002, min_voltage=0, amplitude=1, initial_state=None
-    ):
-        super().__init__(
-            tau_rc=tau_rc,
-            tau_ref=tau_ref,
-            amplitude=amplitude,
-            initial_state=initial_state,
-        )
-        self.min_voltage = min_voltage
-
-    def step(self, dt, J, output, voltage, refractory_time):
-        # look these up once to avoid repeated parameter accesses
-        tau_rc = self.tau_rc
-        min_voltage = self.min_voltage
-
-        # reduce all refractory times by dt
-        refractory_time -= dt
-
-        # compute effective dt for each neuron, based on remaining time.
-        # note that refractory times that have completed midway into this
-        # timestep will be given a partial timestep, and moreover these will
-        # be subtracted to zero at the next timestep (or reset by a spike)
-        delta_t = clip((dt - refractory_time), 0, dt)
-
-        # update voltage using discretized lowpass filter
-        # since v(t) = v(0) + (J - v(0))*(1 - exp(-t/tau)) assuming
-        # J is constant over the interval [t, t + dt)
-        voltage -= (J - voltage) * np.expm1(-delta_t / tau_rc)
-
-        # determine which neurons spiked (set them to 1/dt, else 0)
-        spiked_mask = voltage > 1.5
-        output[:] = spiked_mask * (self.amplitude / dt)
-
-        # set v(0) = 1 and solve for t to compute the spike time
-        t_spike = dt + tau_rc * np.log1p(
-            -(voltage[spiked_mask] - 1) / (J[spiked_mask] - 1)
-        )
-
-        # set spiked voltages to zero, refractory times to tau_ref, and
-        # rectify negative voltages to a floor of min_voltage
-        voltage[voltage < min_voltage] = min_voltage
-        voltage[spiked_mask] = -2 #reset voltage
-        refractory_time[spiked_mask] = self.tau_ref + t_spike
 
 
 
