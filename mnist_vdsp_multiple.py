@@ -103,10 +103,10 @@ def evaluate_mnist_multiple(args):
             "vthn":0.15,
             "gmax":0.0085,
             "gmin":0.0000085,
-            "vprog_increment":args.vprog_increment,
-            "voltage_clip_max":args.voltage_clip_max,
-            "voltage_clip_min":args.voltage_clip_min,
-            "Vapp_multiplier":args.Vapp_multiplier,
+            # "vprog_increment":args.vprog_increment,
+            # "voltage_clip_max":args.voltage_clip_max,
+            # "voltage_clip_min":args.voltage_clip_min,
+            # "Vapp_multiplier":args.Vapp_multiplier,
             "sample_distance": int((presentation_time+pause_time)*200*10), #Store weight after 10 images
     }
 
