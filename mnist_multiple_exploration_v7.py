@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [0]
-		, amp_neuron=[0.05]
+		, amp_neuron=[0.025]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.03]
@@ -78,11 +78,11 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
-		, tau_ref_in = [0.002]
-		, tau_ref_out = [0.002]
+		, tau_ref_in = [0.01]
+		, tau_ref_out = [0.005]
 		, inc_n = [0.01]
 		, tau_n = [1]
-		, synapse_layer_1=[None]
+		, synapse_layer_1=[0.005]
 		, winit_max = [1]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
