@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [0]
-		, amp_neuron=[0.025]
+		, amp_neuron=[0.015]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
 		,tau_out = [0.03]
