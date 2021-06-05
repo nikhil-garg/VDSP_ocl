@@ -78,7 +78,7 @@ if __name__ == '__main__':
 		, dt = [0.005]
 		, n_neurons = [50]
 		, inhibition_time = [10]
-		, tau_ref_in = [0.005]
+		, tau_ref_in = [0.01]
 		, tau_ref_out = [0.005]
 		, inc_n = [0.01]
 		, tau_n = [1]
