@@ -69,7 +69,7 @@ if __name__ == '__main__':
 		vprog = [0]
 		, amp_neuron=[0.1]
 		,input_nbr=[60000]
-		,tau_in = [0.02]
+		,tau_in = [0.06]
 		,tau_out = [0.09]
 		, lr = [1]
 		, iterations=[1]
