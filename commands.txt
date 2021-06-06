@@ -17,6 +17,7 @@ sbatch slrum_trial_dw_var_v4.sh --log_file_path $OUTDIR
 sbatch slrum_trial_dw_var_v5.sh --log_file_path $OUTDIR
 sbatch slrum_trial_dw_var_v6.sh --log_file_path $OUTDIR
 
+git pull
 sbatch slrum_trial_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v3.sh --log_file_path $OUTDIR
@@ -24,6 +25,18 @@ sbatch slrum_trial_v4.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v5.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v6.sh --log_file_path $OUTDIR
 sbatch slrum_trial_v7.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v9.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v10.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v11.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v12.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v13.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v14.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v15.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v16.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v17.sh --log_file_path $OUTDIR
+sbatch slrum_trial_v18.sh --log_file_path $OUTDIR
+
 
 sbatch slrum_trial_amp_var_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_amp_var_v2.sh --log_file_path $OUTDIR
@@ -141,33 +154,10 @@ image_train_filtered = 255*(image_train_filtered-image_train_filtered.min())/(im
 
 
 
-scancel 3829401
-scancel 3829403
-scancel 3829437
-scancel 3829439
-scancel 3829441
-scancel 3834374
-scancel 3834379
-scancel 3834383
-scancel 3834387
-scancel 3834392
-scancel 3834421
-scancel 3834697
-scancel 3840548
-scancel 3840549
-scancel 3840551
-scancel 3862811
-scancel 3862834
-scancel 3862858
-scancel 3862874
-scancel 3862878
-scancel 3862894
-scancel 3862906
-scancel 3862908
-scancel 3862910
-scancel 3862957
-scancel 3862964
-scancel 3862965
-scancel 3862972
-scancel 3862985
-scancel 3862989
+scancel 4255935
+scancel 4255936
+scancel 4255937
+scancel 4255938
+scancel 4255939
+scancel 4255940
+scancel 4255941
