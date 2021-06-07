@@ -71,7 +71,7 @@ if __name__ == '__main__':
 		,input_nbr=[60000]
 		,tau_in = [0.03]
 		,tau_out = [0.06]
-		, lr = [1,2,5,10]
+		, lr = [1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 		, gain_in = [3.5]
 		, bias_in = [0.5]
 		, noise_input = [0]
-		, seed =[100]
+		, seed =[50,100,150,200,250]
     )
 	param_values = [v for v in parameters.values()]
 
