@@ -72,11 +72,11 @@ if __name__ == '__main__':
 		,tau_in = [0.03]
 		,tau_out = [0.12]
 		, lr = [1]
-		, iterations=[2]
+		, iterations=[3]
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [100]
+		, n_neurons = [200]
 		, inhibition_time = [10]
 		, tau_ref_in = [0.005]
 		, tau_ref_out = [0.005]
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 		, gain_in = [4]
 		, bias_in = [0.5]
 		, noise_input = [0]
-		, seed =[100]
+		, seed =[50]
     )
 	param_values = [v for v in parameters.values()]
 
