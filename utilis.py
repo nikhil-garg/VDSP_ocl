@@ -682,11 +682,11 @@ def fun_post_tio2(X,
 
     dW = (cond_pot*f_pot*g_pot  +  cond_dep*f_dep*g_dep)*eta
     return dW
-'''
-parameter for TiO2 with 0.5 threshold and 77.07 accuracy
+
+# parameter for TiO2 with 0.5 threshold and 77.07 accuracy
 popt_tio2 = np.array((1.62708935, 2.1204144 , 0.044, 0.07223655, 0.95411709))
-'''
-popt_tio2 = np.array((0.86066859, 1.28831255, 0.44703269, 0.21166331, 0.80906049))
+
+# popt_tio2 = np.array((0.86066859, 1.28831255, 0.44703269, 0.21166331, 0.80906049))
 
 def fun_post_tio2_var(X,
        alphap=1,alphan=5,Ap=4000,An=4000,eta=1,
