@@ -192,7 +192,7 @@ class MyLIF_in(LIFRate):
         voltage -= (J - voltage) * np.expm1(-delta_t / tau_rc)
 
         # determine which neurons spiked (set them to 1/dt, else 0)
-        spiked_mask = voltage > 1.5
+        spiked_mask = voltage > 1.8
         output[:] = spiked_mask * (self.amplitude / dt)
 
         # set v(0) = 1 and solve for t to compute the spike time
