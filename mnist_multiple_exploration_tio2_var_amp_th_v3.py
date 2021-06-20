@@ -91,8 +91,8 @@ if __name__ == '__main__':
 		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
-		, amp_vth_var = [0.8,1]
-		, seed =[500,600]
+		, amp_vth_var = [0,0.2,0.4,0.6,0.8,1]
+		, seed =[300]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
 		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2_var_amp_th(args)

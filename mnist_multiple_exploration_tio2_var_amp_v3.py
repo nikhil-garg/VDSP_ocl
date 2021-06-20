@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple_tio2_var_th import *
+from mnist_vdsp_multiple_tio2_var_amp import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -55,7 +55,7 @@ if __name__ == '__main__':
                         "gain_in":[],
                         "bias_in":[],
                         "noise_input":[],
-                        "th_var":[],
+                        "amp_var":[],
                         "accuracy":[],
                         "accuracy_2":[]
                          })
@@ -91,8 +91,8 @@ if __name__ == '__main__':
 		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
-		, th_var = [0.8,1]
-		, seed =[100,200]
+		, amp_var = [0,0.2,0.4,0.6,0.8,1]
+		, seed =[300]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -107,10 +107,10 @@ if __name__ == '__main__':
 
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
-		log_file_name = 'accuracy_log'+str(timestr)+'.csv'
+		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
-		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2_th_amp(args)
+		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2_var_amp(args)
 
 		df = df.append({ "vprog":args.vprog,
 						"amp_neuron":args.amp_neuron,
@@ -139,7 +139,7 @@ if __name__ == '__main__':
 		                 "gain_in":args.gain_in,
 		                 "bias_in":args.bias_in,
 		                 "noise_input":args.noise_input,
-		                 "th_var":args.th_var,
+		                 "amp_var":args.amp_var,
 		                 "accuracy":accuracy,
 		                 "accuracy_2":accuracy_2
 		                 },ignore_index=True)
