@@ -872,6 +872,82 @@ class CustomRule_post_v2_tio2(nengo.Process):
         self.signal_out_post = signal
 
 
+class CustomRule_post_v2_tio2_gaussian(nengo.Process):
+   
+    def __init__(self, vprog=0,winit_mean=5, winit_dev=0.5, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008,vprog_increment=0,voltage_clip_max=None,voltage_clip_min=None,Vapp_multiplier=0):
+       
+        self.vprog = vprog  
+        
+        self.signal_vmem_pre = None
+        self.signal_out_post = None
+
+        self.winit_mean = winit_mean
+        self.winit_dev = winit_dev
+        
+        
+        self.sample_distance = sample_distance
+        self.lr = lr
+        self.vthp = vthp
+        self.vthn = vthn
+        self.gmax=gmax
+        self.gmin = gmin
+        
+        self.history = [0]
+
+        self.voltage_clip_min=voltage_clip_min
+        self.voltage_clip_max=voltage_clip_max
+        self.vprog_increment=vprog_increment
+        self.Vapp_multiplier = Vapp_multiplier
+
+        
+        # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
+        
+        super().__init__()
+        
+    def make_step(self, shape_in, shape_out, dt, rng, state=None):  
+       
+        self.w = np.random.normal(self.winit_mean, self.winit_dev, (shape_out[0], shape_in[0]))
+        self.w = np.clip(self.w,0,1)
+        def step(t, x):
+
+            assert self.signal_vmem_pre is not None
+            assert self.signal_out_post is not None
+            
+            # vmem = np.clip(self.signal_vmem_pre, -1, 1)
+            
+            post_out = self.signal_out_post
+            
+            vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
+
+            post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
+
+            self.w = np.clip((self.w + dt*(fun_post_tio2((self.w,vmem, self.vprog, self.vthp,self.vthn,self.voltage_clip_max,self.voltage_clip_min,self.Vapp_multiplier),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+
+            post_spiked = post_out_matrix*dt
+            self.vprog += post_spiked*self.vprog_increment
+            self.vprog = np.clip(self.vprog, None, 0)
+            
+            # if (self.tstep%self.sample_distance ==0):
+            #     self.history.append(self.w.copy())
+            
+            # self.tstep +=1
+            self.history[0] = self.w.copy()
+            # self.history.append(self.w.copy())
+            # self.history = self.history[-2:]
+            # self.history = self.w
+
+            return np.dot((self.w*(self.gmax-self.gmin)) + self.gmin, x)
+        
+        return step   
+
+        # self.current_weight = self.w
+    
+    def set_signal_vmem(self, signal):
+        self.signal_vmem_pre = signal
+        
+    def set_signal_out(self, signal):
+        self.signal_out_post = signal
+
 class CustomRule_post_v3_tio2(nengo.Process):
    
     def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,gmax=0.0008,gmin=0.00008,vprog_increment=0,voltage_clip_max=None,voltage_clip_min=None,Vapp_multiplier=0):

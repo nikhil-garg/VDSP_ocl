@@ -293,6 +293,18 @@ def args():
         type=float,
         help="Input noise",
     )
+    parser.add_argument(
+        "--winit_mean",
+        default=0.5,
+        type=float,
+        help="Winit mean",
+    )
+    parser.add_argument(
+        "--winit_dev",
+        default=0.5,
+        type=float,
+        help="Winit dev",
+    )
 
 
 

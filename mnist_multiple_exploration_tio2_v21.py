@@ -5,7 +5,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from mnist_vdsp_multiple_tio2 import *
+from mnist_vdsp_multiple_tio2_gaussian import *
 from utilis import *
 from args_mnist import args as my_args
 # from ax import optimize
@@ -47,7 +47,8 @@ if __name__ == '__main__':
                         "inc_n":[],
                         "tau_n":[],
                         "synapse_layer_1":[],
-                        "winit_max":[],
+                        "winit_mean":[],
+                        "winit_dev":[],
                         "vprog_increment":[],
                         "voltage_clip_max":[],
                         "voltage_clip_min":[],
@@ -76,14 +77,15 @@ if __name__ == '__main__':
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [600]
+		, n_neurons = [50]
 		, inhibition_time = [10]
 		, tau_ref_in = [0.01]
 		, tau_ref_out = [0.005]
 		, inc_n = [0.01]
 		, tau_n = [1]
 		, synapse_layer_1=[0.005]
-		, winit_max = [1]
+		, winit_mean = [0.25]
+		, winit_dev = [0.1,0.2,0.3,0.4,0.5]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
 		, voltage_clip_min = [-1.5]
@@ -99,19 +101,19 @@ if __name__ == '__main__':
 	folder = os.getcwd()+"/MNIST_VDSP_explorartion"+now
 	os.mkdir(folder)
 
-	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref_in,args.tau_ref_out,args.inc_n,args.tau_n,args.synapse_layer_1,args.winit_max,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
+	for args.vprog,args.amp_neuron,args.input_nbr,args.tau_in,args.tau_out,args.lr,args.iterations,args.presentation_time,args.pause_time, args.dt,args.n_neurons,args.inhibition_time,args.tau_ref_in,args.tau_ref_out,args.inc_n,args.tau_n,args.synapse_layer_1,args.winit_mean,args.winit_dev,args.vprog_increment,args.voltage_clip_max,args.voltage_clip_min,args.Vapp_multiplier,args.gain_in,args.bias_in,args.noise_input,args.seed in product(*param_values):
 
 
 		# args.pause_time = 0
 
 		# args.filename = 'vprog-'+str(args.vprog)+'-g_max-'+str(args.g_max)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)
-		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)+str(args.n_neurons)+str(args.seed)
+		args.filename = 'vprog-'+str(args.vprog)+'amp_neuron'+str(args.amp_neuron)+'-tau_in-'+str(args.tau_in)+'-tau_out-'+str(args.tau_out)+'-lr-'+str(args.lr)+'-presentation_time-'+str(args.presentation_time)+'pause_time'+str(args.pause_time) + 'dt-'+str(args.dt)+'ref-'+str(args.tau_ref_in)+str(args.tau_ref_out)+'gain-'+str(args.gain_in)+'bias_in'+str(args.bias_in)+'adaptation'+str(args.inc_n)+str(args.tau_n)+'noise'+str(args.noise_input)+'Vapp_multiplier-'+str(args.Vapp_multiplier)+'winit_max'+str(args.winit_max)+str(args.voltage_clip_max)+str(args.voltage_clip_min)+str(args.n_neurons)+str(args.seed)+str(args.winit_mean)+str(args.winit_dev)
 
 		timestr = time.strftime("%Y%m%d-%H%M%S")
 		log_file_name = 'accuracy_log'+'.csv'
 		pwd = os.getcwd()
 
-		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2(args)
+		accuracy, accuracy_2,weights = evaluate_mnist_multiple_tio2_gaussian(args)
 
 		df = df.append({ "vprog":args.vprog,
 						"amp_neuron":args.amp_neuron,
@@ -132,7 +134,8 @@ if __name__ == '__main__':
 		                 "inc_n":args.inc_n,
 		                 "tau_n":args.tau_n,
 		                 "synapse_layer_1":args.synapse_layer_1,
-		                 "winit_max":args.winit_max,
+		                 "winit_mean":args.winit_mean,
+		                 "winit_dev":args.winit_dev,
 		                 "vprog_increment":args.vprog_increment,
 		                 "voltage_clip_max":args.voltage_clip_max,
 		                 "voltage_clip_min":args.voltage_clip_min,
