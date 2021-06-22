@@ -116,18 +116,49 @@ sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v4.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v5.sh --log_file_path $OUTDIR
-
+sbatch slrum_trial_tio2_var_th_v6.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v7.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v9.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v10.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v4.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v5.sh --log_file_path $OUTDIR
-
+sbatch slrum_trial_tio2_var_amp_v6.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v7.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v9.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v10.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v3.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v4.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v5.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v6.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v7.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v9.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v10.sh --log_file_path $OUTDIR
+
+
+sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_th_v5.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_v5.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_tio2_var_amp_th_v5.sh --log_file_path $OUTDIR
+
 
 
 sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
