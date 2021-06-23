@@ -145,7 +145,7 @@ def evaluate_mnist_multiple(args):
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         sim.run((presentation_time+pause_time) * labels.shape[0])
 
-    last_weight = weights[-1]
+    last_weight = 0.0000085 + ((0.0085-0.0000085)*weights[-1])
 
     sim.close()
 
