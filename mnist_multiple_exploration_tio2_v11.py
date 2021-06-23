@@ -76,7 +76,7 @@ if __name__ == '__main__':
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
-		, n_neurons = [200]
+		, n_neurons = [50]
 		, inhibition_time = [10]
 		, tau_ref_in = [0.01]
 		, tau_ref_out = [0.005]
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
-		, seed =[100]
+		, seed =[1971,2011,2020,420]
     )
 	param_values = [v for v in parameters.values()]
 
@@ -157,7 +157,7 @@ if __name__ == '__main__':
 			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(columns*5,rows*5))
 
 			for i in range(0,(args.n_neurons)):
-				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0,cmap='hot')
+				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
 
 			plt.tight_layout()    
 
