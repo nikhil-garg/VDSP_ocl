@@ -293,9 +293,9 @@ def evaluate_mnist_multiple_tio2(args):
     print("Accuracy: ", accuracy)
     sim.close()
 
-    del weights, sim.data, labels, class_pred, spikes_layer1_probe_train
+    del sim.data, labels, class_pred, spikes_layer1_probe_train
 
-    return accuracy, accuracy_2, last_weight
+    return accuracy, accuracy_2, weights[-1]
 
 
     # for tstep in np.arange(0, len(weights), 1):

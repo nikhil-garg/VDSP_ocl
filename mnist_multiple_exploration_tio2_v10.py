@@ -157,7 +157,7 @@ if __name__ == '__main__':
 			fig, axes = plt.subplots(int(args.n_neurons/columns), int(columns), figsize=(columns*5,rows*5))
 
 			for i in range(0,(args.n_neurons)):
-				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0,cmap='hot')
+				axes[int(i/columns)][int(i%columns)].matshow(np.reshape(weights[i],(28,28)),interpolation='nearest', vmax=1, vmin=0)
 
 			plt.tight_layout()    
 
