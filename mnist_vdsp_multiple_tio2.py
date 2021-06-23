@@ -149,7 +149,7 @@ def evaluate_mnist_multiple_tio2(args):
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         sim.run((presentation_time+pause_time) * labels.shape[0])
 
-    last_weight = 0.00008 + (weights[-1]*(0.0008-0.00008))
+    last_weight = (0.00008 + (weights[-1]*(0.0008-0.00008)))*200
 
     sim.close()
 
