@@ -108,7 +108,7 @@ def evaluate_mnist_multiple_tio2_var_th(args):
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,
-            "var_th":args.var_th,
+            "var_th":args.th_var,
             "voltage_clip_max":args.voltage_clip_max,
             "voltage_clip_min":args.voltage_clip_min,
             "gmax":0.0008,
