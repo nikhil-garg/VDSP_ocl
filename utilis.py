@@ -1469,7 +1469,7 @@ class CustomRule_post_v5_tio2(nengo.Process):
 
 class CustomRule_post_v6_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_1= 1,var_amp_2=1,var_vthp=1,var_vthn=1,gmax=0.0008,gmin=0.00008, voltage_clip_max=None, voltage_clip_min=None):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_th,gmax=0.0008,gmin=0.00008, voltage_clip_max=None, voltage_clip_min=None):
        
         self.vprog = vprog  
         
@@ -1486,10 +1486,8 @@ class CustomRule_post_v6_tio2(nengo.Process):
         self.vthn = vthn
         self.gmax=gmax
         self.gmin = gmin
-        self.var_amp_1=var_amp_1
-        self.var_amp_2=var_amp_2
-        self.var_vthp=var_vthp
-        self.var_vthn=var_vthn
+        self.var_amp_th=var_amp_th
+
 
         self.voltage_clip_min=voltage_clip_min
         self.voltage_clip_max=voltage_clip_max
@@ -1512,13 +1510,25 @@ class CustomRule_post_v6_tio2(nengo.Process):
             
             # vmem = np.clip(self.signal_vmem_pre, -1, 1)
             
+            random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0])) #between -1 to 1 of shape W
+            var_th_matrix_1 = 1 + (random_matrix*self.var_amp_th)
+            random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0])) #between -1 to 1 of shape W
+            var_th_matrix_2 = 1 + (random_matrix*self.var_amp_th)
+
+            random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0])) #between -1 to 1 of shape W
+            var_amp_matrix_1 = 1 + (random_matrix*self.var_amp_th)
+            random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0])) #between -1 to 1 of shape W
+            var_amp_matrix_2 = 1 + (random_matrix*self.var_amp_th)
+
+
+
             post_out = self.signal_out_post
             
             vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2_var_v2((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_amp_1,self.var_amp_2,self.var_vthp,self.var_vthn, self.voltage_clip_max, self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2_var_v2((self.w,vmem, self.vprog, self.vthp,self.vthn,var_amp_matrix_1,var_amp_matrix_2,var_th_matrix_1,var_th_matrix_2, self.voltage_clip_max, self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())

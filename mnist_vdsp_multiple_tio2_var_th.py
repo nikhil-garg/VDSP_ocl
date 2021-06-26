@@ -150,7 +150,8 @@ def evaluate_mnist_multiple_tio2_var_th(args):
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         sim.run((presentation_time+pause_time) * labels.shape[0])
 
-    last_weight = weights[-1]
+    # last_weight = weights[-1]
+    last_weight = (0.00008 + (weights[-1]*(0.0008-0.00008)))*200
 
     sim.close()
 
@@ -263,9 +264,9 @@ def evaluate_mnist_multiple_tio2_var_th(args):
     print("Accuracy: ", accuracy)
     sim.close()
 
-    del weights, sim.data, labels, output_spikes, class_pred, t_data, spikes_layer1_probe_train
+    del sim.data, labels, output_spikes, class_pred, t_data, spikes_layer1_probe_train
 
-    return accuracy,accuracy_2, last_weight
+    return accuracy,accuracy_2, weights[-1]
 
 
     # for tstep in np.arange(0, len(weights), 1):

@@ -94,17 +94,17 @@ def evaluate_mnist_multiple_tio2_var_amp_th(args):
 
     np.random.seed(args.seed)
     random.seed(args.seed) 
-    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    var_amp_matrix_1 = 1 + (random_matrix*args.amp_vth_var)
+    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    # var_amp_matrix_1 = 1 + (random_matrix*args.amp_vth_var)
 
-    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    var_amp_matrix_2 = 1 + (random_matrix*args.amp_vth_var)
+    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    # var_amp_matrix_2 = 1 + (random_matrix*args.amp_vth_var)
 
-    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    var_vthp_matrix = 1 + (random_matrix*args.amp_vth_var)
+    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    # var_vthp_matrix = 1 + (random_matrix*args.amp_vth_var)
 
-    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    var_vthn_matrix = 1 + (random_matrix*args.amp_vth_var)
+    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    # var_vthn_matrix = 1 + (random_matrix*args.amp_vth_var)
 
     #Learning rule parameters
     learning_args = {
@@ -114,10 +114,7 @@ def evaluate_mnist_multiple_tio2_var_amp_th(args):
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,
-            "var_amp_1":var_amp_matrix_1,
-            "var_amp_2":var_amp_matrix_2,
-            "var_vthp":var_vthp_matrix,
-            "var_vthn":var_vthn_matrix,
+            "var_amp_th":args.amp_vth_var,
             "voltage_clip_max":args.voltage_clip_max,
             "voltage_clip_min":args.voltage_clip_min,
             "gmax":0.0008,
@@ -158,7 +155,8 @@ def evaluate_mnist_multiple_tio2_var_amp_th(args):
         w.output.set_signal_out(sim.signals[sim.model.sig[layer1.neurons]["out"]])
         sim.run((presentation_time+pause_time) * labels.shape[0])
 
-    last_weight = weights[-1]
+    # last_weight = weights[-1]
+    last_weight = (0.00008 + (weights[-1]*(0.0008-0.00008)))*200
 
     sim.close()
 
@@ -271,9 +269,9 @@ def evaluate_mnist_multiple_tio2_var_amp_th(args):
     print("Accuracy: ", accuracy)
     sim.close()
 
-    del weights, sim.data, labels, output_spikes, class_pred, t_data, spikes_layer1_probe_train
+    del sim.data, labels, output_spikes, class_pred, t_data, spikes_layer1_probe_train
 
-    return accuracy,accuracy_2, last_weight
+    return accuracy,accuracy_2, weights[-1]
 
 
     # for tstep in np.arange(0, len(weights), 1):
