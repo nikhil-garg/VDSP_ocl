@@ -1391,7 +1391,7 @@ class CustomRule_post_v4_tio2(nengo.Process):
 
 class CustomRule_post_v5_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_th_1= 1,var_th_2=1,gmax=0.0008,gmin=0.00008,voltage_clip_max=None,voltage_clip_min=None):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_th= 0,gmax=0.0008,gmin=0.00008,voltage_clip_max=None,voltage_clip_min=None):
        
         self.vprog = vprog  
         
@@ -1411,8 +1411,7 @@ class CustomRule_post_v5_tio2(nengo.Process):
         self.vthn = vthn
         self.gmax=gmax
         self.gmin = gmin
-        self.var_th_1=var_th_1
-        self.var_th_2=var_th_2
+        self.var_th=var_th
         
         self.history = [0]
 
@@ -1432,13 +1431,20 @@ class CustomRule_post_v5_tio2(nengo.Process):
             
             # vmem = np.clip(self.signal_vmem_pre, -1, 1)
             
+            random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0])) #between -1 to 1 of shape W
+            var_th_matrix_1 = 1 + (random_matrix*self.var_th)
+            random_matrix = np.random.normal(0.0, 1.0, (shape_out[0],shape_in[0])) #between -1 to 1 of shape W
+            var_th_matrix_2 = 1 + (random_matrix*self.var_th)
+
+
+
             post_out = self.signal_out_post
             
             vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
 
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
 
-            self.w = np.clip((self.w + dt*(fun_post_tio2_var_th((self.w,vmem, self.vprog, self.vthp,self.vthn,self.var_th_1,self.var_th_2, self.voltage_clip_max, self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
+            self.w = np.clip((self.w + dt*(fun_post_tio2_var_th((self.w,vmem, self.vprog, self.vthp,self.vthn,var_th_matrix_1,var_th_matrix_2, self.voltage_clip_max, self.voltage_clip_min),*popt_tio2))*post_out_matrix*self.lr), 0, 1)
             
             # if (self.tstep%self.sample_distance ==0):
             #     self.history.append(self.w.copy())
