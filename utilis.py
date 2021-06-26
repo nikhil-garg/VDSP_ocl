@@ -1469,7 +1469,7 @@ class CustomRule_post_v5_tio2(nengo.Process):
 
 class CustomRule_post_v6_tio2(nengo.Process):
    
-    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_th,gmax=0.0008,gmin=0.00008, voltage_clip_max=None, voltage_clip_min=None):
+    def __init__(self, vprog=0,winit_min=0, winit_max=1, sample_distance = 1, lr=1,vthp=0.5,vthn=0.5,var_amp_th=0,gmax=0.0008,gmin=0.00008, voltage_clip_max=None, voltage_clip_min=None):
        
         self.vprog = vprog  
         
