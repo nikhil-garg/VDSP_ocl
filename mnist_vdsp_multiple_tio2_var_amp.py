@@ -94,11 +94,11 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
 
     np.random.seed(args.seed)
     random.seed(args.seed) 
-    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    var_amp_matrix_1 = 1 + (random_matrix*args.amp_var)
+    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    # var_amp_matrix_1 = 1 + (random_matrix*args.amp_var)
 
-    random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
-    var_amp_matrix_2 = 1 + (random_matrix*args.amp_var)
+    # random_matrix = np.random.normal(0.0, 1.0, (n_neurons,n_in)) #between -1 to 1 of shape W
+    # var_amp_matrix_2 = 1 + (random_matrix*args.amp_var)
 
     #Learning rule parameters
     learning_args = {
@@ -108,8 +108,7 @@ def evaluate_mnist_multiple_tio2_var_amp(args):
             "vprog":args.vprog, 
             "vthp":args.vthp,
             "vthn":args.vthn,
-            "var_amp_1":var_amp_matrix_1,
-            "var_amp_2":var_amp_matrix_2,
+            "var_amp":args.amp_var,
             "voltage_clip_max":args.voltage_clip_max,
             "voltage_clip_min":args.voltage_clip_min,
             "gmax":0.0008,
