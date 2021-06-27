@@ -86,12 +86,12 @@ if __name__ == '__main__':
 		, winit_max = [1]
 		, vprog_increment = [0]
 		, voltage_clip_max=[1.8]
-		, voltage_clip_min = [-1.45,-1.40,-1.55,-1.35]
+		, voltage_clip_min = [-1.5]
 		, Vapp_multiplier = [1]
 		, gain_in = [3.5]
 		, bias_in = [0.85]
 		, noise_input = [0]
-		, seed =[100]
+		, seed =[4,2,1967,1971]
     )
 	param_values = [v for v in parameters.values()]
 

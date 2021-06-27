@@ -146,18 +146,16 @@ sbatch slrum_trial_tio2_var_amp_th_v10.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_th_v3.sh --log_file_path $OUTDIR
-sbatch slrum_trial_tio2_var_th_v4.sh --log_file_path $OUTDIR
-sbatch slrum_trial_tio2_var_th_v5.sh --log_file_path $OUTDIR
+
 sbatch slrum_trial_tio2_var_amp_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_v3.sh --log_file_path $OUTDIR
-sbatch slrum_trial_tio2_var_amp_v4.sh --log_file_path $OUTDIR
-sbatch slrum_trial_tio2_var_amp_v5.sh --log_file_path $OUTDIR
+
 sbatch slrum_trial_tio2_var_amp_th_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_tio2_var_amp_th_v3.sh --log_file_path $OUTDIR
-sbatch slrum_trial_tio2_var_amp_th_v4.sh --log_file_path $OUTDIR
-sbatch slrum_trial_tio2_var_amp_th_v5.sh --log_file_path $OUTDIR
+
+
 
 
 
@@ -185,10 +183,13 @@ image_train_filtered = 255*(image_train_filtered-image_train_filtered.min())/(im
 
 
 
-scancel 4255935
-scancel 4255936
-scancel 4255937
-scancel 4255938
-scancel 4255939
-scancel 4255940
-scancel 4255941
+scancel 6120617
+scancel 6120626
+scancel 6120632
+scancel 6120635
+scancel 6120701
+scancel 6121749
+scancel 6121756
+scancel 6121765
+scancel 6121795
+scancel 6121808
