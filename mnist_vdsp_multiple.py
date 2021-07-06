@@ -272,13 +272,7 @@ def evaluate_mnist_multiple(args):
         predicted_labels.append(class_pred)
 
         true_class = labels[(num*int((presentation_time + pause_time) /args.dt))]
-        # print(true_class)
-        # print(class_pred)
 
-        # if(neuron_class[k] == true_class):
-        #     correct_classified+=1
-        # else:
-        #     wrong_classified+=1
         if(class_pred == true_class):
             correct_classified+=1
         else:
