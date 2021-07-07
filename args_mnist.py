@@ -305,6 +305,12 @@ def args():
         type=float,
         help="Winit dev",
     )
+    parser.add_argument(
+        "--alpha",
+        default=2,
+        type=float,
+        help="Winit dev",
+    )
 
 
 

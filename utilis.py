@@ -479,7 +479,63 @@ class MyLIF_out(LIFRate):
         voltage[spiked_mask] = -1
         refractory_time[spiked_mask] = self.tau_ref + t_spike
 
+def fun_post_baseline(X,
+       alpha=1,lr=1,
+       ): 
+    
+    w, vmem = X
+    vapp = -vmem
         
+    f_pot = np.exp(-alpha*(w))*(-w+ 1)
+    f_dep = np.exp(alpha*(w-1))*w
+    
+    cond_pot = vapp > 0
+    cond_dep = vapp < 0
+    
+    g_pot = np.exp(vapp)-1
+    g_dep = np.exp(-vapp)-1
+
+    dW = (cond_pot*f_pot*g_pot  -  cond_dep*f_dep*g_dep)*lr
+    return dW
+
+class CustomRule_post_baseline(nengo.Process):
+   
+    def __init__(self,winit_min=0, winit_max=1, sample_distance = 1, lr=6.0e-05, alpha=2):
+        
+        self.signal_vmem_pre = None
+        self.signal_out_post = None
+        self.winit_min = winit_min
+        self.winit_max = winit_max
+        self.alpha = alpha
+        self.sample_distance = sample_distance
+        self.lr = lr
+        self.history = [0]        
+        # self.tstep=0 #Just recording the tstep to sample weights. (To save memory)
+        super().__init__()
+        
+    def make_step(self, shape_in, shape_out, dt, rng, state=None):  
+       
+        self.w = np.random.uniform(self.winit_min, self.winit_max, (shape_out[0], shape_in[0]))
+
+        def step(t, x):
+
+            assert self.signal_vmem_pre is not None
+            assert self.signal_out_post is not None
+                        
+            post_out = self.signal_out_post
+            vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
+            post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
+            self.w = np.clip((self.w + dt*(fun_post_baseline((self.w,vmem),self.alpha,self.lr))*post_out_matrix), 0, 1)
+            self.history[0] = self.w.copy()
+            return np.dot(self.w, x*dt)
+        
+        return step   
+
+    def set_signal_vmem(self, signal):
+        self.signal_vmem_pre = signal
+        
+    def set_signal_out(self, signal):
+        self.signal_out_post = signal
 
 
 # def fun_post(X,
