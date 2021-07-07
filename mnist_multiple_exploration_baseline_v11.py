@@ -71,7 +71,7 @@ if __name__ == '__main__':
 		, amp_neuron=[0.1e-5,1.0e-3]
 		,input_nbr=[60000]
 		,tau_in = [0.06]
-		,tau_out = [0.06]
+		,tau_out = [0.12]
 		, lr = [5.0e-5,5.0e-4]
 		, alpha= [2]
 		, iterations=[1]
