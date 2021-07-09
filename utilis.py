@@ -525,6 +525,7 @@ class CustomRule_post_baseline(nengo.Process):
             post_out = self.signal_out_post
             vmem = np.reshape(self.signal_vmem_pre, (1, shape_in[0]))   
             post_out_matrix = np.reshape(post_out, (shape_out[0], 1))
+            
             self.w = np.clip((self.w + dt*(fun_post_baseline((self.w,vmem),self.alpha,self.lr))*post_out_matrix), 0, 1)
             self.history[0] = self.w.copy()
             return np.dot(self.w, x*dt)
