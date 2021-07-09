@@ -68,12 +68,12 @@ if __name__ == '__main__':
 
 	parameters = dict(
 		vprog = [0]
-		, amp_neuron=[0.025]
+		, amp_neuron=[0.05]
 		,input_nbr=[60000]
 		,tau_in = [0.03]
 		,tau_out = [0.03]
-		, lr = [0.0005,0.001]
-		, alpha= [2,3,4]
+		, lr = [0.0007,0.0003]
+		, alpha= [2,4,1]
 		, iterations=[1]
 		, presentation_time = [0.35]
 		, pause_time = [0]
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1]
 		, Vapp_multiplier = [1]
 		, gain_in = [4]
-		, bias_in = [0.5,0.35,0.4]
+		, bias_in = [0.5,0.45,0.4]
 		, noise_input = [0]
 		, seed =[50]
     )
