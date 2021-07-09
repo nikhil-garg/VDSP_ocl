@@ -1,3 +1,34 @@
+
+git pull
+sbatch slrum_trial_baseline_v1.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v2.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v3.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v4.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v5.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v6.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v7.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v8.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v9.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v10.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v11.sh --log_file_path $OUTDIR
+sbatch slrum_trial_baseline_v12.sh --log_file_path $OUTDIR
+
+
+
+
+
+scancel 7275125
+scancel 7275126
+scancel 7275127
+
+
+
+
+
+
+
+
+
 sbatch slrum_trial_th_var_v1.sh --log_file_path $OUTDIR
 sbatch slrum_trial_th_var_v2.sh --log_file_path $OUTDIR
 sbatch slrum_trial_th_var_v3.sh --log_file_path $OUTDIR
@@ -183,13 +214,29 @@ image_train_filtered = 255*(image_train_filtered-image_train_filtered.min())/(im
 
 
 
-scancel 6120617
-scancel 6120626
-scancel 6120632
-scancel 6120635
-scancel 6120701
-scancel 6121749
-scancel 6121756
-scancel 6121765
-scancel 6121795
-scancel 6121808
+scancel 7134872
+scancel 7134867
+scancel 7134870
+scancel 7134871
+scancel 7154388
+scancel 7154392
+scancel 7154395
+scancel 7154398
+scancel 7154403
+scancel 7154406
+scancel 7154409
+scancel 7154524
+scancel 7161672
+scancel 7161674
+scancel 7161676
+scancel 7161678
+scancel 7200975
+scancel 7200978
+scancel 7200982
+scancel 7201002
+scancel 7201080
+scancel 7236669
+scancel 7236672
+scancel 7236674
+scancel 7236677
+scancel 7236713
