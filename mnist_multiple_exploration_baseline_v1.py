@@ -91,9 +91,9 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1]
 		, Vapp_multiplier = [1]
 		, gain_in = [4]
-		, bias_in = [0.45,0.4,0.475,0.425,0.375]
+		, bias_in = [0.45]
 		, noise_input = [0]
-		, seed =[50]
+		, seed =[50,100,200,2011,42]
     )
 	param_values = [v for v in parameters.values()]
 
