@@ -1,3 +1,15 @@
+50
+400
+100
+2011
+42
+
+
+
+
+
+
+
 
 git pull
 sbatch slrum_trial_baseline_v1.sh --log_file_path $OUTDIR
