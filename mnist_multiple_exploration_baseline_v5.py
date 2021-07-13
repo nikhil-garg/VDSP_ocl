@@ -73,7 +73,7 @@ if __name__ == '__main__':
 		,tau_in = [0.03]
 		,tau_out = [0.03]
 		, lr = [0.0006]
-		, alpha= [0]
+		, alpha= [1]
 		, iterations=[4]
 		, presentation_time = [0.35]
 		, pause_time = [0]
