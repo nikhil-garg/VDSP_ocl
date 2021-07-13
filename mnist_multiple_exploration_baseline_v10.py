@@ -72,9 +72,9 @@ if __name__ == '__main__':
 		,input_nbr=[60000]
 		,tau_in = [0.03]
 		,tau_out = [0.03]
-		, lr = [0.001,0.002]
+		, lr = [0.0005]
 		, alpha= [0]
-		, iterations=[3]
+		, iterations=[4]
 		, presentation_time = [0.35]
 		, pause_time = [0]
 		, dt = [0.005]
@@ -91,9 +91,9 @@ if __name__ == '__main__':
 		, voltage_clip_min = [-1]
 		, Vapp_multiplier = [1]
 		, gain_in = [4]
-		, bias_in = [0.45]
+		, bias_in = [0.5]
 		, noise_input = [0]
-		, seed =[50]
+		, seed =[100]
     )
 	param_values = [v for v in parameters.values()]
 
